@@ -1,0 +1,2350 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+}
+
+/* 🔥 NAVBAR */
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background: green;
+  color: white;
+}
+
+.nav h2 {
+  cursor: pointer;
+}
+
+/* 🍔 Menu Button */
+.menu-btn {
+  font-size: 24px;
+  cursor: pointer;
+  display: none;
+}
+
+/* ✅ Desktop Menu */
+.nav-links {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.nav-links a,
+.logout-btn {
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* 📱 Mobile */
+@media (max-width: 768px) {
+  .menu-btn {
+    display: block;
+  }
+
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    height: 100%;
+    width: 250px;
+    background: #222;
+    flex-direction: column;
+    padding: 20px;
+    transition: 0.3s ease;
+    z-index: 10;
+  }
+
+  .nav-links.active {
+    right: 0;
+  }
+
+  .nav-links a,
+  .logout-btn {
+    padding: 12px;
+    border-bottom: 1px solid #444;
+  }
+}
+
+/* 🔥 Overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 5;
+}
+
+/* 🔥 FILTERS */
+.filters {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 20px;
+}
+
+/* 🔥 GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* 🔥 CARD */
+.card {
+  position: relative;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  background: #008000;
+  color: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px) scale(1.02);
+}
+
+/* ❤️ Like */
+.like-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+/* 🔥 BUTTON */
+button {
+  margin-top: 10px;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: orange;
+  color: white;
+  cursor: pointer;
+}
+
+/* 🛒 CART */
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+/* 📱 Small mobile */
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cart-item {
+    flex-direction: column;
+  }
+}
+
+/* 💳 PAYMENT */
+.payment {
+  padding: 20px;
+  max-width: 400px;
+  margin: auto;
+}
+
+.payment input,
+.payment textarea,
+.payment select {
+  width: 100%;
+  margin: 8px 0;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.payment-item {
+  display: flex;
+  gap: 10px;
+  background: #111;
+  color: white;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 10px;
+}
+
+/* 👤 PROFILE */
+.profile {
+  padding: 20px;
+  text-align: center;
+}
+
+.profile-card {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  padding: 15px;
+  border-radius: 15px;
+  margin-bottom: 15px;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-around;
+  margin: 15px 0;
+}
+
+.order-preview {
+  background: #222;
+  color: #00ff88;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 10px;
+}
+
+/* 🔥 Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+#Link-text {
+  text-decoration: none;
+  color: #ffffff;
+}
+
+#Link-Text {
+  text-decoration: none;
+  color: #000000;
+}
+
+#items-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+#items-center-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 🌍 Page */
+.cart-container {
+  max-width: 480px;
+  margin: 30px auto;
+  padding: 15px;
+  font-family: 'Poppins', sans-serif;
+  background: #f8f8f8;
+  transition: 0.3s;
+}
+
+/* 🧾 Title */
+.cart-title {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+/* 📦 Card */
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 16px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+  transition: 0.3s;
+}
+
+.cart-item:hover {
+  transform: translateY(-3px);
+}
+
+/* 🍔 Left info */
+.cart-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.cart-name {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.cart-price {
+  font-size: 14px;
+  color: gray;
+}
+
+/* ➕➖ Qty */
+.qty {
+  display: flex;
+  align-items: center;
+  background: #f1f1f1;
+  border-radius: 10px;
+  padding: 5px;
+}
+
+.qty button {
+  background: #fc8019; /* Swiggy orange */
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.qty span {
+  margin: 0 10px;
+  font-weight: bold;
+}
+
+/* ❌ Remove */
+.remove-btn {
+  background: transparent;
+  color: #fc8019;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* 💰 Total box */
+.total-box {
+  background: #fff;
+  padding: 15px;
+  border-radius: 16px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+  margin-top: 20px;
+}
+
+.total-text {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* 💳 Checkout */
+.checkout-btn {
+  width: 100%;
+  margin-top: 15px;
+  padding: 14px;
+  background: #fc8019;
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.checkout-btn:hover {
+  background: #e56f10;
+}
+
+/* 📱 Mobile */
+@media (max-width: 500px) {
+  .cart-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .qty {
+    align-self: center;
+  }
+}
+
+/* 🌍 Page */
+.orders-container {
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 15px;
+  font-family: 'Poppins', sans-serif;
+  background: #f5f5f5;
+}
+
+/* 🧾 Title */
+.orders-title {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+/* 📦 Order Card */
+.order-card {
+  background: #fff;
+  padding: 15px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+  transition: 0.3s;
+}
+
+.order-card:hover {
+  transform: translateY(-3px);
+}
+
+/* 📅 Top Info */
+.order-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: gray;
+  margin-bottom: 10px;
+}
+
+/* 📍 Location */
+.order-location {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+/* 💳 Payment + Status */
+.order-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.status {
+  color: green;
+  font-weight: 600;
+}
+
+/* 🍕 Product */
+.order-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.order-item img {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.item-name {
+  font-weight: 600;
+}
+
+.item-qty {
+  font-size: 13px;
+  color: gray;
+}
+
+/* 🔁 Reorder Button */
+.reorder-btn {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
+  border: none;
+  background: #fc8019;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.reorder-btn:hover {
+  background: #e56f10;
+}
+
+/* 📱 Mobile */
+@media (max-width: 500px) {
+  .order-top,
+  .order-meta {
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+
+/* 🌍 Global */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: #f5f5f5;
+}
+
+/* 👋 Welcome */
+.welcome {
+  padding: 15px;
+  font-size: 18px;
+}
+
+/* 🔥 HERO */
+.hero {
+  height: 100vh;
+  /* background-image: url("https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200"); */
+  background-image: url("/src/assets/images/home_page.png");
+  background-size: cover;
+  background-position: center;
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 🌑 Overlay */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+}
+
+/* 📦 Content */
+.hero-content {
+  position: relative;
+  text-align: center;
+  color: white;
+  padding: 20px;
+}
+
+/* 📍 Location */
+.location {
+  font-size: 14px;
+}
+
+/* 🔥 Offer */
+.offer-text {
+  color: #ffcc00;
+  font-size: 20px;
+  font-weight: bold;
+  margin: 10px 0;
+  animation: fadeSlide 1s ease;
+}
+
+/* 🍔 Title */
+.hero-title {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+/* 🔍 Search */
+.search-box {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.search-box input {
+  padding: 12px;
+  width: 250px;
+  border: none;
+  border-radius: 10px 0 0 10px;
+  outline: none;
+}
+
+.search-box button {
+  padding: 12px;
+  border: none;
+  background: #fc8019;
+  color: white;
+  border-radius: 0 10px 10px 0;
+  cursor: pointer;
+}
+
+/* 🍔 Button */
+.order-btn {
+  padding: 12px 20px;
+  background: #fc8019;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.order-btn:hover {
+  background: #e56f10;
+}
+
+/* 🍽️ Categories */
+.categories {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  padding: 20px;
+}
+
+.cat-card {
+  background: white;
+  padding: 20px;
+  text-align: center;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  cursor: pointer;
+}
+
+/* ✨ Animation */
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 📱 Responsive */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 26px;
+  }
+
+  .search-box input {
+    width: 180px;
+  }
+
+  .categories {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    height: 80vh;
+  }
+
+  .hero-title {
+    font-size: 22px;
+  }
+
+  .search-box {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .search-box input,
+  .search-box button {
+    width: 100%;
+    border-radius: 10px;
+  }
+
+  .categories {
+    grid-template-columns: 1fr;
+  }
+}
+
+.App-Name {
+  font-style: italic;
+  font-size: 30px;
+  color: #00ffff;
+  background: linear-gradient(135deg, #71b767, #9b59b6);
+}
+
+#App-Name {
+  color: #ff0000;
+}
+
+/* Liked Section CSS */
+
+/* 🌍 Container */
+.liked-container {
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* ❤️ Title */
+.liked-title {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 25px;
+}
+
+/* 😢 Empty State */
+.empty-state {
+  text-align: center;
+  padding: 50px;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+/* 📦 Grid */
+.liked-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* 🛍️ Card */
+.liked-card {
+  background: #fff;
+  border-radius: 15px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  transition: 0.3s;
+}
+
+.liked-card:hover {
+  transform: translateY(-5px);
+}
+
+/* 🖼️ Image */
+.liked-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* 🏷️ Name */
+.liked-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 10px 0;
+}
+
+/* 💰 Price */
+.liked-price {
+  color: #fc8019;
+  font-weight: bold;
+}
+
+/* 🔘 Buttons */
+.btn-group {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.cart-btn {
+  background: #fc8019;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.remove-btn {
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* 📱 Responsive */
+@media (max-width: 768px) {
+  .liked-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .liked-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-group {
+    flex-direction: column;
+  }
+}
+
+/* Card hover animation */
+.liked-card {
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.liked-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+
+/*-------------------- ProductCart CSS --------------------------------------------------*/
+
+/* 🌍 Container */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 20px;
+}
+
+/* 🛍️ Card */
+.card {
+  background: #0b7a0b;
+  border-radius: 15px;
+  padding: 15px;
+  text-align: center;
+  color: white;
+  position: relative;
+  overflow: hidden;
+
+  transition: 0.3s;
+}
+
+/* ✨ Hover animation */
+.card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+}
+
+/* 🖼️ Image SAME SIZE */
+.card img {
+  width: 100%;
+  height: 200px;        /* 🔥 same height */
+  object-fit: cover;    /* 🔥 crop properly */
+  border-radius: 10px;
+}
+
+/* ❤️ Heart */
+.heart {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.heart:hover {
+  transform: scale(1.3);
+}
+
+/* 🏷️ Title */
+.card h4 {
+  margin: 10px 0 5px;
+  font-size: 18px;
+}
+
+/* 💰 Price */
+.card p {
+  margin: 5px 0;
+  font-weight: bold;
+}
+
+/* ⭐ Rating */
+.stars {
+  color: gold;
+}
+
+/* 🎯 Filter buttons */
+.filters {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px;
+  flex-wrap: wrap;
+}
+
+.filters button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 20px;
+  background: orange;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.filters button:hover {
+  background: #ff6600;
+  transform: scale(1.1);
+}
+
+/* 🔥 Title center */
+.title {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.empty-cart {
+  text-align: center;
+  margin-top: 60px;
+}
+
+.empty-cart h2 {
+  font-size: 24px;
+  color: #555;
+}
+
+/* 📱 Responsive */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .card img {
+    height: 180px;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card img {
+    height: 180px;
+    width: 100%;
+  }
+
+  button{
+    width: 100%;
+
+  }
+}
+
+/* =========================
+   📱 MOBILE VIEW
+========================= */
+@media (max-width: 480px) {
+
+  .cart-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* 🔥 IMAGE FULL WIDTH */
+  .cart-img {
+    width: 100%;
+    height: 180px;
+    border-radius: 10px;
+  }
+
+  .cart-info {
+    width: 100%;
+  }
+
+  /* 🔢 qty center */
+  .qty {
+    width: 100%;
+    justify-content: center;
+    margin: 10px 0;
+  }
+
+  /* 🔥 REMOVE FULL WIDTH */
+  .cart-item > button {
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .checkout-btn {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+
+/*------------------------- Contact CSS ---------------------------------------------------- */
+
+.contact-form {
+  max-width: 400px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  height: 60vh;
+}
+
+.contact-form input,
+.contact-form textarea {
+  margin: 10px 0;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+}
+
+.contact-form button {
+  background: linear-gradient(45deg, orange, red);
+  color: white;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+/* 🔥 PAGE BACKGROUND */
+
+
+/* ✨ HOVER */
+.contact-form button:hover {
+  transform: scale(1.05);
+}
+
+/* 📱 Tablet */
+@media (max-width: 768px) {
+
+  .contact h1 {
+    font-size: 30px;
+  }
+
+  .contact-form {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .contact-form input,
+  .contact-form textarea {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .contact-form button {
+    font-size: 14px;
+  }
+}
+
+/* 📱 Small Mobile */
+@media (max-width: 480px) {
+
+  .contact {
+    padding: 20px;
+  }
+
+  .contact h1 {
+    font-size: 24px;
+  }
+
+  .contact-form {
+    width: 100%;
+    padding: 15px;
+    border-radius: 15px;
+  }
+
+  .contact-form input,
+  .contact-form textarea {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  .contact-form button {
+    font-size: 13px;
+    padding: 10px;
+  }
+}
+
+/* 🖼️ Image */
+.contact-img {
+  width: 120px;
+  margin-bottom: 10px;
+  border-radius: 50%;
+  box-shadow: 0 0 15px #00ffcc;
+}
+
+/* 🚀 Send Button (fix anchor issue) */
+.send-btn {
+  display: block;
+  text-align: center;
+  padding: 12px;
+  border-radius: 10px;
+  background: linear-gradient(45deg, orange, red);
+  color: white;
+  text-decoration: none;
+  margin-top: 10px;
+}
+
+/* 📱 Mobile */
+@media (max-width: 480px) {
+  .contact-img {
+    width: 90px;
+  }
+}
+
+.send-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 🔥 PAGE */
+.contact {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f9d0f, #006400);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 🖼️ Image */
+.contact-img {
+  width: 120px;
+  margin-bottom: 10px;
+  border-radius: 50%;
+  box-shadow: 0 0 15px #00ffcc;
+}
+
+/* 🔥 TITLE */
+.contact h1 {
+  color: white;
+  font-size: 40px;
+  margin-bottom: 20px;
+}
+
+/* 🧊 Glass */
+.glass {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+}
+
+/* 📦 FORM */
+.contact-form {
+  width: 400px;
+  padding: 30px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 🔥 INPUT GROUP */
+.input-group {
+  position: relative;
+}
+
+.input-group input,
+.input-group textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: white;
+  font-size: 16px;
+  border: 1px solid #ccc;
+}
+
+/* 📝 TEXTAREA */
+.input-group textarea {
+  height: 100px;
+  resize: none;
+}
+
+/* 🏷️ LABEL */
+.input-group label {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  color: #ccc;
+  font-size: 14px;
+  pointer-events: none;
+  transition: 0.3s;
+}
+
+/* ✨ FLOAT EFFECT */
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label,
+.input-group textarea:focus + label,
+.input-group textarea:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 10px;
+  font-size: 12px;
+  color: #00ffcc;
+  background: #006400;
+  padding: 0 5px;
+}
+
+/* 🚀 BUTTON */
+.send-btn {
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(45deg, orange, red);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.contact input,.contact textarea {
+    width: 98%;
+}
+
+/* 📱 MOBILE */
+@media (max-width: 480px) {
+  .contact-form {
+    width: 100%;
+    padding: 20px;
+    height: 70vh;
+  }
+
+  .contact h1 {
+    font-size: 26px;
+  }
+
+  .contact-img {
+    width: 90px;
+  }
+.contact input,.contact textarea {
+    width: 80%;
+}
+}
+
+/*------------------------------- ABOUT CSS ----------------------------------*/
+
+/* 🌈 Background gradient */
+.premium-bg {
+  /* background: linear-gradient(135deg, #1a1a1a, #000); */
+  background: green;
+  color: white;
+  min-height: 100vh;
+  padding: 40px;
+  text-align: center;
+}
+
+/* ✨ Glass effect */
+.glass {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(15px);
+  border-radius: 15px;
+}
+
+/* 🔥 Cards */
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.about-card {
+  padding: 25px;
+  font-size: 18px;
+  transition: 0.3s;
+}
+
+/* ✨ Smooth fade */
+* {
+  transition: all 0.3s ease;
+}
+
+/* 🔥 Button hover glow */
+button:hover {
+  box-shadow: 0 0 15px orange;
+}
+
+/* 🌊 Floating animation */
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
+
+.about-card {
+  animation: float 3s infinite ease-in-out;
+}
+
+/*--------------------------- FOOTER CSS -------------------------------------*/
+
+/* 🔥 MAIN FOOTER */
+.footer {
+  background: black;
+  color: white;
+  text-align: center;
+  padding: 30px 20px;
+  margin: 20px auto;
+  width: 1000px;
+  border-radius: 12px;
+  margin-top: 60px;
+}
+
+/* Title */
+.footer h2 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+/* Text */
+.footer p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+/* Icons container */
+.socials {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+  align-items: center;
+}
+
+/* Icons */
+.socials i {
+  font-size: 24px;
+  color: #a855f7;
+  transition: 0.3s;
+}
+
+/* Hover effect 🔥 */
+.socials i:hover {
+  transform: scale(1.3);
+  color: #00ffcc;
+}
+
+/* 📱 Tablet */
+@media (max-width: 768px) {
+
+  .footer {
+    width: 90%;           /* full width */
+    padding: 20px;
+  }
+
+  .footer h2 {
+    font-size: 22px;
+  }
+
+  .footer p {
+    font-size: 14px;
+  }
+
+  /* 🔥 Icons row layout */
+  .socials {
+    flex-direction: row;          /* column → row */
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .socials i {
+    font-size: 20px;
+  }
+}
+
+/* 📱 Small Mobile */
+@media (max-width: 480px) {
+
+  .footer {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .footer h2 {
+    font-size: 18px;
+  }
+
+  .footer p {
+    font-size: 13px;
+  }
+
+  .socials {
+    gap: 10px;
+  }
+
+  .socials i {
+    font-size: 18px;
+  }
+}
+
+/* 🔥 FOOTER FULL WIDTH FIX */
+.footer {
+  width: 100%;
+  background: #000;
+  color: #fff;
+  text-align: center;
+  padding: 30px 20px;
+  margin-top: 40px;
+  border-radius: 0; /* 🔥 remove rounded */
+}
+
+/* 🔥 REMOVE CENTER BOX LOOK */
+.premium-footer {
+  width: 97%;
+  max-width: 100%;   /* 🔥 remove limit */
+  margin: 0;         /* 🔥 remove center gap */
+  border-radius: 0;  /* 🔥 full stretch */
+  box-shadow: 0 0 20px rgba(255,255,255,0.1);
+}
+
+/* 🔥 TITLE STYLE */
+.footer h2 {
+  font-size: 26px;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+/* 🔥 TEXT */
+.footer p {
+  font-size: 14px;
+  opacity: 0.8;
+  margin-bottom: 15px;
+}
+
+/* 🔥 SOCIAL ICONS */
+.socials {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.socials i {
+  font-size: 22px;
+  color: #a855f7;
+  transition: 0.3s;
+}
+
+/* 🔥 HOVER EFFECT */
+/* .socials i:hover {
+  transform: scale(1.2);
+  color: #ff4d4d;
+} */
+
+/* =========================
+   📱 MOBILE RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+
+  .footer {
+    padding: 25px 10px;
+  }
+
+  .footer h2 {
+    font-size: 20px;
+  }
+
+  .footer p {
+    font-size: 12px;
+  }
+
+  .socials {
+    gap: 15px;
+  }
+
+  .socials i {
+    font-size: 18px;
+  }
+}
+
+/* =========================
+   📱 SMALL MOBILE
+========================= */
+@media (max-width: 480px) {
+
+  .footer {
+    padding: 20px 5px;
+  }
+
+  .footer h2 {
+    font-size: 18px;
+  }
+
+  .footer p {
+    font-size: 11px;
+  }
+
+  .socials {
+    gap: 12px;
+  }
+
+  .socials i {
+    font-size: 16px;
+  }
+}
+
+
+/*----------------------------------------------- PROFILE CSS -----------------------------------*/
+
+/* 🌈 Full Page */
+.profile {
+  min-height: 100vh;
+  padding: 30px 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(135deg, #dfe9f3, #ffffff);
+  text-align: center;
+}
+
+/* 👤 Title */
+.profile h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+/* 🧊 Profile Card (CENTER FIX) */
+.profile-card {
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  color: white;
+  padding: 25px;
+  border-radius: 20px;
+  width: 320px;
+  max-width: 90%;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  transition: 0.3s;
+}
+
+.profile-card:hover {
+  transform: translateY(-5px) scale(1.02);
+}
+
+/* 🖼️ Image */
+.profile-card img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 3px solid white;
+  margin-bottom: 10px;
+}
+
+/* ✏️ Edit text */
+.profile-card span {
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* 🔘 Buttons */
+button {
+  margin-top: 12px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(45deg, #ff9800, #ff5722);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+/* 📊 STATS (FIX ALIGN ISSUE) */
+.stats {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 40px;   /* spacing fix */
+  flex-wrap: wrap;
+}
+
+.stats div {
+  background: #fff;
+  padding: 10px 20px;
+  border-radius: 12px;
+  min-width: 100px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  font-weight: bold;
+}
+
+/* 📦 Orders */
+.order-preview {
+  margin-top: 10px;
+  background: white;
+  padding: 10px;
+  border-radius: 10px;
+  width: 350px;
+  max-width: 90%;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+}
+
+/* 📱 MOBILE FIX */
+@media (max-width: 600px) {
+  .profile-card {
+    width: 100%;
+  }
+
+  .stats {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  button {
+    width: 80%;
+  }
+}
+
+.profile-card {
+  box-shadow: 0 0 25px rgba(0, 114, 255, 0.5);
+}
+
+/*----------------------- PROFILECHANCE CSS ---------------------------------------------*/
+
+/* 🌈 Full Page */
+.profile-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #eef2f3, #dfe9f3);
+  padding: 20px;
+  text-align: center;
+}
+
+/* 👤 Title */
+.profile-page h2 {
+  margin-bottom: 20px;
+  font-size: 26px;
+}
+
+/* 🧊 Card Container */
+.profile-page {
+  gap: 15px;
+}
+
+.profile-page img {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 3px solid #4CAF50;
+  object-fit: cover;
+  margin-bottom: 10px;
+  transition: 0.3s;
+}
+
+.profile-page img:hover {
+  transform: scale(1.05);
+}
+
+/* 📂 File Input */
+.profile-page input[type="file"] {
+  margin: 10px 0;
+  padding: 8px;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+}
+
+/* ✏️ Text Input */
+.profile-page input[type="text"] {
+  width: 250px;
+  max-width: 90%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  outline: none;
+  margin-bottom: 10px;
+  transition: 0.3s;
+}
+
+.profile-page input:focus {
+  border-color: #4CAF50;
+  box-shadow: 0 0 5px rgba(76,175,80,0.5);
+}
+
+/* 🔘 Button */
+.profile-page button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(45deg, #ff9800, #ff5722);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.profile-page button:hover {
+  transform: scale(1.05);
+}
+
+/* 🔗 Link fix */
+#Link-text {
+  text-decoration: none;
+  color: white;
+}
+
+/* 📱 MOBILE */
+@media (max-width: 600px) {
+  .profile-page input[type="text"] {
+    width: 90%;
+  }
+
+  .profile-page button {
+    width: 80%;
+  }
+}
+
+.profile-page {
+  backdrop-filter: blur(10px);
+}
+
+/*----------------------------------- DARK,LIGHT MODE CSS-----------------------------------------------------*/
+
+/* 🌙 Dark Mode */
+.dark {
+  background: #121212;
+  color: #008000;
+}
+
+.dark .card {
+  background: #1e1e1e;
+}
+
+.dark .profile-card {
+  background: linear-gradient(135deg, #232526, #414345);
+}
+
+.dark .nav {
+  background: #000;
+}
+
+.dark button {
+  background: linear-gradient(45deg, #444, #222);
+}
+
+/* 💀 Skeleton */
+.skeleton {
+  height: 200px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #eee, #ddd, #eee);
+  animation: loading 1.2s infinite;
+}
+
+@keyframes loading {
+  0% { background-position: -200px; }
+  100% { background-position: 200px; }
+}
+
+/*------------------------------------------ LOGOUT PAGE ---------------------------------------------------------------------*/
+
+/* 🌍 FULL PAGE CENTER */
+.header {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #f5f7fa, #e4efe9);
+  text-align: center;
+  padding: 20px;
+}
+
+/* 👤 ICON */
+.header h1 {
+  font-size: 60px;
+  margin-bottom: 10px;
+}
+
+/* 👋 NAME */
+.header h3 {
+  font-size: 22px;
+  margin: 5px 0;
+  color: #333;
+}
+
+/* 🙏 MAIN TEXT */
+.header h2 {
+  font-size: 32px;
+  font-weight: bold;
+  margin: 15px 0;
+  color: #111;
+}
+
+/* ✨ SUB TEXT */
+.header h5 {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* 🚪 BUTTON */
+.header button {
+  background: linear-gradient(45deg, orange, #ff4d4d);
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+/* 🔥 HOVER EFFECT */
+.header button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* 📱 MOBILE */
+@media (max-width: 600px) {
+  .header h1 {
+    font-size: 45px;
+  }
+
+  .header h2 {
+    font-size: 24px;
+  }
+
+  .header h3 {
+    font-size: 18px;
+  }
+
+  .header h5 {
+    font-size: 14px;
+  }
+
+  .header button {
+    width: 100%;
+    padding: 12px;
+  }
+}
+
+/* 📲 TABLET */
+@media (max-width: 900px) {
+  .header h2 {
+    font-size: 28px;
+  }
+}
+
+.fade-in {
+  animation: fade 0.8s ease-in-out;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scroll-container {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 15px 0;
+}
+
+.scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+.scroll-track {
+  display: flex;
+  gap: 15px;
+  width: max-content;
+}
+
+.scroll-track.slow {
+  animation: scroll 50s linear infinite;
+}
+
+.scroll-track.fast {
+  animation: scroll 10s linear infinite;
+}
+
+.scroll-track:hover {
+  animation-play-state: paused;
+}
+
+.food-card {
+  min-width: 140px;
+  background: white;
+  padding: 10px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  cursor: pointer;
+}
+
+.food-card img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.food-card:hover {
+  transform: scale(1.08);
+}
+
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* 🔥 FIXED SIZE IMAGES */
+
+.food-card img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;   /* 🔥 IMPORTANT */
+  border-radius: 10px;
+}
+
+.cart-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.product-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/*----------------------------- LOGIN CSS --------------------------------------------------*/
+
+/* Full page center */
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f5f5f5;
+}
+
+/* Login box */
+.login-box {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 350px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+/* Inputs */
+.login-box input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+/* Buttons */
+.login-box button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 8px;
+  background: orange;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.login-box button:hover {
+  background: darkorange;
+}
+
+/* Secondary buttons */
+.login-box .secondary-btn {
+  background: linear-gradient(to right, orange, orangered);
+}
+
+/* OR text */
+.login-box h4 {
+  margin: 15px 0;
+  color: gray;
+}
+
+/* 📱 Mobile responsive */
+@media (max-width: 480px) {
+  .login-box {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .login-box input {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  .login-box button {
+    padding: 8px;
+    font-size: 14px;
+  }
+}
+
+/*----------------------------- OTP CSS --------------------------------------------------*/
+
+/* Full page center */
+.otp-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f4f4f4;
+}
+
+/* Box */
+.otp-box {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 400px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+/* OTP inputs container */
+.otp-inputs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+/* Each box */
+.otp-inputs input {
+  width: 50px;
+  height: 55px;
+  text-align: center;
+  font-size: 20px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: 0.2s;
+}
+
+.otp-inputs input:focus {
+  border-color: orange;
+  box-shadow: 0 0 5px orange;
+}
+
+/* Buttons */
+.otp-box button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  margin-top: 10px;
+  background: linear-gradient(to right, orange, orangered);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.otp-box button:hover {
+  opacity: 0.9;
+}
+
+.otp-box button:disabled {
+  background: gray;
+  cursor: not-allowed;
+}
+
+/* 📱 Mobile */
+@media (max-width: 480px) {
+  .otp-box {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .otp-inputs {
+    gap: 6px;
+  }
+
+  .otp-inputs input {
+    width: 40px;
+    height: 45px;
+    font-size: 16px;
+  }
+
+  .otp-box button {
+    padding: 8px;
+    font-size: 14px;
+  }
+}
+
+/*----------------------------- FORGOT PASSWORD CSS --------------------------------------------------*/
+
+/* Full page center */
+.forgot-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f4f4f4;
+}
+
+/* Card */
+.forgot-box {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 400px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+/* Inputs */
+.forgot-box input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  outline: none;
+  transition: 0.2s;
+}
+
+.forgot-box input:focus {
+  border-color: orange;
+  box-shadow: 0 0 5px orange;
+}
+
+/* Buttons */
+.forgot-box button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(to right, orange, orangered);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.forgot-box button:hover {
+  opacity: 0.9;
+}
+
+/* Disabled state */
+.forgot-box button:disabled {
+  background: gray;
+  cursor: not-allowed;
+}
+
+/* 📱 Mobile */
+@media (max-width: 480px) {
+  .forgot-box {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .forgot-box input {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  .forgot-box button {
+    padding: 8px;
+    font-size: 14px;
+  }
+}
+
+/*----------------------------- REGISTER CSS --------------------------------------------------*/
+
+/* Full page center */
+.register-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f4f4f4;
+}
+
+/* Card */
+.register-box {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 400px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+/* Inputs */
+.register-box input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  outline: none;
+  transition: 0.2s;
+}
+
+.register-box input:focus {
+  border-color: orange;
+  box-shadow: 0 0 5px orange;
+}
+
+/* Buttons */
+.register-box button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(to right, orange, orangered);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.register-box button:hover {
+  opacity: 0.9;
+}
+
+.register-box button:disabled {
+  background: gray;
+  cursor: not-allowed;
+}
+
+/* 📱 Mobile */
+@media (max-width: 480px) {
+  .register-box {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .register-box input {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  .register-box button {
+    padding: 8px;
+    font-size: 14px;
+  }
+}
+
+.register-box > * {
+  margin-top: 10px;
+}
+
+input {
+  font-size: 16px;
+}
+
+/*----------------------------- CART CSS --------------------------------------------------*/
+
+/* =========================
+   📱 MOBILE VIEW
+========================= */
+@media (max-width: 480px) {
+
+  .cart-item {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: center;
+  }
+
+  /* 🔥 IMAGE FULL WIDTH */
+  .cart-img {
+    width: 100%;
+    height: 180px;
+    border-radius: 10px;
+  }
+}
+
+.cart-item:hover {
+  transform: scale(1.02);
+  transition: 0.2s;
+}
+
+.cart-item {
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.btn-group button {
+  width: 100%;
+}
+
+/*----------------------------- HERO CSS --------------------------------------------------*/
+
+.hero-slider {
+  position: relative;
+  height: 300px;
+  overflow: hidden;
+  border-radius: 15px;
+}
+
+.slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: 0.8s;
+}
+
+.slide.active {
+  opacity: 1;
+}
+
+.hero-overlay {
+  background: rgba(0,0,0,0.5);
+  height: 100%;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 30px;
+}
+
+.hero-overlay h1 {
+  font-size: 30px;
+}
+
+.hero-overlay button {
+  margin-top: 10px;
+  padding: 8px 15px;
+  border: none;
+  background: orange;
+  color: white;
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .hero-slider {
+    height: 200px;
+  }
+
+  .hero-overlay h1 {
+    font-size: 20px;
+  }
+}
+
+.hero-slider {
+  position: relative;
+  height: 300px;
+  overflow: hidden;
+}
+
+.slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.slide.active {
+  opacity: 1;
+}
