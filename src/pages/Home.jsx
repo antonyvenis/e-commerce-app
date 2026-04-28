@@ -269,7 +269,7 @@ function Home() {
 
   /* 🔥 FETCH PRODUCTS */
   const fetchProducts = () => {
-    axios.get("http://127.0.0.1:8000/api/products/")
+    axios.get("https://e-commerce-app-8jg4.onrender.com/api/products/")
       .then(res => setData(res.data))
       .catch(err => console.log(err));
   };
