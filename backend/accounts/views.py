@@ -12,6 +12,10 @@ from django.contrib.auth import authenticate
 from .serializers import RegisterSerializer
 from .models import CustomUser, Like, CartItem, Order, OrderItem, OTP
 
+from django.contrib.auth.models import User
+from django.http import HttpResponse
+
+
 
 # ================================
 # 📧 SEND OTP (DB 🔥)
@@ -603,3 +607,35 @@ def add_products_bulk(request):
         )
 
     return Response({"message": "Products saved successfully ✅"})
+
+
+@api_view(['POST'])
+def add_product(request):
+    Product.objects.create(
+        name=request.data['name'],
+        price=request.data['price'],
+        category=request.data['category'],
+        rating=request.data['rating'],
+        image=request.data['image']
+    )
+    return Response({"message": "added"})
+
+# from django.contrib.auth.models import User
+# from django.http import HttpResponse
+
+def create_admin(request):
+    key = request.GET.get("key")
+
+    if key != "mysecret123":
+        return HttpResponse("Unauthorized ❌")
+
+    if not User.objects.filter(username='antony').exists():
+        User.objects.create_superuser(
+            'antony',
+            'antonyvenis1212@gmail.com',
+            'Venisking@419'
+        )
+        return HttpResponse("Admin created ✅")
+
+    return HttpResponse("Already exists")   
+

@@ -21,6 +21,7 @@ from .views import (
     get_products,
     load_products,
     add_products_bulk,
+    create_admin,
 )
 
 urlpatterns = [
@@ -70,4 +71,5 @@ urlpatterns = [
     path("products/", get_products),
     path("load-products/", load_products),
     path("add-products/", add_products_bulk),
+    path('create-admin/', create_admin),
 ]
