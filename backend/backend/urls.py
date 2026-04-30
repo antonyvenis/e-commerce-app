@@ -19,7 +19,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.http import HttpResponse
-from .views import create_admin  
+from backend.views import create_admin  
 
 def home(request):
     return HttpResponse("Backend Running Successfully 🚀")
