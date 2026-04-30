@@ -74,7 +74,7 @@ function OTP() {
 
   try {
     const res = await axios.post(
-      "http://127.0.0.1:8000/api/verify-otp/",
+      "https://e-commerce-app-8jg4.onrender.com/api/verify-otp/",
       {
         email,
         otp: finalOtp
@@ -104,7 +104,7 @@ function OTP() {
   const resendOtp = async () => {
     if (timer > 0) return;
 
-    await axios.post("http://127.0.0.1:8000/api/send-otp/", {
+    await axios.post("https://e-commerce-app-8jg4.onrender.com/api/send-otp/", {
       email
     });
 

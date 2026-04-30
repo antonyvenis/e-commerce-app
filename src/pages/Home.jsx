@@ -372,7 +372,7 @@ function Home() {
               <img
                 src={
                   item.image
-                    ? `http://127.0.0.1:8000${item.image}`
+                    ? `https://e-commerce-app-8jg4.onrender.com${item.image}`
                     : "https://dummyimage.com/150"
                 }
                 alt={item.name}

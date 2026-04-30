@@ -24,7 +24,7 @@ function Login() {
       setLoading(true);
 
       const res = await axios.post(
-        "http://127.0.0.1:8000/api/login/",
+        "https://e-commerce-app-8jg4.onrender.com/api/login/",
         data
       );
 
@@ -34,21 +34,21 @@ function Login() {
 
       // ❤️ Likes
       const likesRes = await axios.get(
-        "http://127.0.0.1:8000/api/likes/",
+        "https://e-commerce-app-8jg4.onrender.com/api/likes/",
         { params: { username } }
       );
       localStorage.setItem("likes", JSON.stringify(likesRes.data));
 
       // 🛒 Cart
       const cartRes = await axios.get(
-        "http://127.0.0.1:8000/api/cart/",
+        "https://e-commerce-app-8jg4.onrender.com/api/cart/",
         { params: { username } }
       );
       localStorage.setItem("cart", JSON.stringify(cartRes.data));
 
       // 📦 Orders
       const ordersRes = await axios.get(
-        "http://127.0.0.1:8000/api/orders/",
+        "https://e-commerce-app-8jg4.onrender.com/api/orders/",
         { params: { username } }
       );
       localStorage.setItem("orders", JSON.stringify(ordersRes.data));

@@ -151,7 +151,7 @@ function Liked() {
     if (!user) return;
 
     try {
-      const res = await axios.get("http://127.0.0.1:8000/api/likes/", {
+      const res = await axios.get("https://e-commerce-app-8jg4.onrender.com/api/likes/", {
         params: { username: user.username }
       });
 
@@ -195,7 +195,7 @@ function Liked() {
     setLikedProducts(prev => prev.filter(p => p.id !== item.id));
 
     try {
-      await axios.post("http://127.0.0.1:8000/api/remove-like/", {
+      await axios.post("https://e-commerce-app-8jg4.onrender.com/api/remove-like/", {
         username: user.username,
         id: item.id
       });
@@ -216,7 +216,7 @@ function Liked() {
   ================================ */
   const handleAdd = async (item) => {
     try {
-      await axios.post("http://127.0.0.1:8000/api/add-cart/", {
+      await axios.post("https://e-commerce-app-8jg4.onrender.com/api/add-cart/", {
         username: user.username,
         item_name: item.item_name,
         price: item.price || 100,

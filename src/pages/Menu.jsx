@@ -251,7 +251,7 @@ import { useCart } from "./CartContext";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-const API = "http://127.0.0.1:8000";
+const API = "https://e-commerce-app-8jg4.onrender.com";
 
 function Menu() {
   const { cart } = useCart();

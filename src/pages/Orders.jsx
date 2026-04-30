@@ -200,7 +200,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 
-const API = "http://127.0.0.1:8000";
+const API = "https://e-commerce-app-8jg4.onrender.com";
 
 function Orders() {
   const [orders, setOrders] = useState([]);

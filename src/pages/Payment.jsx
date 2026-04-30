@@ -179,7 +179,7 @@ function Payment() {
     }
 
     try {
-      await axios.post("http://127.0.0.1:8000/api/order/", {
+      await axios.post("https://e-commerce-app-8jg4.onrender.com/api/order/", {
         username: user.username,
         name: form.name,
         phone: form.phone,

@@ -272,7 +272,7 @@ function Profile() {
      👤 FETCH PROFILE
   ========================================= */
   useEffect(() => {
-    axios.get("http://127.0.0.1:8000/api/profile/", {
+    axios.get("https://e-commerce-app-8jg4.onrender.com/api/profile/", {
       params: { username: storedUser.username }
     })
     .then(res => setUserData(res.data))
@@ -285,7 +285,7 @@ function Profile() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await axios.get("http://127.0.0.1:8000/api/orders/", {
+        const res = await axios.get("https://e-commerce-app-8jg4.onrender.com/api/orders/", {
           params: { username: storedUser.username }
         });
 

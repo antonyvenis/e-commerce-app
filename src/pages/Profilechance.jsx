@@ -105,7 +105,7 @@ function ProfileChange() {
   // 💾 Save
   const saveProfile = async () => {
     try {
-      await axios.post("http://127.0.0.1:8000/api/update-profile/", user);
+      await axios.post("https://e-commerce-app-8jg4.onrender.com/api/update-profile/", user);
 
       localStorage.setItem("user", JSON.stringify(user));
 

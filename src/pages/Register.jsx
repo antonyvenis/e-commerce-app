@@ -56,7 +56,7 @@ function Register() {
     try {
       setLoading(true);
 
-      await axios.post("http://127.0.0.1:8000/api/send-otp/", {
+      await axios.post("https://e-commerce-app-8jg4.onrender.com/api/send-otp/", {
         email: data.email,
         username: data.username,
         phone: data.phone,
@@ -125,7 +125,7 @@ function Register() {
       setLoading(true);
 
       const res = await axios.post(
-        "http://127.0.0.1:8000/api/register/",
+        "https://e-commerce-app-8jg4.onrender.com/api/register/",
         data
       );
 

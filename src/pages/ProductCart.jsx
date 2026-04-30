@@ -168,7 +168,7 @@ function ProductCard({ product }) {
   const imageUrl = product.image
     ? product.image.startsWith("http")
       ? product.image
-      : `http://127.0.0.1:8000${product.image}`
+      : `https://e-commerce-app-8jg4.onrender.com${product.image}`
     : "https://via.placeholder.com/200";
 
   /* =========================================================
@@ -177,7 +177,7 @@ function ProductCard({ product }) {
   useEffect(() => {
     if (!user) return;
 
-    axios.get("http://127.0.0.1:8000/api/likes/", {
+    axios.get("https://e-commerce-app-8jg4.onrender.com/api/likes/", {
       params: { username: user.username }
     })
     .then(res => {
@@ -212,7 +212,7 @@ function ProductCard({ product }) {
 
     // 🔥 backend (no wait)
     axios.post(
-      `http://127.0.0.1:8000/api/${newLiked ? "add-like" : "remove-like"}/`,
+      `https://e-commerce-app-8jg4.onrender.com/api/${newLiked ? "add-like" : "remove-like"}/`,
       {
         username: user.username,
         item_name: product.name,
@@ -247,7 +247,7 @@ function ProductCard({ product }) {
     toast.success(`${product.name} added to cart 🛒`);
 
     // 🔥 backend (no wait)
-    axios.post("http://127.0.0.1:8000/api/add-cart/", {
+    axios.post("https://e-commerce-app-8jg4.onrender.com/api/add-cart/", {
       username: user.username,
       item_name: product.name,
       price: product.price,
