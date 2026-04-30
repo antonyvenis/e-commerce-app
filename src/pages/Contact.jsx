@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Footer from "./Footer";
-import contactImg from "../assets/hero.png";
+// import contactImg from "../assets/hero.png";
 import toast from "react-hot-toast";
 
 function Contact() {
@@ -58,7 +58,7 @@ ${form.message}
     <div className="contact premium-bg">
 
       <motion.img
-        src={contactImg}
+        src="/src/assets/images/contact.png"
         className="contact-img"
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
