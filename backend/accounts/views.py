@@ -641,3 +641,20 @@ def create_admin(request):
 
     return HttpResponse("Already exists") 
 
+# from django.contrib.auth import get_user_model
+# from django.http import HttpResponse
+
+User = get_user_model()
+
+def reset_admin(request):
+    user = User.objects.filter(username='antony').first()
+    
+    if not user:
+        return HttpResponse("User not found ❌")
+    
+    user.set_password('1234')
+    user.is_staff = True
+    user.is_superuser = True
+    user.save()
+
+    return HttpResponse("Password reset + admin access ✅")
