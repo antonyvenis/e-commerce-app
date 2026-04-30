@@ -12,7 +12,7 @@ from django.contrib.auth import authenticate
 from .serializers import RegisterSerializer
 from .models import CustomUser, Like, CartItem, Order, OrderItem, OTP
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 
 
@@ -620,8 +620,10 @@ def add_product(request):
     )
     return Response({"message": "added"})
 
-# from django.contrib.auth.models import User
+# from django.contrib.auth import get_user_model
 # from django.http import HttpResponse
+
+User = get_user_model()
 
 def create_admin(request):
     key = request.GET.get("key")
@@ -631,11 +633,11 @@ def create_admin(request):
 
     if not User.objects.filter(username='antony').exists():
         User.objects.create_superuser(
-            'antony',
-            'antonyvenis1212@gmail.com',
-            'Venisking@419'
+            username='antony',
+            email='antonyvenis1212@gmail.com',
+            password='Venisking@419'
         )
         return HttpResponse("Admin created ✅")
 
-    return HttpResponse("Already exists")   
+    return HttpResponse("Already exists") 
 
