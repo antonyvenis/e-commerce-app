@@ -288,7 +288,11 @@ function Cart() {
 
                   {/* 🖼 SAME SIZE IMAGE */}
                   <img
-                    src={getImage(item.image)}
+                    src={
+                  item.image
+                    ? `https://e-commerce-app-8jg4.onrender.com${item.image}`
+                    : "https://dummyimage.com/150"
+                    }
                     alt={item.item_name}
                     className="cart-img"
                   />
