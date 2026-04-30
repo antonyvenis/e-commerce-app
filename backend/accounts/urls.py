@@ -1,6 +1,6 @@
 from django.urls import path
-from django.http import HttpResponse
-from .views import create_admin  
+# from django.http import HttpResponse
+# from .views import create_admin  
 from .views import (
     register,
     LoginView,
@@ -23,7 +23,6 @@ from .views import (
     get_products,
     load_products,
     add_products_bulk,
-    reset_admin,
 )
 
 urlpatterns = [
@@ -73,6 +72,6 @@ urlpatterns = [
     path("products/", get_products),
     path("load-products/", load_products),
     path("add-products/", add_products_bulk),
-    path('create-admin/', create_admin),
-    path('reset-admin/', reset_admin),
+    # path('create-admin/', create_admin),
+    # path('reset-admin/', reset_admin),
 ]

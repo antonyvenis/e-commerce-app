@@ -12,8 +12,8 @@ from django.contrib.auth import authenticate
 from .serializers import RegisterSerializer
 from .models import CustomUser, Like, CartItem, Order, OrderItem, OTP
 
-from django.contrib.auth import get_user_model
-from django.http import HttpResponse
+# from django.contrib.auth import get_user_model
+# from django.http import HttpResponse
 
 
 
@@ -620,41 +620,41 @@ def add_product(request):
     )
     return Response({"message": "added"})
 
-# from django.contrib.auth import get_user_model
-# from django.http import HttpResponse
+# # from django.contrib.auth import get_user_model
+# # from django.http import HttpResponse
 
-User = get_user_model()
+# User = get_user_model()
 
-def create_admin(request):
-    key = request.GET.get("key")
+# def create_admin(request):
+#     key = request.GET.get("key")
 
-    if key != "mysecret123":
-        return HttpResponse("Unauthorized ❌")
+#     if key != "mysecret123":
+#         return HttpResponse("Unauthorized ❌")
 
-    if not User.objects.filter(username='antony').exists():
-        User.objects.create_superuser(
-            username='antony',
-            email='antonyvenis1212@gmail.com',
-            password='Venisking@419'
-        )
-        return HttpResponse("Admin created ✅")
+#     if not User.objects.filter(username='antony').exists():
+#         User.objects.create_superuser(
+#             username='antony',
+#             email='antonyvenis1212@gmail.com',
+#             password='Venisking@419'
+#         )
+#         return HttpResponse("Admin created ✅")
 
-    return HttpResponse("Already exists") 
+#     return HttpResponse("Already exists") 
 
-# from django.contrib.auth import get_user_model
-# from django.http import HttpResponse
+# # from django.contrib.auth import get_user_model
+# # from django.http import HttpResponse
 
-User = get_user_model()
+# User = get_user_model()
 
-def reset_admin(request):
-    user = User.objects.filter(username='antony').first()
+# def reset_admin(request):
+#     user = User.objects.filter(username='antony').first()
     
-    if not user:
-        return HttpResponse("User not found ❌")
+#     if not user:
+#         return HttpResponse("User not found ❌")
     
-    user.set_password('1234')
-    user.is_staff = True
-    user.is_superuser = True
-    user.save()
+#     user.set_password('1234')
+#     user.is_staff = True
+#     user.is_superuser = True
+#     user.save()
 
-    return HttpResponse("Password reset + admin access ✅")
+#     return HttpResponse("Password reset + admin access ✅")

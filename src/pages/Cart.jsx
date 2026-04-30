@@ -103,7 +103,7 @@ import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 
-const API = "http://127.0.0.1:8000";
+const API = "https://e-commerce-app-8jg4.onrender.com";
 
 function Cart() {
   const navigate = useNavigate();

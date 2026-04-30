@@ -276,7 +276,7 @@ function Liked() {
               >
 
                 <img
-                  src={item.image || "https://via.placeholder.com/150"}
+                  src={"https://e-commerce-app-8jg4.onrender.com" + item.image}
                   alt={item.item_name}
                 />
 
