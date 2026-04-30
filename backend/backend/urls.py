@@ -18,8 +18,6 @@ from django.urls import path, include
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from django.http import HttpResponse
-from backend.views import create_admin  
 
 def home(request):
     return HttpResponse("Backend Running Successfully 🚀")
@@ -29,7 +27,6 @@ urlpatterns = [
     path('api/', include('accounts.urls')),
     path('', include('accounts.urls')),
     path('legend-admin/', admin.site.urls),
-    path('create-admin/', create_admin),
     path('', home),
 ]
 # 🔥 ADD THIS
