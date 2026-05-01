@@ -81,7 +81,7 @@ def send_otp(request):
         send_mail(
             "Your OTP Code",
             f"Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is {otp}",
-            settings.EMAIL_HOST_USER,
+            "antonyvenis1212@gmail.com",
             [email],
             fail_silently=False,
         )
