@@ -186,21 +186,39 @@ function Home() {
   /* =========================
      🔥 HERO SLIDER (15)
   ========================= */
-  const heroSlides = [
-  { image: "/src/assets/images/briyani_hero.png", title: "🔥 Biryani Special", sub: "Hot & spicy" },
-  { image: "/src/assets/images/pizza_hero.png", title: "🍕 Pizza Blast", sub: "Cheesy love" },
-  { image: "/src/assets/images/burger_hero.png", title: "🍔 Burger King", sub: "Juicy bites" },
-  { image: "/src/assets/images/cool_drinks_hero.png", title: "🥤 Cool Drinks", sub: "Chill refresh" },
-  { image: "/src/assets/images/chicken_fry_hero.png", title: "🍗 Chicken Fry", sub: "Crispy & tasty" },
-  { image: "/src/assets/images/noodles_hero.png", title: "🍜 Noodles", sub: "Street style" },
-  { image: "/src/assets/images/meals_hero.png", title: "🍛 Meals", sub: "Full meals" },
-  { image: "/src/assets/images/veg_special_hero.png", title: "🥗 Veg Special", sub: "Healthy" },
-  { image: "/src/assets/images/cake_hero.png", title: "🍰 Desserts", sub: "Sweet treat" },
-  { image: "/src/assets/images/chinese_hero.png", title: "🥘 Chinese", sub: "Rich taste" },
-  { image: "/src/assets/images/bbq_hero.png", title: "🍖 BBQ", sub: "Smoky flavor" },
-  { image: "/src/assets/images/breakfast_hero.png", title: "🍞 Breakfast", sub: "Start fresh" },
-  { image: "/src/assets/images/Juice_hero.png", title: "🍹 Juice", sub: "Natural energy" },
-  { image: "/src/assets/images/combo_offers_hero.png", title: "🔥 Combo Offers", sub: "Save big" }
+//   const heroSlides = [
+//   { image: "/src/assets/images/briyani_hero.png", title: "🔥 Biryani Special", sub: "Hot & spicy" },
+//   { image: "/src/assets/images/pizza_hero.png", title: "🍕 Pizza Blast", sub: "Cheesy love" },
+//   { image: "/src/assets/images/burger_hero.png", title: "🍔 Burger King", sub: "Juicy bites" },
+//   { image: "/src/assets/images/cool_drinks_hero.png", title: "🥤 Cool Drinks", sub: "Chill refresh" },
+//   { image: "/src/assets/images/chicken_fry_hero.png", title: "🍗 Chicken Fry", sub: "Crispy & tasty" },
+//   { image: "/src/assets/images/noodles_hero.png", title: "🍜 Noodles", sub: "Street style" },
+//   { image: "/src/assets/images/meals_hero.png", title: "🍛 Meals", sub: "Full meals" },
+//   { image: "/src/assets/images/veg_special_hero.png", title: "🥗 Veg Special", sub: "Healthy" },
+//   { image: "/src/assets/images/cake_hero.png", title: "🍰 Desserts", sub: "Sweet treat" },
+//   { image: "/src/assets/images/chinese_hero.png", title: "🥘 Chinese", sub: "Rich taste" },
+//   { image: "/src/assets/images/bbq_hero.png", title: "🍖 BBQ", sub: "Smoky flavor" },
+//   { image: "/src/assets/images/breakfast_hero.png", title: "🍞 Breakfast", sub: "Start fresh" },
+//   { image: "/src/assets/images/Juice_hero.png", title: "🍹 Juice", sub: "Natural energy" },
+//   { image: "/src/assets/images/combo_offers_hero.png", title: "🔥 Combo Offers", sub: "Save big" }
+// ];
+
+const heroSlides = [
+  { image: "https://images.unsplash.com/photo-1600891964599-f61ba0e24092", title: "🔥 Biryani Special", sub: "Hot & spicy" },
+  { image: "https://images.unsplash.com/photo-1594007654729-407eedc4be65", title: "🍕 Pizza Blast", sub: "Cheesy love" },
+  { image: "https://images.unsplash.com/photo-1550547660-d9450f859349", title: "🍔 Burger King", sub: "Juicy bites" },
+  { image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87", title: "🥤 Cool Drinks", sub: "Chill refresh" },
+  { image: "https://images.unsplash.com/photo-1604908812242-2d6c1a3d1a05", title: "🍗 Chicken Fry", sub: "Crispy & tasty" },
+  { image: "https://images.unsplash.com/photo-1617196035154-1e5f9c4c0c09", title: "🍜 Noodles", sub: "Street style" },
+  { image: "https://images.unsplash.com/photo-1604908176997-431b1b8c3d74", title: "🍛 Meals", sub: "Full meals" },
+  { image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c", title: "🍤 Seafood", sub: "Fresh catch" },
+  { image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd", title: "🥗 Veg Special", sub: "Healthy" },
+  { image: "https://images.unsplash.com/photo-1551024601-bec78aea704b", title: "🍰 Desserts", sub: "Sweet treat" },
+  { image: "https://images.unsplash.com/photo-1605475128387-92f1f8f1d6a0", title: "🥘 Curry", sub: "Rich taste" },
+  { image: "https://images.unsplash.com/photo-1600891963935-8f6b6b0f6b5c", title: "🍖 BBQ", sub: "Smoky flavor" },
+  { image: "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0", title: "🍞 Breakfast", sub: "Start fresh" },
+  { image: "https://images.unsplash.com/photo-1525385133512-2f3bdd039054", title: "🍹 Juice", sub: "Natural energy" },
+  { image: "https://images.unsplash.com/photo-1600891964092-4316c288032e", title: "🔥 Combo Offers", sub: "Save big" }
 ];
 
   const [heroIndex, setHeroIndex] = useState(0);
