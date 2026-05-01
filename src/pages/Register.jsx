@@ -61,6 +61,7 @@ function Register() {
         username: data.username,
         phone: data.phone,
       });
+      setOtpSent(true); // ✅ important
 
       toast.success("OTP sent 📧");
 
