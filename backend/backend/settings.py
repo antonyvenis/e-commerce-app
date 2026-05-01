@@ -153,14 +153,23 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'antonyvenis1212@gmail.com'
+# EMAIL_HOST_PASSWORD = 'ilew ihtg wfhg ascg'
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
+
+EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
+EMAIL_PORT = int(os.getenv("EMAIL_PORT", 587))
+
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'antonyvenis1212@gmail.com'
-EMAIL_HOST_PASSWORD = 'ilew ihtg wfhg ascg'
-# EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-# EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+
 
 ADMIN_SITE_HEADER = "🔥 Antony Admin Panel"
 ADMIN_SITE_TITLE = "Dashboard"
