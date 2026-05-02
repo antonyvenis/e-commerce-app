@@ -6,6 +6,7 @@ from django.conf import settings
 import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
+from .utils import send_email_otp
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
