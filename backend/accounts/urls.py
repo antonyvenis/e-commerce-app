@@ -28,25 +28,25 @@ urlpatterns = [
     # =========================
     # 🔐 AUTH
     # =========================
-    path('api/register/', register),
-    path('api/login/', LoginView.as_view()),
-    path('api/send-otp/', send_otp),
-    path('api/verify-otp/', verify_otp),
-    path('api/reset-password/', reset_password),
-    path('api/forgot-password-otp/', forgot_password_send_otp),
+    path('register/', register),
+    path('login/', LoginView.as_view()),
+    path('send-otp/', send_otp),
+    path('verify-otp/', verify_otp),
+    path('reset-password/', reset_password),
+    path('forgot-password-otp/', forgot_password_send_otp),
 
     # =========================
     # 👤 PROFILE
     # =========================
-    path('api/profile/', profile),
-    path('api/update-profile/', update_profile),
+    path('profile/', profile),
+    path('update-profile/', update_profile),
 
     # =========================
     # ❤️ LIKES
     # =========================
-    path('api/add-like/', add_like),
-    path('api/likes/', get_likes),
-    path('api/remove-like/', remove_like),
+    path('add-like/', add_like),
+    path('likes/', get_likes),
+    path('remove-like/', remove_like),
 
     # =========================
     # 🛒 CART
