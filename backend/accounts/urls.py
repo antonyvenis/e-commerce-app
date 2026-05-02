@@ -1,6 +1,4 @@
-from django.urls import path
-# from django.http import HttpResponse
-# from .views import create_admin  
+from django.urls import path, include
 from .views import (
     register,
     LoginView,
@@ -30,19 +28,19 @@ urlpatterns = [
     # =========================
     # 🔐 AUTH
     # =========================
-    path('register/', register),
-    path('login/', LoginView.as_view()),
+    path('api/register/', register),
+    path('api/login/', LoginView.as_view()),
     path('api/send-otp/', send_otp),
-    path('verify-otp/', verify_otp),
-    path('register/', register),
-    path('reset-password/', reset_password),
-    path('forgot-password-otp/', forgot_password_send_otp),
+    path('api/verify-otp/', verify_otp),
+    path('api/reset-password/', reset_password),
+    path('api/forgot-password-otp/', forgot_password_send_otp),
+    path('api/', include('accounts.urls')),  # Include accounts app URLs
 
     # =========================
     # 👤 PROFILE
     # =========================
-    path('profile/', profile),
-    path('update-profile/', update_profile),
+    path('api/profile/', profile),
+    path('api/update-profile/', update_profile),
 
     # =========================
     # ❤️ LIKES
@@ -72,6 +70,4 @@ urlpatterns = [
     path("products/", get_products),
     path("load-products/", load_products),
     path("add-products/", add_products_bulk),
-    # path('create-admin/', create_admin),
-    # path('reset-admin/', reset_admin),
 ]
