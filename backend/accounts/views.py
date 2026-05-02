@@ -3,6 +3,7 @@ import random
 from django.core.mail import send_mail
 from django.conf import settings
 
+import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
@@ -18,7 +19,7 @@ from .models import CustomUser, Like, CartItem, Order, OrderItem, OTP
 
 # ================================
 # 📧 SEND OTP (DB 🔥)
-================================
+#================================
 # @api_view(['POST'])
 # def send_otp(request):
 #     email = request.data.get("email")

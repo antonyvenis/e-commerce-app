@@ -194,4 +194,5 @@ CSRF_TRUSTED_ORIGINS = [
     "https://e-commerce-app-food.vercel.app"
 ]
 
+CORS_ALLOW_CREDENTIALS = True
 
