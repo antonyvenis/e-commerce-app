@@ -24,9 +24,8 @@ def home(request):
     return HttpResponse("Backend Running Successfully 🚀")
 
 urlpatterns = [
-    # 🔥 API ROUTES
-    path('api/', include('accounts.urls')),
-    path('', include('accounts.urls')),
+    path('api/', include('accounts.urls')),  # 🔥 ONLY THIS
+
     path('legend-admin/', admin.site.urls),
     path('', home),
 ]
