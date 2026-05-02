@@ -3,7 +3,6 @@ import random
 from django.core.mail import send_mail
 from django.conf import settings
 
-import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
