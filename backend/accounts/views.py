@@ -3,6 +3,10 @@ import random
 from django.core.mail import send_mail
 from django.conf import settings
 
+import os
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -12,54 +16,17 @@ from django.contrib.auth import authenticate
 from .serializers import RegisterSerializer
 from .models import CustomUser, Like, CartItem, Order, OrderItem, OTP
 
-# from django.contrib.auth import get_user_model
-# from django.http import HttpResponse
-
-
 
 # ================================
 # 📧 SEND OTP (DB 🔥)
 ================================
-@api_view(['POST'])
-def send_otp(request):
-    email = request.data.get("email")
-    username = request.data.get("username")  # 🔥 ADD THIS
-    phone = request.data.get("phone")  # 🔥 ADD THIS
-
-    # 🔥 USERNAME CHECK
-    if CustomUser.objects.filter(username__iexact=username).exists():
-        return Response({"error": "Username already exists ❌"}, status=400)
-
-    if CustomUser.objects.filter(email=email).exists():
-        return Response({"error": "Email already exists ❌"}, status=400)
-
-    if CustomUser.objects.filter(phone=phone).exists():
-        return Response({"error": "Phone number already exists ❌"}, status=400)
-
-    otp = str(random.randint(100000, 999999))
-
-    OTP.objects.update_or_create(
-        email=email,
-        defaults={"otp": otp, "is_verified": False}
-    )
-
-    send_mail(
-        "Your OTP Code",
-        f"Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is {otp}",
-        settings.DEFAULT_FROM_EMAIL,
-        [email],
-        fail_silently=False,
-    )
-
-    return Response({"message": "OTP sent 📧"})
-
 # @api_view(['POST'])
 # def send_otp(request):
 #     email = request.data.get("email")
-#     username = request.data.get("username")
-#     phone = request.data.get("phone")
+#     username = request.data.get("username")  # 🔥 ADD THIS
+#     phone = request.data.get("phone")  # 🔥 ADD THIS
 
-#     # 🔥 VALIDATION
+#     # 🔥 USERNAME CHECK
 #     if CustomUser.objects.filter(username__iexact=username).exists():
 #         return Response({"error": "Username already exists ❌"}, status=400)
 
@@ -76,21 +43,40 @@ def send_otp(request):
 #         defaults={"otp": otp, "is_verified": False}
 #     )
 
-#     # 🔥 EMAIL SEND (SAFE MODE)
-#     try:
-#         send_mail(
-#             "Your OTP Code",
-#             f"Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is {otp}",
-#             "antonyvenis1212@gmail.com",
-#             [email],
-#             fail_silently=False,
-#         )
-#     except Exception as e:
-#         print("❌ EMAIL ERROR:", str(e))
-#         return Response({
-#             "error": "Email sending failed ❌",
-#             "otp_debug": otp   # 🔥 TEMP (remove later)
-#         }, status=500)
+#     send_mail(
+#         "Your OTP Code",
+#         f"Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is {otp}",
+#         settings.DEFAULT_FROM_EMAIL,
+#         [email],
+#         fail_silently=True,
+#     )
+
+#     return Response({"message": "OTP sent 📧"})
+
+# @api_view(['POST'])
+# def send_otp(request):
+#     email = request.data.get("email")
+#     username = request.data.get("username")
+#     phone = request.data.get("phone")
+
+#     if CustomUser.objects.filter(username__iexact=username).exists():
+#         return Response({"error": "Username already exists ❌"}, status=400)
+
+#     if CustomUser.objects.filter(email=email).exists():
+#         return Response({"error": "Email already exists ❌"}, status=400)
+
+#     if CustomUser.objects.filter(phone=phone).exists():
+#         return Response({"error": "Phone number already exists ❌"}, status=400)
+
+#     otp = str(random.randint(100000, 999999))
+
+#     OTP.objects.update_or_create(
+#         email=email,
+#         defaults={"otp": otp, "is_verified": False}
+#     )
+
+#     # 🔥 USE API (NOT SMTP)
+#     send_email_otp(email, otp)
 
 #     return Response({"message": "OTP sent 📧"})
 
@@ -661,41 +647,51 @@ def add_product(request):
     )
     return Response({"message": "added"})
 
-# # from django.contrib.auth import get_user_model
-# # from django.http import HttpResponse
 
-# User = get_user_model()
+# ================================
+# OTP RELATED FUNCTION
+# ================================
+# 🔹 function
+def send_email_otp(email, otp):
+    try:
+        message = Mail(
+            from_email='antonyvenis1212@gmail.com',
+            to_emails=email,
+            subject='Your OTP Code',
+            html_content=f'<strong>Your OTP is {otp}</strong>'
+        )
 
-# def create_admin(request):
-#     key = request.GET.get("key")
+        sg = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
+        sg.send(message)
 
-#     if key != "mysecret123":
-#         return HttpResponse("Unauthorized ❌")
+    except Exception as e:
+        print("EMAIL ERROR 👉", str(e))
 
-#     if not User.objects.filter(username='antony').exists():
-#         User.objects.create_superuser(
-#             username='antony',
-#             email='antonyvenis1212@gmail.com',
-#             password='Venisking@419'
-#         )
-#         return HttpResponse("Admin created ✅")
 
-#     return HttpResponse("Already exists") 
+# 🔹 API (THIS IS YOUR CODE)
+@api_view(['POST'])
+def send_otp(request):
+    email = request.data.get("email")
+    username = request.data.get("username")
+    phone = request.data.get("phone")
 
-# # from django.contrib.auth import get_user_model
-# # from django.http import HttpResponse
+    if CustomUser.objects.filter(username__iexact=username).exists():
+        return Response({"error": "Username already exists ❌"}, status=400)
 
-# User = get_user_model()
+    if CustomUser.objects.filter(email=email).exists():
+        return Response({"error": "Email already exists ❌"}, status=400)
 
-# def reset_admin(request):
-#     user = User.objects.filter(username='antony').first()
-    
-#     if not user:
-#         return HttpResponse("User not found ❌")
-    
-#     user.set_password('1234')
-#     user.is_staff = True
-#     user.is_superuser = True
-#     user.save()
+    if CustomUser.objects.filter(phone=phone).exists():
+        return Response({"error": "Phone number already exists ❌"}, status=400)
 
-#     return HttpResponse("Password reset + admin access ✅")
+    otp = str(random.randint(100000, 999999))
+
+    OTP.objects.update_or_create(
+        email=email,
+        defaults={"otp": otp, "is_verified": False}
+    )
+
+    # 🔥 IMPORTANT
+    send_email_otp(email, otp)
+
+    return Response({"message": "OTP sent 📧"})
