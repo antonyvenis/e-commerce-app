@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 from .views import (
     register,
     LoginView,
@@ -34,7 +34,6 @@ urlpatterns = [
     path('api/verify-otp/', verify_otp),
     path('api/reset-password/', reset_password),
     path('api/forgot-password-otp/', forgot_password_send_otp),
-    path('api/', include('accounts.urls')),  # Include accounts app URLs
 
     # =========================
     # 👤 PROFILE
