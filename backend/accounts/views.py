@@ -83,7 +83,7 @@ def send_otp(request):
             f"Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is {otp}",
             "antonyvenis1212@gmail.com",
             [email],
-            fail_silently=False,
+            fail_silently=True,
         )
     except Exception as e:
         print("❌ EMAIL ERROR:", str(e))

@@ -151,7 +151,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = False
+
+CORS_ALLOWED_ORIGINS = [
+    "https://e-commerce-app-food.vercel.app",
+]
 
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_HOST = 'smtp.gmail.com'
@@ -184,6 +188,4 @@ SESSION_COOKIE_AGE = 300  # 5 minutes
 # SESSION_COOKIE_AGE = 0  # Session expires immediately when the browser is closed
 SESSION_SAVE_EVERY_REQUEST = True
 
-CORS_ALLOWED_ORIGINS = [
-    "https://e-commerce-app-food.vercel.app",
-]
+

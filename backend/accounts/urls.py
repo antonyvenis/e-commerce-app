@@ -32,7 +32,7 @@ urlpatterns = [
     # =========================
     path('register/', register),
     path('login/', LoginView.as_view()),
-    path('send-otp/', send_otp),
+    path('api/send-otp/', send_otp),
     path('verify-otp/', verify_otp),
     path('register/', register),
     path('reset-password/', reset_password),
