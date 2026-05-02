@@ -183,9 +183,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Session settings
 
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_COOKIE_AGE = 300  # 5 minutes
-# SESSION_COOKIE_AGE = 0  # Session expires immediately when the browser is closed
-SESSION_SAVE_EVERY_REQUEST = True
+# SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+# SESSION_COOKIE_AGE = 300  # 5 minutes
+# # SESSION_COOKIE_AGE = 0  # Session expires immediately when the browser is closed
+# SESSION_SAVE_EVERY_REQUEST = True
+
+CORS_ALLOW_CREDENTIALS = True
 
 
