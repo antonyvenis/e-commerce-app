@@ -19,47 +19,14 @@ from .models import CustomUser, Like, CartItem, Order, OrderItem, OTP
 
 # ================================
 # 📧 SEND OTP (DB 🔥)
-# ================================
-# @api_view(['POST'])
-# def send_otp(request):
-#     email = request.data.get("email")
-#     username = request.data.get("username")  # 🔥 ADD THIS
-#     phone = request.data.get("phone")  # 🔥 ADD THIS
-
-#     # 🔥 USERNAME CHECK
-#     if CustomUser.objects.filter(username__iexact=username).exists():
-#         return Response({"error": "Username already exists ❌"}, status=400)
-
-#     if CustomUser.objects.filter(email=email).exists():
-#         return Response({"error": "Email already exists ❌"}, status=400)
-
-#     if CustomUser.objects.filter(phone=phone).exists():
-#         return Response({"error": "Phone number already exists ❌"}, status=400)
-
-#     otp = str(random.randint(100000, 999999))
-
-#     OTP.objects.update_or_create(
-#         email=email,
-#         defaults={"otp": otp, "is_verified": False}
-#     )
-
-#     send_mail(
-#         "Your OTP Code",
-#         f"Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is {otp}",
-#         settings.EMAIL_HOST_USER,
-#         [email],
-#         fail_silently=False,
-#     )
-
-#     return Response({"message": "OTP sent 📧"})
-
+================================
 @api_view(['POST'])
 def send_otp(request):
     email = request.data.get("email")
-    username = request.data.get("username")
-    phone = request.data.get("phone")
+    username = request.data.get("username")  # 🔥 ADD THIS
+    phone = request.data.get("phone")  # 🔥 ADD THIS
 
-    # 🔥 VALIDATION
+    # 🔥 USERNAME CHECK
     if CustomUser.objects.filter(username__iexact=username).exists():
         return Response({"error": "Username already exists ❌"}, status=400)
 
@@ -76,23 +43,56 @@ def send_otp(request):
         defaults={"otp": otp, "is_verified": False}
     )
 
-    # 🔥 EMAIL SEND (SAFE MODE)
-    try:
-        send_mail(
-            "Your OTP Code",
-            f"Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is {otp}",
-            "antonyvenis1212@gmail.com",
-            [email],
-            fail_silently=False,
-        )
-    except Exception as e:
-        print("❌ EMAIL ERROR:", str(e))
-        return Response({
-            "error": "Email sending failed ❌",
-            "otp_debug": otp   # 🔥 TEMP (remove later)
-        }, status=500)
+    send_mail(
+        "Your OTP Code",
+        f"Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is {otp}",
+        settings.DEFAULT_FROM_EMAIL,
+        [email],
+        fail_silently=False,
+    )
 
     return Response({"message": "OTP sent 📧"})
+
+# @api_view(['POST'])
+# def send_otp(request):
+#     email = request.data.get("email")
+#     username = request.data.get("username")
+#     phone = request.data.get("phone")
+
+#     # 🔥 VALIDATION
+#     if CustomUser.objects.filter(username__iexact=username).exists():
+#         return Response({"error": "Username already exists ❌"}, status=400)
+
+#     if CustomUser.objects.filter(email=email).exists():
+#         return Response({"error": "Email already exists ❌"}, status=400)
+
+#     if CustomUser.objects.filter(phone=phone).exists():
+#         return Response({"error": "Phone number already exists ❌"}, status=400)
+
+#     otp = str(random.randint(100000, 999999))
+
+#     OTP.objects.update_or_create(
+#         email=email,
+#         defaults={"otp": otp, "is_verified": False}
+#     )
+
+#     # 🔥 EMAIL SEND (SAFE MODE)
+#     try:
+#         send_mail(
+#             "Your OTP Code",
+#             f"Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is {otp}",
+#             "antonyvenis1212@gmail.com",
+#             [email],
+#             fail_silently=False,
+#         )
+#     except Exception as e:
+#         print("❌ EMAIL ERROR:", str(e))
+#         return Response({
+#             "error": "Email sending failed ❌",
+#             "otp_debug": otp   # 🔥 TEMP (remove later)
+#         }, status=500)
+
+#     return Response({"message": "OTP sent 📧"})
 
 
 # ================================
