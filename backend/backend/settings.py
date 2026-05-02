@@ -24,9 +24,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-$-+eshy1pt-ooasa%e_ln9*rnzbt2nji0w6s7_%)n^)a%q%z7_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['*']
+
+ALLOWED_HOSTS = [
+    "e-commerce-app-8jg4.onrender.com"
+]
 
 
 # Application definition
@@ -163,15 +167,17 @@ CORS_ALLOWED_ORIGINS = [
 # EMAIL_HOST_USER = 'antonyvenis1212@gmail.com'
 # EMAIL_HOST_PASSWORD = 'ilew ihtg wfhg ascg'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-EMAIL_HOST = os.getenv("EMAIL_HOST")
-EMAIL_PORT = int(os.getenv("EMAIL_PORT", 587))
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-EMAIL_USE_TLS = True
+# EMAIL_HOST = os.getenv("EMAIL_HOST")
+# EMAIL_PORT = int(os.getenv("EMAIL_PORT", 587))
+# EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+# EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+# EMAIL_USE_TLS = True
 
 DEFAULT_FROM_EMAIL = "antonyvenis1212@gmail.com"
+
+SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
 
 
 ADMIN_SITE_HEADER = "🔥 Antony Admin Panel"
