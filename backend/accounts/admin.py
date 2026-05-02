@@ -94,21 +94,21 @@ class ProductAdmin(admin.ModelAdmin):
 # ============================
 # 📦 PRODUCTS ADD ITEM ADMIN
 # ============================
-@api_view(['POST'])
-def add_products_bulk(request):
+# @api_view(['POST'])
+# def add_products_bulk(request):
 
-    products = request.data  # list வரும்
+#     products = request.data  # list வரும்
 
-    for p in products:
-        Product.objects.update_or_create(
-            name=p["name"],  # duplicate avoid
-            defaults={
-                "price": p["price"],
-                "category": p["category"],
-                "rating": p["rating"],
-                "image": p["image"],
-                "stock": 10
-            }
-        )
+#     for p in products:
+#         Product.objects.update_or_create(
+#             name=p["name"],  # duplicate avoid
+#             defaults={
+#                 "price": p["price"],
+#                 "category": p["category"],
+#                 "rating": p["rating"],
+#                 "image": p["image"],
+#                 "stock": 10
+#             }
+#         )
 
-    return Response({"message": "Products saved to DB ✅"})
+#     return Response({"message": "Products saved to DB ✅"})
