@@ -107,61 +107,32 @@ from django.utils import timezone
 #     except OTP.DoesNotExist:
 #         return Response({"error": "Invalid OTP ❌"}, status=400)
 
-# from datetime import timedelta
-# from django.utils import timezone
-
-# @api_view(['POST'])
-# def verify_otp(request):
-#     email = request.data.get("email")
-#     otp = str(request.data.get("otp"))   # 🔥 FIX
-
-#     if not otp:
-#         return Response({"error": "Enter OTP ❌"}, status=400)
-
-#     try:
-#         record = OTP.objects.get(email=email, otp=otp)
-
-#         # ⏰ OTP EXPIRY (5 mins)
-#         if record.created_at < timezone.now() - timedelta(minutes=5):
-#             return Response({"error": "OTP expired ⏰"}, status=400)
-
-#         # 🔁 ALREADY USED CHECK
-#         if record.is_verified:
-#             return Response({"error": "OTP already used ❌"}, status=400)
-
-#         # ✅ VERIFY
-#         record.is_verified = True
-#         record.save()
-
-#         return Response({"message": "OTP verified ✅"})
-
-#     except OTP.DoesNotExist:
-#         return Response({"error": "Invalid OTP ❌"}, status=400)
-
 @api_view(['POST'])
 def verify_otp(request):
     email = request.data.get("email")
-    otp = str(request.data.get("otp")).strip()   # 🔥 FIX (trim + string)
+    otp = str(request.data.get("otp"))
 
     if not otp:
         return Response({"error": "Enter OTP ❌"}, status=400)
 
-    # 🔥 GET LATEST OTP ONLY
     record = OTP.objects.filter(email=email).order_by('-created_at').first()
 
-    # ❌ OTP இல்ல / mismatch
-    if not record or record.otp != otp:
+    if not record:
         return Response({"error": "Invalid OTP ❌"}, status=400)
 
-    # ⏰ OTP EXPIRY (5 mins)
+    # 🔥 DEBUG
+    print("NOW 👉", timezone.now())
+    print("CREATED 👉", record.created_at)
+    print("DIFF 👉", timezone.now() - record.created_at)
+
+    # 🔥 FIX INDENTATION
     if record.created_at < timezone.now() - timedelta(minutes=5):
         return Response({"error": "OTP expired ⏰"}, status=400)
 
-    # 🔁 ALREADY USED
-    if record.is_verified:
-        return Response({"error": "OTP already used ❌"}, status=400)
+    # 🔥 OTP MATCH CHECK
+    if record.otp != otp:
+        return Response({"error": "Invalid OTP ❌"}, status=400)
 
-    # ✅ VERIFY
     record.is_verified = True
     record.save()
 
