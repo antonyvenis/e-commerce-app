@@ -973,7 +973,7 @@ def send_email_otp(email, otp):
             to_emails=email,
             subject='Your OTP Code',
             html_content=f"""
-            <strong>⚡💫𝓛𝓮𝓰𝓮𝓷𝓭💫⚡ Login</strong>
+            <strong>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡ Login</strong>
             <p>Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is:</p>
             <h1>{otp}</h1>
             <p>Do not share this OTP with anyone ❌</p>

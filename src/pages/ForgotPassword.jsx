@@ -261,6 +261,7 @@ function ForgotPassword() {
       setOtpSent(false); // 🔥 optional UX
 
     } catch (err) {
+      console.log(err.response?.data);  // 🔥 ADD THIS
       toast.error(err.response?.data?.error || "Invalid OTP ❌");
     }
   };
