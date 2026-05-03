@@ -87,7 +87,8 @@ from .models import CustomUser, Like, CartItem, Order, OrderItem, OTP
 @api_view(['POST'])
 def verify_otp(request):
     email = request.data.get("email")
-    otp = request.data.get("otp")
+    # otp = request.data.get("otp")
+    otp = str(request.data.get("otp"))   # 🔥 FIX
 
     if not otp:
         return Response({"error": "Enter OTP ❌"}, status=400)
