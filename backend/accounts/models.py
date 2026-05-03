@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timezone
 
 
 # ============================
@@ -24,8 +25,12 @@ class OTP(models.Model):
     is_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    # 🔥 NEW FIELDS (ANTI-SPAM)
+    last_sent_at = models.DateTimeField(null=True, blank=True)
+    send_count = models.IntegerField(default=0)
+
     def __str__(self):
-        return self.email
+        return self.email         
 
 # ============================
 # ❤️ Likes
@@ -120,3 +125,4 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+      
