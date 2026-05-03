@@ -107,6 +107,9 @@ from django.utils import timezone
 #     except OTP.DoesNotExist:
 #         return Response({"error": "Invalid OTP ❌"}, status=400)
 
+from datetime import timedelta
+from django.utils import timezone
+
 @api_view(['POST'])
 def verify_otp(request):
     email = request.data.get("email")
@@ -115,21 +118,24 @@ def verify_otp(request):
     if not otp:
         return Response({"error": "Enter OTP ❌"}, status=400)
 
+    # 🔥 ALWAYS GET LATEST OTP
     record = OTP.objects.filter(email=email).order_by('-created_at').first()
 
     if not record:
-        return Response({"error": "Invalid OTP ❌"}, status=400)
+        return Response({"error": "OTP not found ❌"}, status=400)
 
-    # 🔥 DEBUG
+    # 🔥 DEBUG (remove later)
     print("NOW 👉", timezone.now())
     print("CREATED 👉", record.created_at)
     print("DIFF 👉", timezone.now() - record.created_at)
 
-    # 🔥 FIX INDENTATION
-    if record.created_at < timezone.now() - timedelta(minutes=5):
+    # 🔥 FIX → use total_seconds()
+    diff = timezone.now() - record.created_at
+
+    if diff.total_seconds() > 300:   # 5 minutes
         return Response({"error": "OTP expired ⏰"}, status=400)
 
-    # 🔥 OTP MATCH CHECK
+    # 🔥 MATCH OTP
     if record.otp != otp:
         return Response({"error": "Invalid OTP ❌"}, status=400)
 
@@ -137,7 +143,7 @@ def verify_otp(request):
     record.save()
 
     return Response({"message": "OTP verified ✅"})
-
+    
 # ================================
 # 🧑 REGISTER (OTP REQUIRED 🔥)
 # # ================================
