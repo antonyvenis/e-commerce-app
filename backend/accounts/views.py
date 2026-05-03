@@ -20,8 +20,6 @@ from .models import CustomUser, Like, CartItem, Order, OrderItem, OTP
 from datetime import timedelta
 from django.utils import timezone
 
-
-
 # ================================
 # 📧 SEND OTP (DB 🔥)
 #================================
@@ -109,36 +107,65 @@ from django.utils import timezone
 #     except OTP.DoesNotExist:
 #         return Response({"error": "Invalid OTP ❌"}, status=400)
 
-from datetime import timedelta
-from django.utils import timezone
+# from datetime import timedelta
+# from django.utils import timezone
+
+# @api_view(['POST'])
+# def verify_otp(request):
+#     email = request.data.get("email")
+#     otp = str(request.data.get("otp"))   # 🔥 FIX
+
+#     if not otp:
+#         return Response({"error": "Enter OTP ❌"}, status=400)
+
+#     try:
+#         record = OTP.objects.get(email=email, otp=otp)
+
+#         # ⏰ OTP EXPIRY (5 mins)
+#         if record.created_at < timezone.now() - timedelta(minutes=5):
+#             return Response({"error": "OTP expired ⏰"}, status=400)
+
+#         # 🔁 ALREADY USED CHECK
+#         if record.is_verified:
+#             return Response({"error": "OTP already used ❌"}, status=400)
+
+#         # ✅ VERIFY
+#         record.is_verified = True
+#         record.save()
+
+#         return Response({"message": "OTP verified ✅"})
+
+#     except OTP.DoesNotExist:
+#         return Response({"error": "Invalid OTP ❌"}, status=400)
 
 @api_view(['POST'])
 def verify_otp(request):
     email = request.data.get("email")
-    otp = str(request.data.get("otp"))   # 🔥 FIX
+    otp = str(request.data.get("otp")).strip()   # 🔥 FIX (trim + string)
 
     if not otp:
         return Response({"error": "Enter OTP ❌"}, status=400)
 
-    try:
-        record = OTP.objects.get(email=email, otp=otp)
+    # 🔥 GET LATEST OTP ONLY
+    record = OTP.objects.filter(email=email).order_by('-created_at').first()
 
-        # ⏰ OTP EXPIRY (5 mins)
-        if record.created_at < timezone.now() - timedelta(minutes=5):
-            return Response({"error": "OTP expired ⏰"}, status=400)
-
-        # 🔁 ALREADY USED CHECK
-        if record.is_verified:
-            return Response({"error": "OTP already used ❌"}, status=400)
-
-        # ✅ VERIFY
-        record.is_verified = True
-        record.save()
-
-        return Response({"message": "OTP verified ✅"})
-
-    except OTP.DoesNotExist:
+    # ❌ OTP இல்ல / mismatch
+    if not record or record.otp != otp:
         return Response({"error": "Invalid OTP ❌"}, status=400)
+
+    # ⏰ OTP EXPIRY (5 mins)
+    if record.created_at < timezone.now() - timedelta(minutes=5):
+        return Response({"error": "OTP expired ⏰"}, status=400)
+
+    # 🔁 ALREADY USED
+    if record.is_verified:
+        return Response({"error": "OTP already used ❌"}, status=400)
+
+    # ✅ VERIFY
+    record.is_verified = True
+    record.save()
+
+    return Response({"message": "OTP verified ✅"})
 
 # ================================
 # 🧑 REGISTER (OTP REQUIRED 🔥)
