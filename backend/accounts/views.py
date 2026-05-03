@@ -107,13 +107,12 @@ from django.utils import timezone
 #     except OTP.DoesNotExist:
 #         return Response({"error": "Invalid OTP ❌"}, status=400)
 
-from datetime import timedelta
-from django.utils import timezone
 
 @api_view(['POST'])
 def verify_otp(request):
     email = request.data.get("email")
     otp = str(request.data.get("otp"))
+    otp_type = request.data.get("type")  # 🔥 IMPORTANT
 
     if not otp:
         return Response({"error": "Enter OTP ❌"}, status=400)
@@ -823,6 +822,7 @@ def forgot_password_send_otp(request):
     otp_record = OTP.objects.create(
         email=email,
         otp=otp,
+        type="forgot_password",
         is_verified=False,
         last_sent_at=now,
         send_count=(last_otp.send_count + 1) if last_otp else 1
@@ -1066,6 +1066,7 @@ def send_otp(request):
         email=email,
         defaults={
             "otp": otp,
+            "type": "register",
             "is_verified": False,
             "last_sent_at": timezone.now(),
             "send_count": (otp_obj.send_count + 1) if otp_obj else 1

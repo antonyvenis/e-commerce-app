@@ -205,7 +205,8 @@ function OTP() {
         "https://e-commerce-app-8jg4.onrender.com/api/verify-otp/",
         {
           email,
-          otp: finalOtp
+          otp: finalOtp,
+          type: "register" // 🔥 IMPORTANT
         }
       );
 
