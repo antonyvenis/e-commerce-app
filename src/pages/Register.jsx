@@ -208,6 +208,21 @@ function Register() {
         {loading ? "Processing..." : "Register 🚀"}
       </button>
 
+      {otpSent && (
+  <div style={{
+    background: "#e7f3ff",
+    color: "#0c5460",
+    padding: "10px",
+    borderRadius: "6px",
+    marginTop: "10px",
+    fontSize: "13px"
+  }}>
+    📧 OTP sent! Check Inbox / Spam folder and refresh your email.
+    📧 Didn’t receive OTP? Wait 30 seconds and try again.
+    {timer > 0 ? ` Resend OTP in ${timer}s` : " Didn't receive? Try again."}
+  </div>
+)}
+
     </div>
   </div>
 );
