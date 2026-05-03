@@ -107,6 +107,30 @@ def verify_otp(request):
 # ================================
 # 🧑 REGISTER (OTP REQUIRED 🔥)
 # ================================
+def send_welcome_email(email, username):
+    try:
+        message = Mail(
+            from_email='antonyvenis1212@gmail.com',  # verified email
+            to_emails=email,
+            subject='Welcome 🎉',
+            html_content=f"""
+                <strong>⚡💫𝓛𝓮𝓰𝓮𝓷𝓭💫⚡</strong>
+                <h2>Welcome {username} 🎉</h2>
+                <p>Your account has been created successfully 🚀</p>
+                <p>Start exploring now 😍</p>
+                <p>Thank You ❤️</p>
+                <a href="https://e-commerce-app-food.vercel.app/" target="_blank">Visit Again 🚀</a>
+            """
+        )
+
+        sg = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
+        response = sg.send(message)
+
+        print("WELCOME EMAIL STATUS 👉", response.status_code)
+
+    except Exception as e:
+        print("WELCOME EMAIL ERROR 👉", str(e))
+ 
 @api_view(['POST'])
 def register(request):
     email = request.data.get("email")
@@ -130,24 +154,27 @@ def register(request):
     if serializer.is_valid():
         user = serializer.save()
 
-        # 🎉 SUCCESS EMAIL
-        send_mail(
-              "Welcome 🎉",
-            f"""
-           ⚡💫𝓛𝓮𝓰𝓮𝓷𝓭💫⚡
+        # 🔥 SEND WELCOME EMAIL
+        send_welcome_email(user.email, user.username)
 
-            Hi {user.username},
+        # # 🎉 SUCCESS EMAIL
+        # send_mail(
+        #       "Welcome 🎉",
+        #     f"""
+        #    ⚡💫𝓛𝓮𝓰𝓮𝓷𝓭💫⚡
 
-            Your account has been created successfully! 🚀
+        #     Hi {user.username},
 
-            Start exploring now 😍
+        #     Your account has been created successfully! 🚀
 
-                    Thank You ❤️
-            """,
-            settings.EMAIL_HOST_USER,
-            [user.email],
-            fail_silently=False,
-        )
+        #     Start exploring now 😍
+
+        #             Thank You ❤️
+        #     """,
+        #     settings.EMAIL_HOST_USER,
+        #     [user.email],
+        #     fail_silently=False,
+        # )
 
         otp.delete()  # 🧹 cleanup
 
@@ -529,6 +556,28 @@ def clear_cart(request):
 # ================================
 # 🔁 // FORGOT PASSWORD SEND OTP //
 # ================================
+def send_forgot_email_otp(email, otp):
+    try:
+        message = Mail(
+            from_email='antonyvenis1212@gmail.com',  # verified sender
+            to_emails=email,
+            subject='Reset Password OTP 🔐',
+            html_content=f"""
+                <h2>Password Reset 🔐</h2>
+                <p>Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is:</p>
+                <h1>{otp}</h1>
+                <p>Do not share this OTP with anyone ❌</p>
+            """
+        )
+
+        sg = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
+        response = sg.send(message)
+
+        print("FORGOT OTP STATUS 👉", response.status_code)
+
+    except Exception as e:
+        print("FORGOT OTP ERROR 👉", str(e))
+
 @api_view(['POST'])
 def forgot_password_send_otp(request):
     email = request.data.get("email")
@@ -549,7 +598,7 @@ def forgot_password_send_otp(request):
     )
      
      # 🔥 USE API (NOT SMTP)
-    send_email_otp(email, otp)
+    send_forgot_email_otp(email, otp)
 
     # send_mail(
     #     "Reset Password OTP",
@@ -653,7 +702,7 @@ def add_product(request):
 
 
 # ================================
-# OTP RELATED FUNCTION
+# SEND OTP FUNCTIONS
 # ================================
 # 🔹 function
 def send_email_otp(email, otp):
@@ -662,7 +711,12 @@ def send_email_otp(email, otp):
             from_email='antonyvenis1212@gmail.com',
             to_emails=email,
             subject='Your OTP Code',
-            html_content=f'<strong>Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is {otp}</strong>'
+            html_content=f"""
+            <strong>⚡💫𝓛𝓮𝓰𝓮𝓷𝓭💫⚡ Login</strong>
+            <p>Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is:</p>
+            <h1>{otp}</h1>
+            <p>Do not share this OTP with anyone ❌</p>
+            """
         )
 
         sg = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
