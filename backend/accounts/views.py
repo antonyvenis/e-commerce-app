@@ -143,7 +143,7 @@ def verify_otp(request):
     record.save()
 
     return Response({"message": "OTP verified ✅"})
-    
+
 # ================================
 # 🧑 REGISTER (OTP REQUIRED 🔥)
 # # ================================
@@ -1060,7 +1060,7 @@ def send_otp(request):
     otp = str(random.randint(100000, 999999))
 
     # 💾 SAVE / UPDATE
-    OTP.objects.update_or_create(
+    OTP.objects.create(
         email=email,
         defaults={
             "otp": otp,
