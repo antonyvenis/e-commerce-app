@@ -121,7 +121,7 @@ def verify_otp(request):
     # 🔥 get latest OTP (with type)
     record = OTP.objects.filter(
         email=email,
-        otp_type=otp_type
+        otp_type="forgot_password",
     ).order_by('-created_at').first()
 
     if not record:
@@ -176,68 +176,6 @@ def send_welcome_email(email, username):
 # ================================
 # 🧑 REGISTER
 # # ================================
-# @api_view(['POST'])
-# def register(request):
-#     email = request.data.get("email")
-#     username = request.data.get("username")
-#     password = request.data.get("password")
-
-#      # 🔥 DEBUG START
-#     print("DATA 👉", request.data)
-
-#     # 🔥 PASSWORD VALIDATION
-#     if not password:
-#         return Response({"error": "Password required ❌"}, status=400)
-
-#     if len(password) < 6:
-#         return Response({"error": "Password Min 6 characters ❌"}, status=400)
-
-#     if not re.search(r"[A-Z]", password):
-#         return Response({"error": "Password Add atleast 1 uppercase letter ❌"}, status=400)
-
-#     if not re.search(r"[a-z]", password):
-#         return Response({"error": "Password Add atleast 1 lowercase letter ❌"}, status=400)
-
-#     if not re.search(r"[0-9]", password):
-#         return Response({"error": "Password Add atleast 1 number ❌"}, status=400)
-
-#     if not re.search(r"[!@#$%^&*]", password):
-#         return Response({"error": "Password Add atleast 1 special character ❌"}, status=400)
-
-
-#     # 🔥 OTP CHECK
-#     try:
-#         otp = OTP.objects.get(email=email, is_verified=True)
-#     except OTP.DoesNotExist:
-#         return Response({"error": "Verify OTP first ❌"})
-
-#     # 🔥 DUPLICATE CHECK
-#     if CustomUser.objects.filter(username=username).exists():
-#         return Response({"error": "Username already exists ❌"})
-
-#     if CustomUser.objects.filter(email=email).exists():
-#         return Response({"error": "Email already exists ❌"})
-
-#     if CustomUser.objects.filter(phone=phone).exists():
-#         return Response({"error": "Phone number already exists ❌"}, status=400)    
-
-#     serializer = RegisterSerializer(data=request.data)
-
-#     if serializer.is_valid():
-#         user = serializer.save()
-
-#         # 🔥 SEND WELCOME EMAIL
-#         send_welcome_email(user.email, user.username)
-
-#         otp.delete()  # 🧹 cleanup
-
-#         return Response({"message": "Registered Successfully ✅"})
-
-#     # 🔥 DEBUG
-#     print(serializer.errors)
-
-#     return Response(serializer.errors, status=400)
-
 @api_view(['POST'])
 def register(request):
     try:
@@ -331,7 +269,55 @@ def verify_register_otp(request):
 
 # ================================
 # 🔁 RESET PASSWORD
-# ================================
+# # ================================
+# @api_view(['POST'])
+# def reset_password(request):
+#     email = request.data.get("email")
+#     password = request.data.get("password")
+
+#     if not email:
+#         return Response({"error": "Email required ❌"}, status=400)
+
+#     if not password:
+#         return Response({"error": "Password required ❌"}, status=400)
+
+#     # 🔥 PASSWORD VALIDATION
+#     if len(password) < 6:
+#         return Response({"error": "Password Min 6 characters ❌"}, status=400)
+
+#     if not re.search(r"[A-Z]", password):
+#         return Response({"error": "Password Add atleast 1 uppercase ❌"}, status=400)
+
+#     if not re.search(r"[a-z]", password):
+#         return Response({"error": "Password Add atleast 1 lowercase ❌"}, status=400)
+
+#     if not re.search(r"[0-9]", password):
+#         return Response({"error": "Password Add atleast 1 number ❌"}, status=400)
+
+#     if not re.search(r"[!@#$%^&*]", password):
+#         return Response({"error": "Password Add atleast 1 special character ❌"}, status=400)
+
+#     try:
+#         otp = OTP.objects.get(email=email, otp_type="forgot_password", is_verified=True)
+
+#         user = CustomUser.objects.get(email=email)
+
+#         user.set_password(password)
+#         user.save()
+
+#         otp.delete()
+
+#         return Response({"message": "Password updated ✅"})
+
+#     except OTP.DoesNotExist:
+#         return Response({"error": "Verify OTP first ❌"}, status=400)
+
+#     except CustomUser.DoesNotExist:
+#         return Response({"error": "User not found ❌"}, status=404)
+
+import re
+from django.utils import timezone
+
 @api_view(['POST'])
 def reset_password(request):
     email = request.data.get("email")
@@ -359,9 +345,17 @@ def reset_password(request):
     if not re.search(r"[!@#$%^&*]", password):
         return Response({"error": "Password Add atleast 1 special character ❌"}, status=400)
 
-    try:
-        otp = OTP.objects.get(email=email, otp_type="forgot_password", is_verified=True)
+    # 🔥 FIX → latest verified OTP
+    otp = OTP.objects.filter(
+        email=email,
+        otp_type="forgot_password",
+        is_verified=True
+    ).order_by('-created_at').first()
 
+    if not otp:
+        return Response({"error": "Verify OTP first ❌"}, status=400)
+
+    try:
         user = CustomUser.objects.get(email=email)
 
         user.set_password(password)
@@ -370,9 +364,6 @@ def reset_password(request):
         otp.delete()
 
         return Response({"message": "Password updated ✅"})
-
-    except OTP.DoesNotExist:
-        return Response({"error": "Verify OTP first ❌"}, status=400)
 
     except CustomUser.DoesNotExist:
         return Response({"error": "User not found ❌"}, status=404)

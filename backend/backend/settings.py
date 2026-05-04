@@ -94,12 +94,6 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 #     }
 # }
 
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         default=os.environ.get('DATABASE_URL')
-#     )
-# }
-
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
 if DATABASE_URL:
@@ -160,21 +154,6 @@ CORS_ALLOWED_ORIGINS = [
     "https://e-commerce-app-food.vercel.app",
 ]
 
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = 'antonyvenis1212@gmail.com'
-# EMAIL_HOST_PASSWORD = 'ilew ihtg wfhg ascg'
-
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
-# EMAIL_HOST = os.getenv("EMAIL_HOST")
-# EMAIL_PORT = int(os.getenv("EMAIL_PORT", 587))
-# EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-# EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-# EMAIL_USE_TLS = True
-
 DEFAULT_FROM_EMAIL = "antonyvenis1212@gmail.com"
 
 SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
@@ -187,12 +166,12 @@ ADMIN_INDEX_TITLE = "Welcome Antony 🚀"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-# Session settings
+Session settings
 
-# SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-# SESSION_COOKIE_AGE = 300  # 5 minutes
-# # SESSION_COOKIE_AGE = 0  # Session expires immediately when the browser is closed
-# SESSION_SAVE_EVERY_REQUEST = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = 300  # 5 minutes
+# SESSION_COOKIE_AGE = 0  # Session expires immediately when the browser is closed
+SESSION_SAVE_EVERY_REQUEST = True
 
 CORS_ALLOW_CREDENTIALS = True
 
