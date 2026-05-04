@@ -106,7 +106,7 @@ def send_otp(request):
 
 
 # ================================
-# ✅ VERIFY OTP
+# ✅ FORGOT_PASSWORD VERIFY OTP
 # ================================
 
 @api_view(['POST'])
@@ -314,9 +314,6 @@ def verify_register_otp(request):
 
 #     except CustomUser.DoesNotExist:
 #         return Response({"error": "User not found ❌"}, status=404)
-
-import re
-from django.utils import timezone
 
 @api_view(['POST'])
 def reset_password(request):

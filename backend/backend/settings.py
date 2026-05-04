@@ -166,7 +166,7 @@ ADMIN_INDEX_TITLE = "Welcome Antony 🚀"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-Session settings
+#Session settings
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 300  # 5 minutes
