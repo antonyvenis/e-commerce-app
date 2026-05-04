@@ -181,6 +181,9 @@ def register(request):
     username = request.data.get("username")
     password = request.data.get("password")
 
+     # 🔥 DEBUG START
+    print("DATA 👉", request.data)
+
     # 🔥 PASSWORD VALIDATION
     if not password:
         return Response({"error": "Password required ❌"}, status=400)
