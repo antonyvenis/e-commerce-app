@@ -111,7 +111,7 @@ def send_otp(request):
 
 @api_view(['POST'])
 def verify_otp(request):
-    email = request.data.get("email")
+    email = request.data.get("email").strip()
     otp = str(request.data.get("otp")).strip()
     otp_type = request.data.get("type")  # 🔥 important
 
@@ -698,10 +698,53 @@ def send_forgot_email_otp(email, otp):
         print("FORGOT OTP ERROR 👉", str(e))
 
 
+# @api_view(['POST'])
+# def forgot_password_send_otp(request):
+#     email = request.data.get("email")
+#     username = request.data.get("username")
+
+#     if not email or not username:
+#         return Response({"error": "Enter username & email ❌"}, status=400)
+
+#     # 🔥 MATCH CHECK
+#     if not CustomUser.objects.filter(email=email, username=username).exists():
+#         return Response({"error": "Invalid username or email ❌"}, status=400)
+
+#     now = timezone.now()
+
+#     # 🔥 GET LAST OTP
+#     last_otp = OTP.objects.filter(email=email, otp_type="forgot_password").order_by('-created_at').first()
+
+#     if last_otp:
+#         # ⏱ COOLDOWN (60 sec)
+#         if last_otp.last_sent_at and (now - last_otp.last_sent_at).total_seconds() < 60:
+#             return Response({"error": "Wait 60 seconds ⏳"}, status=400)
+
+#         # 🚫 DAILY LIMIT (5 times)
+#         if last_otp.send_count >= 5:
+#             return Response({"error": "Too many OTP requests ❌"}, status=400)
+
+#     # 🔥 CREATE NEW OTP
+#     otp = str(random.randint(100000, 999999))
+
+#     otp_record = OTP.objects.create(
+#         email=email,
+#         otp=otp,
+#         otp_type="forgot_password",
+#         is_verified=False,
+#         last_sent_at=now,
+#         send_count=(last_otp.send_count + 1) if last_otp else 1
+#     )
+
+#     # 📧 SEND EMAIL
+#     send_forgot_email_otp(email, otp)
+
+#     return Response({"message": "OTP sent 📧"})
+
 @api_view(['POST'])
 def forgot_password_send_otp(request):
-    email = request.data.get("email")
-    username = request.data.get("username")
+    email = request.data.get("email", "").strip()
+    username = request.data.get("username", "").strip()
 
     if not email or not username:
         return Response({"error": "Enter username & email ❌"}, status=400)
@@ -713,27 +756,36 @@ def forgot_password_send_otp(request):
     now = timezone.now()
 
     # 🔥 GET LAST OTP
-    last_otp = OTP.objects.filter(email=email, otp_type="forgot_password").order_by('-created_at').first()
+    last_otp = OTP.objects.filter(
+        email=email,
+        otp_type="forgot_password"
+    ).order_by('-created_at').first()
 
-    if last_otp:
-        # ⏱ COOLDOWN (60 sec)
-        if last_otp.last_sent_at and (now - last_otp.last_sent_at).total_seconds() < 60:
-            return Response({"error": "Wait 60 seconds ⏳"}, status=400)
+    # ⏱ COOLDOWN (60 sec)
+    if last_otp and last_otp.last_sent_at:
+        diff = (now - last_otp.last_sent_at).total_seconds()
+        if diff < 60:
+            return Response({"error": f"Wait {int(60 - diff)} seconds ⏳"}, status=400)
 
-        # 🚫 DAILY LIMIT (5 times)
-        if last_otp.send_count >= 5:
-            return Response({"error": "Too many OTP requests ❌"}, status=400)
+    # 🚫 DAILY LIMIT (5 times)
+    total_sent_today = OTP.objects.filter(
+        email=email,
+        otp_type="forgot_password",
+        created_at__date=now.date()
+    ).count()
 
-    # 🔥 CREATE NEW OTP
+    if total_sent_today >= 5:
+        return Response({"error": "Too many OTP requests today ❌"}, status=400)
+
+    # 🔥 CREATE OTP
     otp = str(random.randint(100000, 999999))
 
-    otp_record = OTP.objects.create(
+    OTP.objects.create(
         email=email,
         otp=otp,
         otp_type="forgot_password",
         is_verified=False,
-        last_sent_at=now,
-        send_count=(last_otp.send_count + 1) if last_otp else 1
+        last_sent_at=now
     )
 
     # 📧 SEND EMAIL
