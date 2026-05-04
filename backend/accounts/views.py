@@ -122,8 +122,6 @@ from django.utils import timezone
 
 #     return Response({"message": "OTP verified ✅"})
 
-from django.utils import timezone
-
 @api_view(['POST'])
 def verify_otp(request):
     email = request.data.get("email")
@@ -839,7 +837,7 @@ def forgot_password_send_otp(request):
     otp_record = OTP.objects.create(
         email=email,
         otp=otp,
-        type="forgot_password",
+        otp_type="forgot_password",
         is_verified=False,
         last_sent_at=now,
         send_count=(last_otp.send_count + 1) if last_otp else 1
@@ -940,10 +938,6 @@ def load_products(request):
 # ================================
 # 📦 ADD PRODUCTS
 # ================================
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from .models import Product
-
 @api_view(['POST'])
 def add_products_bulk(request):
 
@@ -1034,10 +1028,6 @@ def send_email_otp(email, otp):
 
 #     return Response({"message": "OTP sent 📧"})
 
-from datetime import timedelta
-from django.utils import timezone
-import random
-
 @api_view(['POST'])
 def send_otp(request):
     email = request.data.get("email")
@@ -1081,6 +1071,7 @@ def send_otp(request):
     # 💾 SAVE / UPDATE
     OTP.objects.update_or_create(
         email=email,
+        otp_type="register",
         defaults={
             "otp": otp,
             "type": "register",

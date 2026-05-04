@@ -24,7 +24,7 @@ class OTP(models.Model):
     otp = models.CharField(max_length=6)
     is_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    type = models.CharField(max_length=20, default="register")  # register / forgot_password
+    otp_type = models.CharField(max_length=20, default="register")  # register / forgot_password
 
     # 🔥 NEW FIELDS (ANTI-SPAM)
     last_sent_at = models.DateTimeField(null=True, blank=True)
