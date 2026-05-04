@@ -86,60 +86,77 @@ from django.utils import timezone
 
 # ================================
 # ✅ VERIFY OTP
-# # ================================
+# ================================
 # @api_view(['POST'])
 # def verify_otp(request):
 #     email = request.data.get("email")
-#     # otp = request.data.get("otp")
-#     otp = str(request.data.get("otp"))   # 🔥 FIX
+#     otp = str(request.data.get("otp")).strip()  # 🔥 FIX: convert to string and strip spaces
+#     otp_type = request.data.get("type")  # 🔥 IMPORTANT
 
 #     if not otp:
 #         return Response({"error": "Enter OTP ❌"}, status=400)
 
-#     try:
-#         record = OTP.objects.get(email=email, otp=otp)
+#     # 🔥 ALWAYS GET LATEST OTP
+#     record = OTP.objects.filter(email=email).order_by('-created_at').first()
 
-#         record.is_verified = True
-#         record.save()
+#     if not record:
+#         return Response({"error": "OTP not found ❌"}, status=400)
 
-#         return Response({"message": "OTP verified ✅"})
+#     # 🔥 DEBUG (remove later)
+#     print("NOW 👉", timezone.now())
+#     print("CREATED 👉", record.created_at)
+#     print("DIFF 👉", timezone.now() - record.created_at)
 
-#     except OTP.DoesNotExist:
+#     # 🔥 FIX → use total_seconds()
+#     diff = timezone.now() - record.created_at
+
+#     if diff.total_seconds() > 300:   # 5 minutes
+#         return Response({"error": "OTP expired ⏰"}, status=400)
+
+#     # 🔥 MATCH OTP
+#     if record.otp != otp:
 #         return Response({"error": "Invalid OTP ❌"}, status=400)
 
+#     record.is_verified = True
+#     record.save()
+
+#     return Response({"message": "OTP verified ✅"})
+
+from django.utils import timezone
 
 @api_view(['POST'])
 def verify_otp(request):
     email = request.data.get("email")
-    otp = str(request.data.get("otp")).strip()  # 🔥 FIX: convert to string and strip spaces
-    otp_type = request.data.get("type")  # 🔥 IMPORTANT
+    otp = str(request.data.get("otp")).strip()
+    otp_type = request.data.get("type")  # 🔥 important
 
     if not otp:
         return Response({"error": "Enter OTP ❌"}, status=400)
 
-    # 🔥 ALWAYS GET LATEST OTP
-    record = OTP.objects.filter(email=email).order_by('-created_at').first()
+    # 🔥 get latest OTP (with type)
+    record = OTP.objects.filter(
+        email=email,
+        otp_type=otp_type
+    ).order_by('-created_at').first()
 
     if not record:
         return Response({"error": "OTP not found ❌"}, status=400)
 
-    # 🔥 DEBUG (remove later)
-    print("NOW 👉", timezone.now())
-    print("CREATED 👉", record.created_at)
-    print("DIFF 👉", timezone.now() - record.created_at)
-
-    # 🔥 FIX → use total_seconds()
+    # 🔥 expiry check
     diff = timezone.now() - record.created_at
 
-    if diff.total_seconds() > 300:   # 5 minutes
+    if diff.total_seconds() > 300:
         return Response({"error": "OTP expired ⏰"}, status=400)
 
-    # 🔥 MATCH OTP
+    # 🔥 match OTP
     if record.otp != otp:
         return Response({"error": "Invalid OTP ❌"}, status=400)
 
     record.is_verified = True
     record.save()
+
+    # 🔥 cleanup old OTPs
+    OTP.objects.filter(email=email).delete()
 
     return Response({"message": "OTP verified ✅"})
 
