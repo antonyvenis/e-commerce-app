@@ -226,7 +226,7 @@ def register(request):
         user = serializer.save()
 
         # 🔥 SEND WELCOME EMAIL
-        send_welcome_email(user.email, user.username)
+        # send_welcome_email(user.email, user.username)
 
         otp.delete()  # 🧹 cleanup
 
