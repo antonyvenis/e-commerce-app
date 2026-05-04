@@ -111,7 +111,7 @@ from django.utils import timezone
 @api_view(['POST'])
 def verify_otp(request):
     email = request.data.get("email")
-    otp = str(request.data.get("otp"))
+    otp = str(request.data.get("otp")).strip()  # 🔥 FIX: convert to string and strip spaces
     otp_type = request.data.get("type")  # 🔥 IMPORTANT
 
     if not otp:
