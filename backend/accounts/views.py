@@ -360,7 +360,7 @@ def reset_password(request):
         return Response({"error": "Password Add atleast 1 special character ❌"}, status=400)
 
     try:
-        otp = OTP.objects.get(email=email, is_verified=True)
+        otp = OTP.objects.get(email=email, otp_type="forgot_password", is_verified=True)
 
         user = CustomUser.objects.get(email=email)
 
@@ -725,7 +725,7 @@ def forgot_password_send_otp(request):
     now = timezone.now()
 
     # 🔥 GET LAST OTP
-    last_otp = OTP.objects.filter(email=email).order_by('-created_at').first()
+    last_otp = OTP.objects.filter(email=email, otp_type="forgot_password").order_by('-created_at').first()
 
     if last_otp:
         # ⏱ COOLDOWN (60 sec)
