@@ -22,105 +22,91 @@ from django.utils import timezone
 
 # ================================
 # 📧 SEND OTP (DB 🔥)
-#================================
-# @api_view(['POST'])
-# def send_otp(request):
-#     email = request.data.get("email")
-#     username = request.data.get("username")  # 🔥 ADD THIS
-#     phone = request.data.get("phone")  # 🔥 ADD THIS
+#=================================
 
-#     # 🔥 USERNAME CHECK
-#     if CustomUser.objects.filter(username__iexact=username).exists():
-#         return Response({"error": "Username already exists ❌"}, status=400)
 
-#     if CustomUser.objects.filter(email=email).exists():
-#         return Response({"error": "Email already exists ❌"}, status=400)
+# 🔹 function
+def send_email_otp(email, otp):
+    try:
+        message = Mail(
+            from_email='antonyvenis1212@gmail.com',
+            to_emails=email,
+            subject='Your OTP Code',
+            html_content=f"""
+            <strong>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡ Login</strong>
+            <p>Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is:</p>
+            <h1>{otp}</h1>
+            <p>Do not share this OTP with anyone ❌</p>
+            """
+        )
 
-#     if CustomUser.objects.filter(phone=phone).exists():
-#         return Response({"error": "Phone number already exists ❌"}, status=400)
+        sg = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
+        sg.send(message)
 
-#     otp = str(random.randint(100000, 999999))
+    except Exception as e:
+        print("EMAIL ERROR 👉", str(e))
 
-#     OTP.objects.update_or_create(
-#         email=email,
-#         defaults={"otp": otp, "is_verified": False}
-#     )
+@api_view(['POST'])
+def send_otp(request):
+    email = request.data.get("email")
+    username = request.data.get("username")
+    phone = request.data.get("phone")
 
-#     send_mail(
-#         "Your OTP Code",
-#         f"Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is {otp}",
-#         settings.DEFAULT_FROM_EMAIL,
-#         [email],
-#         fail_silently=True,
-#     )
+    # ❌ EMPTY CHECK
+    if not email or not username or not phone:
+        return Response({"error": "All fields required ❌"}, status=400)
 
-#     return Response({"message": "OTP sent 📧"})
+    # ❌ DUPLICATE CHECK
+    if CustomUser.objects.filter(username__iexact=username).exists():
+        return Response({"error": "Username already exists ❌"}, status=400)
 
-# @api_view(['POST'])
-# def send_otp(request):
-#     email = request.data.get("email")
-#     username = request.data.get("username")
-#     phone = request.data.get("phone")
+    if CustomUser.objects.filter(email=email).exists():
+        return Response({"error": "Email already exists ❌"}, status=400)
 
-#     if CustomUser.objects.filter(username__iexact=username).exists():
-#         return Response({"error": "Username already exists ❌"}, status=400)
+    if CustomUser.objects.filter(phone=phone).exists():
+        return Response({"error": "Phone number already exists ❌"}, status=400)
 
-#     if CustomUser.objects.filter(email=email).exists():
-#         return Response({"error": "Email already exists ❌"}, status=400)
+    # 🔍 CHECK EXISTING OTP RECORD
+    otp_obj = OTP.objects.filter(email=email).first()
 
-#     if CustomUser.objects.filter(phone=phone).exists():
-#         return Response({"error": "Phone number already exists ❌"}, status=400)
+    # 🔥 COOLDOWN (30 sec)
+    if otp_obj and otp_obj.last_sent_at:
+        if otp_obj.last_sent_at > timezone.now() - timedelta(seconds=30):
+            return Response({
+                "error": "Wait 30 seconds before retry ⏱️"
+            }, status=429)
 
-#     otp = str(random.randint(100000, 999999))
+    # 🔥 DAILY LIMIT (max 5 OTP)
+    if otp_obj:
+        if otp_obj.send_count >= 5:
+            return Response({
+                "error": "OTP limit exceeded today 🚫"
+            }, status=429)
 
-#     OTP.objects.update_or_create(
-#         email=email,
-#         defaults={"otp": otp, "is_verified": False}
-#     )
+    # 🔢 GENERATE OTP
+    otp = str(random.randint(100000, 999999))
 
-#     # 🔥 USE API (NOT SMTP)
-#     send_email_otp(email, otp)
+    # 💾 SAVE / UPDATE
+    OTP.objects.update_or_create(
+        email=email,
+        otp_type="register",
+        defaults={
+            "otp": otp,
+            "is_verified": False,
+            "last_sent_at": timezone.now(),
+            "send_count": (otp_obj.send_count + 1) if otp_obj else 1
+        }
+    )
 
-#     return Response({"message": "OTP sent 📧"})
+    # 📧 SEND EMAIL
+    send_email_otp(email, otp)
+
+    return Response({"message": "OTP sent 📧"})
 
 
 # ================================
 # ✅ VERIFY OTP
 # ================================
-# @api_view(['POST'])
-# def verify_otp(request):
-#     email = request.data.get("email")
-#     otp = str(request.data.get("otp")).strip()  # 🔥 FIX: convert to string and strip spaces
-#     otp_type = request.data.get("type")  # 🔥 IMPORTANT
-
-#     if not otp:
-#         return Response({"error": "Enter OTP ❌"}, status=400)
-
-#     # 🔥 ALWAYS GET LATEST OTP
-#     record = OTP.objects.filter(email=email).order_by('-created_at').first()
-
-#     if not record:
-#         return Response({"error": "OTP not found ❌"}, status=400)
-
-#     # 🔥 DEBUG (remove later)
-#     print("NOW 👉", timezone.now())
-#     print("CREATED 👉", record.created_at)
-#     print("DIFF 👉", timezone.now() - record.created_at)
-
-#     # 🔥 FIX → use total_seconds()
-#     diff = timezone.now() - record.created_at
-
-#     if diff.total_seconds() > 300:   # 5 minutes
-#         return Response({"error": "OTP expired ⏰"}, status=400)
-
-#     # 🔥 MATCH OTP
-#     if record.otp != otp:
-#         return Response({"error": "Invalid OTP ❌"}, status=400)
-
-#     record.is_verified = True
-#     record.save()
-
-#     return Response({"message": "OTP verified ✅"})
 
 @api_view(['POST'])
 def verify_otp(request):
@@ -157,90 +143,6 @@ def verify_otp(request):
     OTP.objects.filter(email=email).delete()
 
     return Response({"message": "OTP verified ✅"})
-
-# ================================
-# 🧑 REGISTER (OTP REQUIRED 🔥)
-# # ================================
-# def send_welcome_email(email, username):
-#     try:
-#         message = Mail(
-#             from_email='antonyvenis1212@gmail.com',  # verified email
-#             to_emails=email,
-#             subject='Welcome 🎉',
-#             html_content=f"""
-#                 <strong>⚡💫𝓛𝓮𝓰𝓮𝓷𝓭💫⚡</strong>
-#                 <h2>Welcome {username} 🎉</h2>
-#                 <p>Your account has been created successfully 🚀</p>
-#                 <p>Start exploring now 😍</p>
-#                 <p>Thank You ❤️</p>
-#                 <a href="https://e-commerce-app-food.vercel.app/" target="_blank">Visit Again 🚀</a>
-#             """
-#         )
-
-#         sg = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
-#         response = sg.send(message)
-
-#         print("WELCOME EMAIL STATUS 👉", response.status_code)
-
-#     except Exception as e:
-#         print("WELCOME EMAIL ERROR 👉", str(e))
- 
-# @api_view(['POST'])
-# def register(request):
-#     email = request.data.get("email")
-#     username = request.data.get("username")
-
-#     # 🔥 OTP CHECK
-#     try:
-#         otp = OTP.objects.get(email=email, is_verified=True)
-#     except OTP.DoesNotExist:
-#         return Response({"error": "Verify OTP first ❌"})
-
-#     # 🔥 DUPLICATE CHECK
-#     if CustomUser.objects.filter(username=username).exists():
-#         return Response({"error": "Username already exists ❌"})
-
-#     if CustomUser.objects.filter(email=email).exists():
-#         return Response({"error": "Email already exists ❌"})
-
-#     serializer = RegisterSerializer(data=request.data)
-
-#     if serializer.is_valid():
-#         user = serializer.save()
-
-#         # 🔥 SEND WELCOME EMAIL
-#         send_welcome_email(user.email, user.username)
-
-#         # # 🎉 SUCCESS EMAIL
-#         # send_mail(
-#         #       "Welcome 🎉",
-#         #     f"""
-#         #    ⚡💫𝓛𝓮𝓰𝓮𝓷𝓭💫⚡
-
-#         #     Hi {user.username},
-
-#         #     Your account has been created successfully! 🚀
-
-#         #     Start exploring now 😍
-
-#         #             Thank You ❤️
-#         #     """,
-#         #     settings.EMAIL_HOST_USER,
-#         #     [user.email],
-#         #     fail_silently=False,
-#         # )
-
-#         otp.delete()  # 🧹 cleanup
-
-#         return Response({"message": "Registered Successfully ✅"})
-
-        
-#      # 🔥 DEBUG ERROR
-#         print(serializer.errors)
-
-
-#     return Response(serializer.errors, status=400)
-
 
 # ================================
 # 📧 WELCOME EMAIL FUNCTION
@@ -284,19 +186,19 @@ def register(request):
         return Response({"error": "Password required ❌"}, status=400)
 
     if len(password) < 6:
-        return Response({"error": "Min 6 characters ❌"}, status=400)
+        return Response({"error": "Password Min 6 characters ❌"}, status=400)
 
     if not re.search(r"[A-Z]", password):
-        return Response({"error": "Add 1 uppercase letter ❌"}, status=400)
+        return Response({"error": "Password Add atleast 1 uppercase letter ❌"}, status=400)
 
     if not re.search(r"[a-z]", password):
-        return Response({"error": "Add 1 lowercase letter ❌"}, status=400)
+        return Response({"error": "Password Add atleast 1 lowercase letter ❌"}, status=400)
 
     if not re.search(r"[0-9]", password):
-        return Response({"error": "Add 1 number ❌"}, status=400)
+        return Response({"error": "Password Add atleast 1 number ❌"}, status=400)
 
     if not re.search(r"[!@#$%^&*]", password):
-        return Response({"error": "Add special character ❌"}, status=400)
+        return Response({"error": "Password Add atleast 1 special character ❌"}, status=400)
 
 
     # 🔥 OTP CHECK
@@ -333,100 +235,28 @@ def register(request):
     return Response(serializer.errors, status=400)
 
 
+@api_view(['POST'])
+def verify_register_otp(request):
+    email = request.data.get("email")
+    otp = str(request.data.get("otp")).strip()
+
+    record = OTP.objects.filter(
+        email=email,
+        otp=otp,
+        otp_type="register"
+    ).order_by('-created_at').first()
+
+    if not record:
+        return Response({"error": "Invalid OTP ❌"}, status=400)
+
+    record.is_verified = True
+    record.save()
+
+    return Response({"message": "Register OTP verified ✅"})      
+
 # ================================
-# 🔁 FORGOT PASSWORD
+# 🔁 RESET PASSWORD
 # ================================
-# @api_view(['POST'])
-# def forgot_password_send_otp(request):
-#     email = request.data.get("email")
-
-#     # ❌ EMAIL இல்ல
-#     if not email:
-#         return Response({"error": "Enter email ❌"}, status=400)
-
-#     # ❌ EMAIL DBல இல்ல
-#     if not CustomUser.objects.filter(email=email).exists():
-#         return Response({"error": "Email not found ❌"}, status=400)
-
-#     otp = str(random.randint(100000, 999999))
-
-#     OTP.objects.update_or_create(
-#         email=email,
-#         defaults={"otp": otp, "is_verified": False}
-#     )
-
-#     send_mail(
-#         "Reset Password OTP",
-#         f"Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is {otp}",
-#         settings.EMAIL_HOST_USER,
-#         [email],
-#     )
-
-#     return Response({"message": "OTP sent 📧"})
-
-
-
-# # ================================
-# # 🔁 RESET PASSWORD
-# # ================================
-# @api_view(['POST'])
-# def reset_password(request):
-#     email = request.data.get("email")
-#     password = request.data.get("password")
-
-#     # ❌ EMPTY CHECK
-#     if not password:
-#         return Response({"error": "Enter new password ❌"}, status=400)
-
-#     try:
-#         otp = OTP.objects.get(email=email, is_verified=True)
-#         user = CustomUser.objects.get(email=email)
-
-#         user.set_password(password)   # 🔥 OLD PASSWORD REPLACE
-#         user.save()
-
-#         otp.delete()
-
-#         return Response({"message": "Password updated ✅"})
-
-#     except OTP.DoesNotExist:
-#         return Response({"error": "Verify OTP first ❌"}, status=400)
-
-# @api_view(['POST'])
-# def reset_password(request):
-#     email = request.data.get("email")
-#     password = request.data.get("password")
-
-#     # ❌ EMPTY CHECK
-#     if not email:
-#         return Response({"error": "Email required ❌"}, status=400)
-
-#     if not password:
-#         return Response({"error": "Enter new password ❌"}, status=400)
-
-#     # 🔥 PASSWORD LENGTH CHECK
-#     if len(password) < 6:
-#         return Response({"error": "Password must be at least 6 characters ❌"}, status=400)
-
-#     try:
-#         otp = OTP.objects.get(email=email, is_verified=True)
-
-#         try:
-#             user = CustomUser.objects.get(email=email)
-#         except CustomUser.DoesNotExist:
-#             return Response({"error": "User not found ❌"}, status=404)
-
-#         # 🔥 UPDATE PASSWORD
-#         user.set_password(password)
-#         user.save()
-
-#         otp.delete()  # 🧹 cleanup
-
-#         return Response({"message": "Password updated ✅"})
-
-#     except OTP.DoesNotExist:
-#         return Response({"error": "Verify OTP first ❌"}, status=400)
-
 @api_view(['POST'])
 def reset_password(request):
     email = request.data.get("email")
@@ -440,19 +270,19 @@ def reset_password(request):
 
     # 🔥 PASSWORD VALIDATION
     if len(password) < 6:
-        return Response({"error": "Min 6 characters ❌"}, status=400)
+        return Response({"error": "Password Min 6 characters ❌"}, status=400)
 
     if not re.search(r"[A-Z]", password):
-        return Response({"error": "Add uppercase ❌"}, status=400)
+        return Response({"error": "Password Add atleast 1 uppercase ❌"}, status=400)
 
     if not re.search(r"[a-z]", password):
-        return Response({"error": "Add lowercase ❌"}, status=400)
+        return Response({"error": "Password Add atleast 1 lowercase ❌"}, status=400)
 
     if not re.search(r"[0-9]", password):
-        return Response({"error": "Add number ❌"}, status=400)
+        return Response({"error": "Password Add atleast 1 number ❌"}, status=400)
 
     if not re.search(r"[!@#$%^&*]", password):
-        return Response({"error": "Add special character ❌"}, status=400)
+        return Response({"error": "Password Add atleast 1 special character ❌"}, status=400)
 
     try:
         otp = OTP.objects.get(email=email, is_verified=True)
@@ -972,136 +802,4 @@ def add_product(request):
         rating=request.data['rating'],
         image=request.data['image']
     )
-    return Response({"message": "added"})
-
-
-# ================================
-# SEND OTP FUNCTIONS
-# ================================
-# 🔹 function
-def send_email_otp(email, otp):
-    try:
-        message = Mail(
-            from_email='antonyvenis1212@gmail.com',
-            to_emails=email,
-            subject='Your OTP Code',
-            html_content=f"""
-            <strong>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡ Login</strong>
-            <p>Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is:</p>
-            <h1>{otp}</h1>
-            <p>Do not share this OTP with anyone ❌</p>
-            """
-        )
-
-        sg = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
-        sg.send(message)
-
-    except Exception as e:
-        print("EMAIL ERROR 👉", str(e))
-
-
-# # 🔹 API (THIS IS YOUR CODE)
-# @api_view(['POST'])
-# def send_otp(request):
-#     email = request.data.get("email")
-#     username = request.data.get("username")
-#     phone = request.data.get("phone")
-
-#     if CustomUser.objects.filter(username__iexact=username).exists():
-#         return Response({"error": "Username already exists ❌"}, status=400)
-
-#     if CustomUser.objects.filter(email=email).exists():
-#         return Response({"error": "Email already exists ❌"}, status=400)
-
-#     if CustomUser.objects.filter(phone=phone).exists():
-#         return Response({"error": "Phone number already exists ❌"}, status=400)
-
-#     otp = str(random.randint(100000, 999999))
-
-#     OTP.objects.update_or_create(
-#         email=email,
-#         defaults={"otp": otp, "is_verified": False}
-#     )
-
-#     # 🔥 IMPORTANT
-#     send_email_otp(email, otp)
-
-#     return Response({"message": "OTP sent 📧"})
-
-@api_view(['POST'])
-def send_otp(request):
-    email = request.data.get("email")
-    username = request.data.get("username")
-    phone = request.data.get("phone")
-
-    # ❌ EMPTY CHECK
-    if not email or not username or not phone:
-        return Response({"error": "All fields required ❌"}, status=400)
-
-    # ❌ DUPLICATE CHECK
-    if CustomUser.objects.filter(username__iexact=username).exists():
-        return Response({"error": "Username already exists ❌"}, status=400)
-
-    if CustomUser.objects.filter(email=email).exists():
-        return Response({"error": "Email already exists ❌"}, status=400)
-
-    if CustomUser.objects.filter(phone=phone).exists():
-        return Response({"error": "Phone number already exists ❌"}, status=400)
-
-    # 🔍 CHECK EXISTING OTP RECORD
-    otp_obj = OTP.objects.filter(email=email).first()
-
-    # 🔥 COOLDOWN (30 sec)
-    if otp_obj and otp_obj.last_sent_at:
-        if otp_obj.last_sent_at > timezone.now() - timedelta(seconds=30):
-            return Response({
-                "error": "Wait 30 seconds before retry ⏱️"
-            }, status=429)
-
-    # 🔥 DAILY LIMIT (max 5 OTP)
-    if otp_obj:
-        if otp_obj.send_count >= 5:
-            return Response({
-                "error": "OTP limit exceeded today 🚫"
-            }, status=429)
-
-    # 🔢 GENERATE OTP
-    otp = str(random.randint(100000, 999999))
-
-    # 💾 SAVE / UPDATE
-    OTP.objects.update_or_create(
-        email=email,
-        otp_type="register",
-        defaults={
-            "otp": otp,
-            "is_verified": False,
-            "last_sent_at": timezone.now(),
-            "send_count": (otp_obj.send_count + 1) if otp_obj else 1
-        }
-    )
-
-    # 📧 SEND EMAIL
-    send_email_otp(email, otp)
-
-    return Response({"message": "OTP sent 📧"})
-
-
-
-@api_view(['POST'])
-def verify_register_otp(request):
-    email = request.data.get("email")
-    otp = str(request.data.get("otp")).strip()
-
-    record = OTP.objects.filter(
-        email=email,
-        otp=otp,
-        otp_type="register"
-    ).order_by('-created_at').first()
-
-    if not record:
-        return Response({"error": "Invalid OTP ❌"}, status=400)
-
-    record.is_verified = True
-    record.save()
-
-    return Response({"message": "Register OTP verified ✅"})    
+    return Response({"message": "added"})   

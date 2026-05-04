@@ -169,7 +169,7 @@ function Payment() {
     }
 
     if (!form.name || !form.phone || !form.address) {
-      alert("Fill all details da ⚠️");
+      alert("Fill all details First ⚠️");
       return;
     }
 

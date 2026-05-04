@@ -206,7 +206,7 @@ function OTP() {
         {
           email,
           otp: finalOtp,
-          otp_type: "register" // 🔥 IMPORTANT
+          type: "register" // 🔥 IMPORTANT
         }
       );
 
