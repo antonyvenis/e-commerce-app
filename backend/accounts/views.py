@@ -1069,7 +1069,7 @@ def send_otp(request):
     otp = str(random.randint(100000, 999999))
 
     # 💾 SAVE / UPDATE
-    OTP.objects.update_or_create(
+    OTP.objects.create(
         email=email,
         otp_type="register",
         defaults={
