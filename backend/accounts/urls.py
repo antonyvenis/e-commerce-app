@@ -21,6 +21,7 @@ from .views import (
     get_products,
     load_products,
     add_products_bulk,
+    verify_register_otp
 )
 
 urlpatterns = [
@@ -32,6 +33,7 @@ urlpatterns = [
     path('login/', LoginView.as_view()),
     path('send-otp/', send_otp),
     path('verify-otp/', verify_otp),
+    path('verify-register-otp/', verify_register_otp),
     path('reset-password/', reset_password),
     path('forgot-password-otp/', forgot_password_send_otp),
 

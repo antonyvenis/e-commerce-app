@@ -202,11 +202,11 @@ function OTP() {
 
     try {
       const res = await axios.post(
-        "https://e-commerce-app-8jg4.onrender.com/api/verify-otp/",
+        "https://e-commerce-app-8jg4.onrender.com/api/verify-register-otp/",
         {
           email,
           otp: finalOtp,
-          type: "register" // 🔥 IMPORTANT
+          otp_type: "register" // 🔥 IMPORTANT
         }
       );
 

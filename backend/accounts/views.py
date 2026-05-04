@@ -1069,12 +1069,11 @@ def send_otp(request):
     otp = str(random.randint(100000, 999999))
 
     # 💾 SAVE / UPDATE
-    OTP.objects.create(
+    OTP.objects.update_or_create(
         email=email,
         otp_type="register",
         defaults={
             "otp": otp,
-            "type": "register",
             "is_verified": False,
             "last_sent_at": timezone.now(),
             "send_count": (otp_obj.send_count + 1) if otp_obj else 1
@@ -1085,3 +1084,24 @@ def send_otp(request):
     send_email_otp(email, otp)
 
     return Response({"message": "OTP sent 📧"})
+
+
+
+@api_view(['POST'])
+def verify_register_otp(request):
+    email = request.data.get("email")
+    otp = str(request.data.get("otp")).strip()
+
+    record = OTP.objects.filter(
+        email=email,
+        otp=otp,
+        otp_type="register"
+    ).order_by('-created_at').first()
+
+    if not record:
+        return Response({"error": "Invalid OTP ❌"}, status=400)
+
+    record.is_verified = True
+    record.save()
+
+    return Response({"message": "Register OTP verified ✅"})    
