@@ -5,6 +5,7 @@ from django.conf import settings
 
 import os
 import re
+import traceback
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
@@ -174,68 +175,139 @@ def send_welcome_email(email, username):
 
 # ================================
 # 🧑 REGISTER
-# ================================
+# # ================================
+# @api_view(['POST'])
+# def register(request):
+#     email = request.data.get("email")
+#     username = request.data.get("username")
+#     password = request.data.get("password")
+
+#      # 🔥 DEBUG START
+#     print("DATA 👉", request.data)
+
+#     # 🔥 PASSWORD VALIDATION
+#     if not password:
+#         return Response({"error": "Password required ❌"}, status=400)
+
+#     if len(password) < 6:
+#         return Response({"error": "Password Min 6 characters ❌"}, status=400)
+
+#     if not re.search(r"[A-Z]", password):
+#         return Response({"error": "Password Add atleast 1 uppercase letter ❌"}, status=400)
+
+#     if not re.search(r"[a-z]", password):
+#         return Response({"error": "Password Add atleast 1 lowercase letter ❌"}, status=400)
+
+#     if not re.search(r"[0-9]", password):
+#         return Response({"error": "Password Add atleast 1 number ❌"}, status=400)
+
+#     if not re.search(r"[!@#$%^&*]", password):
+#         return Response({"error": "Password Add atleast 1 special character ❌"}, status=400)
+
+
+#     # 🔥 OTP CHECK
+#     try:
+#         otp = OTP.objects.get(email=email, is_verified=True)
+#     except OTP.DoesNotExist:
+#         return Response({"error": "Verify OTP first ❌"})
+
+#     # 🔥 DUPLICATE CHECK
+#     if CustomUser.objects.filter(username=username).exists():
+#         return Response({"error": "Username already exists ❌"})
+
+#     if CustomUser.objects.filter(email=email).exists():
+#         return Response({"error": "Email already exists ❌"})
+
+#     if CustomUser.objects.filter(phone=phone).exists():
+#         return Response({"error": "Phone number already exists ❌"}, status=400)    
+
+#     serializer = RegisterSerializer(data=request.data)
+
+#     if serializer.is_valid():
+#         user = serializer.save()
+
+#         # 🔥 SEND WELCOME EMAIL
+#         send_welcome_email(user.email, user.username)
+
+#         otp.delete()  # 🧹 cleanup
+
+#         return Response({"message": "Registered Successfully ✅"})
+
+#     # 🔥 DEBUG
+#     print(serializer.errors)
+
+#     return Response(serializer.errors, status=400)
+
 @api_view(['POST'])
 def register(request):
-    email = request.data.get("email")
-    username = request.data.get("username")
-    password = request.data.get("password")
-
-     # 🔥 DEBUG START
-    print("DATA 👉", request.data)
-
-    # 🔥 PASSWORD VALIDATION
-    if not password:
-        return Response({"error": "Password required ❌"}, status=400)
-
-    if len(password) < 6:
-        return Response({"error": "Password Min 6 characters ❌"}, status=400)
-
-    if not re.search(r"[A-Z]", password):
-        return Response({"error": "Password Add atleast 1 uppercase letter ❌"}, status=400)
-
-    if not re.search(r"[a-z]", password):
-        return Response({"error": "Password Add atleast 1 lowercase letter ❌"}, status=400)
-
-    if not re.search(r"[0-9]", password):
-        return Response({"error": "Password Add atleast 1 number ❌"}, status=400)
-
-    if not re.search(r"[!@#$%^&*]", password):
-        return Response({"error": "Password Add atleast 1 special character ❌"}, status=400)
-
-
-    # 🔥 OTP CHECK
     try:
-        otp = OTP.objects.get(email=email, is_verified=True)
-    except OTP.DoesNotExist:
-        return Response({"error": "Verify OTP first ❌"})
+        email = request.data.get("email")
+        username = request.data.get("username")
+        password = request.data.get("password")
+        phone = request.data.get("phone")   # 🔥 FIX
 
-    # 🔥 DUPLICATE CHECK
-    if CustomUser.objects.filter(username=username).exists():
-        return Response({"error": "Username already exists ❌"})
+        # 🔥 DEBUG
+        print("DATA 👉", request.data)
 
-    if CustomUser.objects.filter(email=email).exists():
-        return Response({"error": "Email already exists ❌"})
+        # 🔥 PASSWORD VALIDATION
+        if not password:
+            return Response({"error": "Password required ❌"}, status=400)
 
-    if CustomUser.objects.filter(phone=phone).exists():
-        return Response({"error": "Phone number already exists ❌"}, status=400)    
+        if len(password) < 6:
+            return Response({"error": "Password Min 6 characters ❌"}, status=400)
 
-    serializer = RegisterSerializer(data=request.data)
+        if not re.search(r"[A-Z]", password):
+            return Response({"error": "Password Add atleast 1 uppercase letter ❌"}, status=400)
 
-    if serializer.is_valid():
-        user = serializer.save()
+        if not re.search(r"[a-z]", password):
+            return Response({"error": "Password Add atleast 1 lowercase letter ❌"}, status=400)
 
-        # 🔥 SEND WELCOME EMAIL
-        # send_welcome_email(user.email, user.username)
+        if not re.search(r"[0-9]", password):
+            return Response({"error": "Password Add atleast 1 number ❌"}, status=400)
 
-        otp.delete()  # 🧹 cleanup
+        if not re.search(r"[!@#$%^&*]", password):
+            return Response({"error": "Password Add atleast 1 special character ❌"}, status=400)
 
-        return Response({"message": "Registered Successfully ✅"})
+        # 🔥 OTP CHECK
+        try:
+            otp = OTP.objects.get(email=email, otp_type="register", is_verified=True)
+        except OTP.DoesNotExist:
+            return Response({"error": "Verify OTP first ❌"})
 
-    # 🔥 DEBUG
-    print(serializer.errors)
+        # 🔥 DUPLICATE CHECK
+        if CustomUser.objects.filter(username=username).exists():
+            return Response({"error": "Username already exists ❌"})
 
-    return Response(serializer.errors, status=400)
+        if CustomUser.objects.filter(email=email).exists():
+            return Response({"error": "Email already exists ❌"})
+
+        if CustomUser.objects.filter(phone=phone).exists():
+            return Response({"error": "Phone number already exists ❌"}, status=400)
+
+        serializer = RegisterSerializer(data=request.data)
+
+        if serializer.is_valid():
+            user = serializer.save()
+
+            # 🔥 SEND EMAIL (optional debug)
+            try:
+                send_welcome_email(user.email, user.username)
+            except Exception as e:
+                print("EMAIL ERROR 👉", str(e))
+
+            otp.delete()
+
+            return Response({"message": "Registered Successfully ✅"})
+
+        # 🔥 DEBUG
+        print("ERROR 👉", serializer.errors)
+
+        return Response(serializer.errors, status=400)
+
+    except Exception as e:
+        print("CRASH 👉", str(e))
+        traceback.print_exc()
+        return Response({"error": "Server crash ❌"}, status=500)
 
 
 @api_view(['POST'])
