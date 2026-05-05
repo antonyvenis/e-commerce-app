@@ -783,7 +783,7 @@ def forgot_password_send_otp(request):
     OTP.objects.create(
         email=email,
         otp=otp,
-        otp_type="forgot_password",
+        otp_type="forgot",
         is_verified=False,
         last_sent_at=now
     )
