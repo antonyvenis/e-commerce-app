@@ -243,8 +243,7 @@ def verify_otp(request):
     # 🔥 get latest OTP (with type)
     record = OTP.objects.filter(
         email=email,
-        otp_type=otp_type,
-        is_verified=False
+        otp_type=otp_type
     ).order_by('-created_at').first()
 
     if not record:
@@ -390,7 +389,7 @@ def forgot_password_send_otp(request):
     OTP.objects.create(
         email=email,
         otp=otp,
-        otp_type="forgot",
+        otp_type="forgot_password",
         is_verified=False,
         last_sent_at=now
     )
