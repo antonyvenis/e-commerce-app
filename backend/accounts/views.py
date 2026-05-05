@@ -758,7 +758,8 @@ def get_products(request):
             "id": p.id,
             "name": p.name,
             "price": p.price,
-            "image": p.image.url if p.image else "",
+            # "image": p.image.url if p.image else "",
+            "image": request.build_absolute_uri(p.image.url) if p.image else "",  # 🔥 FIX
             "category": p.category,
             "rating": p.rating,
             "stock": p.stock
