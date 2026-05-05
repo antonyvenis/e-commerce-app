@@ -21,6 +21,8 @@ from .models import CustomUser, Like, CartItem, Order, OrderItem, OTP
 from datetime import timedelta
 from django.utils import timezone
 
+from .models import Product
+
 # ================================
 # 📧 SEND OTP (DB 🔥)
 #=================================
