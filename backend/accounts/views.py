@@ -24,8 +24,6 @@ from django.utils import timezone
 # ================================
 # 📧 SEND OTP (DB 🔥)
 #=================================
-
-
 # 🔹 function
 def send_email_otp(email, otp):
     try:
@@ -268,60 +266,6 @@ def verify_otp(request):
     return Response({"message": "OTP verified ✅"})       
 
 # ================================
-# 🔁 RESET PASSWORD
-# ================================
-@api_view(['POST'])
-def reset_password(request):
-    email = request.data.get("email")
-    password = request.data.get("password")
-
-    if not email:
-        return Response({"error": "Email required ❌"}, status=400)
-
-    if not password:
-        return Response({"error": "Password required ❌"}, status=400)
-
-    # 🔥 PASSWORD VALIDATION
-    if len(password) < 6:
-        return Response({"error": "Password Min 6 characters ❌"}, status=400)
-
-    if not re.search(r"[A-Z]", password):
-        return Response({"error": "Password Add atleast 1 uppercase ❌"}, status=400)
-
-    if not re.search(r"[a-z]", password):
-        return Response({"error": "Password Add atleast 1 lowercase ❌"}, status=400)
-
-    if not re.search(r"[0-9]", password):
-        return Response({"error": "Password Add atleast 1 number ❌"}, status=400)
-
-    if not re.search(r"[!@#$%^&*]", password):
-        return Response({"error": "Password Add atleast 1 special character ❌"}, status=400)
-
-    # 🔥 FIX → latest verified OTP
-    otp = OTP.objects.filter(
-        email=email,
-        otp_type="forgot_password",
-        is_verified=True
-    ).order_by('-created_at').first()
-
-    if not otp:
-        return Response({"error": "Verify OTP first ❌"}, status=400)
-
-    try:
-        user = CustomUser.objects.get(email=email)
-
-        user.set_password(password)
-        user.save()
-
-        otp.delete()
-
-        return Response({"message": "Password updated ✅"})
-
-    except CustomUser.DoesNotExist:
-        return Response({"error": "User not found ❌"}, status=404)
-
-
-# ================================
 # 🔁 // FORGOT PASSWORD SEND OTP //
 # ================================
 def send_forgot_email_otp(email, otp):
@@ -422,6 +366,7 @@ def forgot_password_send_otp(request):
         # 🔄 RESET COUNT AFTER WINDOW
         otp_record.send_count = 0
 
+
     # =========================
     # 🔢 GENERATE OTP
     # =========================
@@ -436,7 +381,59 @@ def forgot_password_send_otp(request):
     # 🔥 SEND EMAIL (YOUR FUNCTION SAME)
     send_forgot_email_otp(email, otp)
 
-    return Response({"message": "OTP sent 📧"})        
+    return Response({"message": "OTP sent 📧"})            
+
+# ================================
+# 🔒 FORGOT PASSWORD RESET
+# ================================
+
+@api_view(['POST'])
+def reset_password(request):
+    email = request.data.get("email")
+    password = request.data.get("password")
+
+    if not email:
+        return Response({"error": "Email required ❌"}, status=400)
+
+    if not password:
+        return Response({"error": "Password required ❌"}, status=400)
+
+    if len(password) < 6:
+        return Response({"error": "Password Min 6 characters ❌"}, status=400)
+
+    if not re.search(r"[A-Z]", password):
+        return Response({"error": "Add 1 uppercase ❌"}, status=400)
+
+    if not re.search(r"[a-z]", password):
+        return Response({"error": "Add 1 lowercase ❌"}, status=400)
+
+    if not re.search(r"[0-9]", password):
+        return Response({"error": "Add 1 number ❌"}, status=400)
+
+    if not re.search(r"[!@#$%^&*]", password):
+        return Response({"error": "Add special character ❌"}, status=400)
+
+    otp = OTP.objects.filter(
+        email=email,
+        otp_type="forgot_password",   # ✅ FIXED
+        is_verified=True
+    ).order_by('-created_at').first()
+
+    if not otp:
+        return Response({"error": "Verify OTP first ❌"}, status=400)
+
+    try:
+        user = CustomUser.objects.get(email=email)
+
+        user.set_password(password)
+        user.save()
+
+        otp.delete()
+
+        return Response({"message": "Password updated ✅"})
+
+    except CustomUser.DoesNotExist:
+        return Response({"error": "User not found ❌"}, status=404)             
 
 # ================================
 # 🔑 LOGIN
