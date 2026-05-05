@@ -7,8 +7,8 @@ function AdminUpload() {
     try {
       const data = Products(); // 👈 your products array
 
-      await axios.post("https://e-commerce-app-8jg4.onrender.com/api/add-products/", {
-        products: data
+      await axios.post("https://e-commerce-app-8jg4.onrender.com/api/add-products-bulk/", {
+        products: Products()  // 👈 send products array to backend
       });
 
       alert("Uploaded 🔥");

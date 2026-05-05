@@ -785,42 +785,57 @@ def load_products(request):
 
     return Response({"message": "Products loaded 🔥"})
 
-
 # ================================
-# 📦 ADD PRODUCTS
+# 📦 ADD PRODUCTS (BULK)
 # ================================
 @api_view(['POST'])
 def add_products_bulk(request):
 
-    print("🔥 DATA RECEIVED 👉", request.data)   # DEBUG
+    print("🔥 DATA RECEIVED 👉", request.data)
 
-    products = request.data.get("products")
+    products = request.data.get("products", [])
 
-    if not products:
+    # 🔴 EMPTY CHECK
+    if not isinstance(products, list) or len(products) == 0:
         return Response({"error": "No products received ❌"}, status=400)
 
     for p in products:
-        Product.objects.update_or_create(
-            name=p.get("name"),
-            defaults={
-                "price": p.get("price", 0),
-                "category": p.get("category", ""),
-                "rating": float(p.get("rating", 0)),
-                "image": p.get("image", ""),
-                "stock": 10
-            }
-        )
+        try:
+            Product.objects.update_or_create(
+                name=p.get("name", ""),   # 🔥 prevent None
+                defaults={
+                    "price": int(p.get("price", 0)),
+                    "category": p.get("category", ""),
+                    "rating": float(p.get("rating", 0) or 0),
+                    "image": p.get("image", ""),
+                    "stock": 10
+                }
+            )
+        except Exception as e:
+            print("❌ PRODUCT ERROR 👉", p)
+            print("❌ ERROR 👉", str(e))
+            return Response({
+                "error": "Failed while inserting product ❌",
+                "details": str(e)
+            }, status=500)
 
     return Response({"message": "Products saved successfully ✅"})
 
-
+# ================================
+# 📦 ADD SINGLE PRODUCT
+# ================================
 @api_view(['POST'])
 def add_product(request):
-    Product.objects.create(
-        name=request.data['name'],
-        price=request.data['price'],
-        category=request.data['category'],
-        rating=request.data['rating'],
-        image=request.data['image']
-    )
-    return Response({"message": "added"})   
+    try:
+        Product.objects.create(
+            name=request.data.get('name', ''),
+            price=int(request.data.get('price', 0)),
+            category=request.data.get('category', ''),
+            rating=float(request.data.get('rating', 0)),
+            image=request.data.get('image', '')
+        )
+        return Response({"message": "added ✅"})
+
+    except Exception as e:
+        print("❌ ERROR 👉", str(e))
+        return Response({"error": str(e)}, status=500)
