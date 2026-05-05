@@ -252,7 +252,7 @@ function ForgotPassword() {
     try {
       await axios.post(
         "https://e-commerce-app-8jg4.onrender.com/api/verify-otp/",
-        { email, otp, type: "forgot" }
+        { email, otp, type: "forgot_password" }
 
       );
 
