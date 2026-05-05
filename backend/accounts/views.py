@@ -121,7 +121,7 @@ def verify_otp(request):
     # 🔥 get latest OTP (with type)
     record = OTP.objects.filter(
         email=email,
-        otp_type="forgot_password",
+        otp_type=otp_type,
     ).order_by('-created_at').first()
 
     if not record:
