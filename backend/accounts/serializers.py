@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import CustomUser
+from .models import Product   # 🔥 THIS LINE ADD
+
 
 class RegisterSerializer(serializers.ModelSerializer):
 
