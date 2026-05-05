@@ -345,7 +345,7 @@ def reset_password(request):
     # 🔥 FIX → latest verified OTP
     otp = OTP.objects.filter(
         email=email,
-        otp_type="forgot_password",
+        otp_type="forgot",
         is_verified=True
     ).order_by('-created_at').first()
 
