@@ -1,5 +1,4 @@
-function Products() {
-  return [
+export const Products = () => [
     { id: 1, name: "Veg Burger", price: 120, category: "veg", rating: 4.9, image: "" },
     { id: 2, name: "Chicken Pizza", price: 250, category: "non-veg", rating: 4.8, image: "" },
     { id: 3, name: "Jigarthanda", price: 100, category: "drinks", rating: 4.6, image: "" },
@@ -84,6 +83,5 @@ function Products() {
     { id: 75, name: "Veechu Parotta", price: 90, category: "non-veg", rating: 4.6, image: "" },
     { id: 76, name: "Coin Parotta", price: 60, category: "non-veg", rating: 4.7, image: "" },
   ];
-}
 
 export default Products;

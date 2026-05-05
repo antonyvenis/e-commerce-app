@@ -1,5 +1,5 @@
 import axios from "axios";
-import Products from "./Products"; 
+import { Products } from "./Products";   // 🔥 path correct ah podu
 
 function AdminUpload() {
 
