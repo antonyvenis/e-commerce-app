@@ -32,7 +32,7 @@ def send_email_otp(email, otp):
             to_emails=email,
             subject='Your OTP Code',
             html_content=f"""
-            <strong>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡ Login</strong>
+            <h6>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡ Register🎉</h6>
             <p>Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is:</p>
             <h1>{otp}</h1>
             <p>Do not share this OTP with anyone ❌</p>
@@ -112,7 +112,7 @@ def send_welcome_email(email, username):
             to_emails=email,
             subject='Welcome 🎉',
             html_content=f"""
-                <strong>⚡💫𝓛𝓮𝓰𝓮𝓷𝓭💫⚡</strong>
+                <h6>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡</h6>
                 <h2>Welcome {username} 🎉</h2>
                 <p>Your account has been created successfully 🚀</p>
                 <p>Start exploring now 😍</p>
@@ -259,9 +259,6 @@ def verify_otp(request):
 
     record.is_verified = True
     record.save()
-
-    # 🔥 cleanup old OTPs
-    OTP.objects.filter(email=email).delete()
 
     return Response({"message": "OTP verified ✅"})       
 
