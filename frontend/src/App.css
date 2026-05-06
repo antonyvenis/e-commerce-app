@@ -2546,3 +2546,30 @@ input {
   }
 }
 
+/* FORCE SHOW HAMBURGER - MOBILE */
+button.hamburger {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 46px !important;
+  height: 46px !important;
+  font-size: 26px !important;
+  background: green !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 50% !important;
+  cursor: pointer !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+/* TOP BAR */
+div.top-bar {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 10px 16px !important;
+}
+

@@ -179,12 +179,7 @@ function Menu() {
           animate={{ y: 0, opacity: 1 }}
         />
 
-        <button
-          className="hamburger"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          ☰
-        </button>
+        <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}> ☰ </button>
 
       {/* <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
          <FaBars />
