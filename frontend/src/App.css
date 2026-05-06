@@ -2574,3 +2574,18 @@ div.top-bar {
   padding: 10px 16px !important;
 }
 
+/* Desktop la hamburger hide */
+@media (min-width: 768px) {
+  .hamburger {
+    display: none !important;
+  }
+
+  .filters {
+    display: flex !important;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 12px 20px;
+  }
+}
+
