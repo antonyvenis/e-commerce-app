@@ -2522,7 +2522,6 @@ input {
 
 /* FILTERS - default mobile la hidden */
 .filters {
-  display: none;
   flex-direction: column;
   gap: 8px;
   padding: 10px 16px;
