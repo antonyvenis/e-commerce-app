@@ -251,6 +251,7 @@
 
 // export default Menu;
 
+
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ProductCard from "./ProductCart";
@@ -267,8 +268,6 @@ function Menu() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
   const [loading, setLoading] = useState(true);
-
-  // 🔥 NEW STATE (hamburger)
   const [menuOpen, setMenuOpen] = useState(false);
 
   const fetchProducts = async () => {
@@ -296,7 +295,6 @@ function Menu() {
 
   const suggestions = useMemo(() => {
     if (cart.length === 0) return products.slice(0, 3);
-
     const categories = cart.map(item => item.category);
     return products.filter(p => categories.includes(p.category));
   }, [products, cart]);
@@ -304,43 +302,61 @@ function Menu() {
   return (
     <div>
 
-      {/* 🔍 Search */}
-      <motion.input
-        type="text"
-        placeholder="Search food...🔍"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="search"
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-      />
+      {/* 🔥 TOP BAR (Search + Hamburger same line) */}
+      <div className="top-bar">
+        <motion.input
+          type="text"
+          placeholder="Search food...🔍"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="search"
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+        />
 
-      {/* 🍔 HAMBURGER BUTTON (mobile only) */}
-      <div className="mobile-menu">
-        <button onClick={() => setMenuOpen(!menuOpen)}>
+        <button
+          className="hamburger"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
           ☰
         </button>
       </div>
 
       {/* 🎯 FILTERS */}
       <div className={`filters ${menuOpen ? "open" : ""}`}>
-        <button onClick={() => setFilter("all")}>All</button>
-        <button onClick={() => setFilter("veg")}>Veg</button>
-        <button onClick={() => setFilter("non-veg")}>Non-Veg</button>
-        <button onClick={() => setFilter("drinks")}>Cool Drinks</button>
-        <button onClick={() => setFilter("side-dish")}>Side Dish</button>
 
-        <button>
+        <button onClick={() => { setFilter("all"); setMenuOpen(false); }}>
+          All
+        </button>
+
+        <button onClick={() => { setFilter("veg"); setMenuOpen(false); }}>
+          Veg
+        </button>
+
+        <button onClick={() => { setFilter("non-veg"); setMenuOpen(false); }}>
+          Non-Veg
+        </button>
+
+        <button onClick={() => { setFilter("drinks"); setMenuOpen(false); }}>
+          Cool Drinks
+        </button>
+
+        <button onClick={() => { setFilter("side-dish"); setMenuOpen(false); }}>
+          Side Dish
+        </button>
+
+        <button onClick={() => setMenuOpen(false)}>
           <Link to="/food" id="Link-text">Cake</Link>
         </button>
 
-        <button>
+        <button onClick={() => setMenuOpen(false)}>
           <Link to="/food2" id="Link-text">Chinese</Link>
         </button>
 
-        <button onClick={() => setFilter("comming-soon")}>
+        <button onClick={() => { setFilter("comming-soon"); setMenuOpen(false); }}>
           Coming soon....
         </button>
+
       </div>
 
       <h2 className="title">Tasty & Sweety Foods 🔥</h2>
