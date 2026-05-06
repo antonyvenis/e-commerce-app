@@ -315,16 +315,16 @@ function Menu() {
           animate={{ y: 0, opacity: 1 }}
         />
 
-        {/* <button
+        <button
           className="hamburger"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           ☰
-        </button> */}
+        </button>
 
-      <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+      {/* <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
          <FaBars />
-       </button>
+       </button> */}
       </div>
 
       {/* 🎯 FILTERS */}
