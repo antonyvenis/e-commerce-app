@@ -370,13 +370,12 @@ function Home() {
                 navigate(`/product/${item.id}`, { state: item })
               }
             >
-              {/* <img
+              <img
                 src={
                   item.image
                     ? `https://e-commerce-app-8jg4.onrender.com+${item.image}`
                     : "https://dummyimage.com/150"
-                } */}
-                <img src={`${product.image}?v=${Date.now()}`}
+                }
                 alt={item.name}
                 loading="lazy"
               />
