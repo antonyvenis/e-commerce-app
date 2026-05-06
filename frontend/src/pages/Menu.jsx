@@ -181,9 +181,6 @@ function Menu() {
 
         <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}> ☰ </button>
 
-      {/* <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
-         <FaBars />
-       </button> */}
       </div>
 
       {/* 🎯 FILTERS */}
