@@ -275,14 +275,26 @@ function Liked() {
                 transition={{ duration: 0.3 }}
               >
 
-                <img
+                {/* <img
                   src={
                   item.image
                     ? `https://e-commerce-app-8jg4.onrender.com${item.image}`
                     : "https://dummyimage.com/150"
                   }
                   alt={item.item_name}
-                />
+                /> */}
+
+                <img
+                src={
+               item.image
+                 ? item.image.startsWith("http")
+                 ? item.image.replace('/upload/', '/upload/w_300,q_auto,f_auto/')
+                 : `https://e-commerce-app-8jg4.onrender.com${item.image}`
+                 : "https://dummyimage.com/150"
+                }
+                alt={item.item_name}
+                loading="lazy"
+                 />
 
                 <h4>
                   {index + 1}. {item.item_name}

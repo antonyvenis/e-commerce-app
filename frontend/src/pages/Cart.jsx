@@ -287,7 +287,7 @@ function Cart() {
                 <div key={item.id} className="cart-item">
 
                   {/* 🖼 SAME SIZE IMAGE */}
-                  <img
+                  {/* <img
                     src={
                   item.image
                     ? `https://e-commerce-app-8jg4.onrender.com${item.image}`
@@ -295,7 +295,19 @@ function Cart() {
                     }
                     alt={item.item_name}
                     className="cart-img"
-                  />
+                  /> */}
+                    <img
+             src={
+              item.image
+              ? item.image.startsWith("http")
+              ? item.image.replace('/upload/', '/upload/w_300,q_auto,f_auto/')
+              : `https://e-commerce-app-8jg4.onrender.com${item.image}`
+              : "https://dummyimage.com/150"
+           }
+           alt={item.name}
+           loading="lazy"
+           className="cart-img"
+            />
 
                   <div className="cart-info">
                     <h3>{item.item_name}</h3>

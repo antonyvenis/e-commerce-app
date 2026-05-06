@@ -370,7 +370,7 @@ function Home() {
                 navigate(`/product/${item.id}`, { state: item })
               }
             >
-              <img
+              {/* <img
                 src={
                   item.image
                     ? `https://e-commerce-app-8jg4.onrender.com+${item.image}`
@@ -378,7 +378,18 @@ function Home() {
                 }
                 alt={item.name}
                 loading="lazy"
-              />
+              /> */}
+              <img
+             src={
+              item.image
+              ? item.image.startsWith("http")
+              ? item.image.replace('/upload/', '/upload/w_300,q_auto,f_auto/')
+              : `https://e-commerce-app-8jg4.onrender.com${item.image}`
+              : "https://dummyimage.com/150"
+           }
+           alt={item.name}
+           loading="lazy"
+            />
               <p>{item.name}</p>
             </div>
           ))}
