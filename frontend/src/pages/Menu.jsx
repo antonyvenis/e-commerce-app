@@ -335,7 +335,7 @@ function Menu() {
         </button>
 
         <button onClick={() => { setFilter("veg"); setMenuOpen(false); }}>
-          🌿Veg
+          🍛Veg
         </button>
 
         <button onClick={() => { setFilter("non-veg"); setMenuOpen(false); }}>
