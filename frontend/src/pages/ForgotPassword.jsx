@@ -140,10 +140,6 @@ function ForgotPassword() {
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        <button onClick={sendOtp} disabled={timer > 0}>
-          {timer > 0 ? `Resend OTP in ${timer}s` : "Send OTP 📧"}
-        </button>
-
         <button onClick={sendOtp} disabled={timer > 0 || verified}>
            {verified
              ? "OTP Verified ✅"
