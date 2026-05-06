@@ -82,7 +82,6 @@ function ProductDetails({ product }) {
       {/* 🖼️ Image */}
       <img
         src={product.image || "https://via.placeholder.com/200"}
-        {/* <img src={`${product.image}?v=${Date.now()}`} */}
         alt={product.name}
       />
 
