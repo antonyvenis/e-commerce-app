@@ -2428,3 +2428,15 @@ input {
     margin: 5px 0;
   }
 }
+
+/* Mobile fix - extra space remove */
+@media (max-width: 768px) {
+  .input-group:last-child {
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  .contact-form {
+    padding-bottom: 20px !important;  /* form bottom space control */
+  }
+}
