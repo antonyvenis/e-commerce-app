@@ -299,7 +299,7 @@ function Profile() {
     fetchOrders();
   }, []);
 
-  if (!userData) return <h2>Loading...</h2>;
+  if (!userData) return <h2>Loading....⏳</h2>;
 
   return (
     <div className="profile">

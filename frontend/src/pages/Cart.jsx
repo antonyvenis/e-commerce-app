@@ -251,7 +251,7 @@ function Cart() {
 
       {/* 🔥 LOADING */}
       {loading ? (
-        <h2 style={{ textAlign: "center" }}>Loading Cart... ⏳</h2>
+        <h2 style={{ textAlign: "center" }}>Loading Cart... 🛒</h2>
       ) : (
 
         <AnimatePresence mode="wait">

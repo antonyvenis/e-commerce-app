@@ -239,7 +239,7 @@ function Liked() {
   if (loading) {
     return (
       <div className="liked-container">
-        <h2>Loading wishlist... ⏳</h2>
+        <h2>Loading wishlist... ❤️</h2>
       </div>
     );
   }
