@@ -2358,11 +2358,6 @@ input {
   flex-wrap: wrap;
 }
 
-/* Hide hamburger in desktop */
-.mobile-menu {
-  display: none;
-}
-
 /* Mobile view */
 @media (max-width: 768px) {
 
@@ -2395,23 +2390,18 @@ input {
   }
 }
 
-.top-bar {
+/* .top-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-}
+} */
 
-.search {
+/* .search {
   flex: 1;
   padding: 10px;
-}
+} */
 
-.hamburger {
-  font-size: 24px;
-  background: none;
-  border: none;
-}
 
 /* Mobile */
 @media (max-width: 768px) {
@@ -2448,6 +2438,11 @@ input {
   color: #555;
   transform: scale(1.1);
 }
+}
+
+/* Hide hamburger in desktop */
+.mobile-menu {
+  display: none;
 }
 
 
