@@ -104,7 +104,7 @@ function Login() {
       </button>
 
       <button className="secondary-btn" onClick={() => navigate("/register")}>
-        Don't have an account? Register
+        Don't have an account? Sign Up
       </button>
     </div>
     </div>

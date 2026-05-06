@@ -124,6 +124,8 @@ class Product(models.Model):
     rating = models.FloatField(default=0)
     image = models.ImageField(upload_to="products/", null=True, blank=True)
     stock = models.IntegerField(default=10)
+    offer = models.IntegerField(default=0)  # % discount
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
