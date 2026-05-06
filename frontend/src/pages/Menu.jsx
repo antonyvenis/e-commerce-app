@@ -258,7 +258,7 @@ import ProductCard from "./ProductCart";
 import { useCart } from "./CartContext";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { FaBars } from "react-icons/fa";
+// import { FaBars } from "react-icons/fa";
 
 const API = "https://e-commerce-app-8jg4.onrender.com";
 
