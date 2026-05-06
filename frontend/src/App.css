@@ -2348,3 +2348,49 @@ input {
 .slide.active {
   opacity: 1;
 }
+
+/*----------------------------------- Menu Catecories Menu Mobile -------------------------*/
+
+/* Desktop */
+.filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Hide hamburger in desktop */
+.mobile-menu {
+  display: none;
+}
+
+/* Mobile view */
+@media (max-width: 768px) {
+
+  .mobile-menu {
+    display: block;
+    margin: 10px;
+  }
+
+  .mobile-menu button {
+    font-size: 24px;
+    background: none;
+    border: none;
+  }
+
+  .filters {
+    display: none;
+    flex-direction: column;
+    background: #111;
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  .filters.open {
+    display: flex;
+  }
+
+  .filters button {
+    width: 100%;
+    margin: 5px 0;
+  }
+}

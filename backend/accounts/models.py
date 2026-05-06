@@ -118,7 +118,8 @@ class OrderItem(models.Model):
 # ============================
 class Product(models.Model):
     name = models.CharField(max_length=200)
-    price = models.FloatField()
+    # price = models.FloatField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     category = models.CharField(max_length=100)
     rating = models.FloatField(default=0)
     image = models.ImageField(upload_to="products/", null=True, blank=True)
