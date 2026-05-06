@@ -2437,6 +2437,6 @@ input {
   }
 
   .contact-form {
-    padding-bottom: 20px !important;  /* form bottom space control */
+    padding-bottom: 40px !important;  /* form bottom space control */
   }
 }
