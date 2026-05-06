@@ -258,6 +258,7 @@ import ProductCard from "./ProductCart";
 import { useCart } from "./CartContext";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { FaBars } from "react-icons/fa";
 
 const API = "https://e-commerce-app-8jg4.onrender.com";
 
@@ -314,47 +315,51 @@ function Menu() {
           animate={{ y: 0, opacity: 1 }}
         />
 
-        <button
+        {/* <button
           className="hamburger"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           ☰
-        </button>
+        </button> */}
+
+      <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+         <FaBars />
+       </button>
       </div>
 
       {/* 🎯 FILTERS */}
       <div className={`filters ${menuOpen ? "open" : ""}`}>
 
         <button onClick={() => { setFilter("all"); setMenuOpen(false); }}>
-          All
+          🍽️ All
         </button>
 
         <button onClick={() => { setFilter("veg"); setMenuOpen(false); }}>
-          Veg
+          🌿Veg
         </button>
 
         <button onClick={() => { setFilter("non-veg"); setMenuOpen(false); }}>
-          Non-Veg
+          🍗Non-Veg
         </button>
 
         <button onClick={() => { setFilter("drinks"); setMenuOpen(false); }}>
-          Cool Drinks
+          🥤Cool Drinks
         </button>
 
         <button onClick={() => { setFilter("side-dish"); setMenuOpen(false); }}>
-          Side Dish
+          🍔Side Dish
         </button>
 
         <button onClick={() => setMenuOpen(false)}>
-          <Link to="/food" id="Link-text">Cake</Link>
+          <Link to="/food" id="Link-text">🍰 Cake</Link>
         </button>
 
         <button onClick={() => setMenuOpen(false)}>
-          <Link to="/food2" id="Link-text">Chinese</Link>
+          <Link to="/food2" id="Link-text">🥢Chinese</Link>
         </button>
 
         <button onClick={() => { setFilter("comming-soon"); setMenuOpen(false); }}>
-          Coming soon....
+          🔜Coming soon....
         </button>
 
       </div>

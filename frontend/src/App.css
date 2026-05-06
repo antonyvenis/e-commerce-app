@@ -2422,7 +2422,7 @@ input {
     position: absolute;
     right: 10px;
     top: 60px;
-    background: #111;
+    background: #f5f5f5;
     padding: 10px;
     border-radius: 10px;
     width: 200px;
@@ -2437,4 +2437,22 @@ input {
     width: 100%;
     margin: 5px 0;
   }
+}
+
+.hamburger {
+  color: #00ffff;  
+  font-size: 22px;
+  background: none;
+  border: none;
+}
+
+.hamburger:hover {
+  color: #555;
+  transform: scale(1.1);
+}
+
+.filters {
+  background: rgba(0,0,0,0.9);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
 }
