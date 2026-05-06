@@ -47,6 +47,63 @@ def send_email_otp(email, otp):
     except Exception as e:
         print("EMAIL ERROR 👉", str(e))
 
+# @api_view(['POST'])
+# def send_otp(request):
+#     email = request.data.get("email")
+#     username = request.data.get("username")
+#     phone = request.data.get("phone")
+
+#     # ❌ EMPTY CHECK
+#     if not email or not username or not phone:
+#         return Response({"error": "All fields required ❌"}, status=400)
+
+#     # ❌ DUPLICATE CHECK
+#     if CustomUser.objects.filter(username__iexact=username).exists():
+#         return Response({"error": "Username already exists ❌"}, status=400)
+
+#     if CustomUser.objects.filter(email=email).exists():
+#         return Response({"error": "Email already exists ❌"}, status=400)
+
+#     if CustomUser.objects.filter(phone=phone).exists():
+#         return Response({"error": "Phone number already exists ❌"}, status=400)
+
+#     # 🔍 CHECK EXISTING OTP RECORD
+#     otp_obj = OTP.objects.filter(email=email).first()
+
+#     # 🔥 COOLDOWN (30 sec)
+#     if otp_obj and otp_obj.last_sent_at:
+#         if otp_obj.last_sent_at > timezone.now() - timedelta(seconds=30):
+#             return Response({
+#                 "error": "Wait 30 seconds before retry ⏱️"
+#             }, status=429)
+
+#     # 🔥 DAILY LIMIT (max 5 OTP)
+#     if otp_obj:
+#         if otp_obj.send_count >= 5:
+#             return Response({
+#                 "error": "OTP limit exceeded today 🚫"
+#             }, status=429)
+
+#     # 🔢 GENERATE OTP
+#     otp = str(random.randint(100000, 999999))
+
+#     # 💾 SAVE / UPDATE
+#     OTP.objects.update_or_create(
+#         email=email,
+#         otp_type="register",
+#         defaults={
+#             "otp": otp,
+#             "is_verified": False,
+#             "last_sent_at": timezone.now(),
+#             "send_count": (otp_obj.send_count + 1) if otp_obj else 1
+#         }
+#     )
+
+#     # 📧 SEND EMAIL
+#     send_email_otp(email, otp)
+
+#     return Response({"message": "OTP sent 📧"})
+
 @api_view(['POST'])
 def send_otp(request):
     email = request.data.get("email")
@@ -67,22 +124,30 @@ def send_otp(request):
     if CustomUser.objects.filter(phone=phone).exists():
         return Response({"error": "Phone number already exists ❌"}, status=400)
 
-    # 🔍 CHECK EXISTING OTP RECORD
+    # 🔍 GET OTP OBJECT
     otp_obj = OTP.objects.filter(email=email).first()
+
+    now = timezone.now()
+    today = now.date()
+
+    # 🔥 RESET COUNT IF NEW DAY
+    if otp_obj and otp_obj.last_sent_at:
+        if otp_obj.last_sent_at.date() != today:
+            otp_obj.send_count = 0   # ✅ RESET
+            otp_obj.save()
 
     # 🔥 COOLDOWN (30 sec)
     if otp_obj and otp_obj.last_sent_at:
-        if otp_obj.last_sent_at > timezone.now() - timedelta(seconds=30):
+        if otp_obj.last_sent_at > now - timedelta(seconds=30):
             return Response({
                 "error": "Wait 30 seconds before retry ⏱️"
             }, status=429)
 
     # 🔥 DAILY LIMIT (max 5 OTP)
-    if otp_obj:
-        if otp_obj.send_count >= 5:
-            return Response({
-                "error": "OTP limit exceeded today 🚫"
-            }, status=429)
+    if otp_obj and otp_obj.send_count >= 5:
+        return Response({
+            "error": "OTP limit exceeded today 🚫"
+        }, status=429)
 
     # 🔢 GENERATE OTP
     otp = str(random.randint(100000, 999999))
@@ -94,7 +159,7 @@ def send_otp(request):
         defaults={
             "otp": otp,
             "is_verified": False,
-            "last_sent_at": timezone.now(),
+            "last_sent_at": now,
             "send_count": (otp_obj.send_count + 1) if otp_obj else 1
         }
     )
