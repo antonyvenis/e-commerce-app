@@ -889,20 +889,36 @@ function ProductCard({ product }) {
     //     id: product.id
     //   }
     // );
-    axios.post(
+//     axios.post(
+//   "https://e-commerce-app-8jg4.onrender.com/api/add-cart/",
+//   {
+//     username: user.username,
+//     item_name: product.name,
+
+//     // 🔥 OFFER PRICE
+//     price: isOffer
+//       ? Number(offerPrice)
+//       : Number(product.price),
+
+//     quantity: 1,
+//     image: imageUrl,
+//     id: product.id
+//   }
+// );
+
+axios.post(
   "https://e-commerce-app-8jg4.onrender.com/api/add-cart/",
   {
     username: user.username,
+
+    // 🔥 IMPORTANT
+    product_id: product.id,
+
     item_name: product.name,
 
-    // 🔥 OFFER PRICE
-    price: isOffer
-      ? Number(offerPrice)
-      : Number(product.price),
-
     quantity: 1,
-    image: imageUrl,
-    id: product.id
+
+    image: imageUrl
   }
 );
   };

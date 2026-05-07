@@ -43,7 +43,7 @@ class Like(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     item_name = models.CharField(max_length=200)
     image = models.URLField()
-    price = models.FloatField(default=0) 
+    price = models.FloatField(default=0) # 🔥 OPTIONAL (if you want to show price in likes)
     product_id = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
@@ -59,6 +59,7 @@ class CartItem(models.Model):
     price = models.FloatField()
     quantity = models.IntegerField(default=1)
     image = models.URLField()
+    product_id = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.user.username} 🛒 {self.item_name}"

@@ -187,12 +187,12 @@ function Home() {
      🔥 HERO SLIDER (15)
   ========================= */
   const heroSlides = [
-  { image: "/src/assets/images/briyani_hero.png", title: "🔥 Biryani Special", sub: "Hot & spicy" },
+  { image: "https://img.magnific.com/premium-photo/flying-chicken-biryani-spicy-indian-hyderabadi-biryani-generative-ai_21085-36430.jpg?w=2000", title: "🔥 Biryani Special", sub: "Hot & spicy" },
   { image: "https://images.unsplash.com/photo-1594007654729-407eedc4be65", title: "🍕 Pizza Blast", sub: "Cheesy love" },
   { image: "https://images.unsplash.com/photo-1550547660-d9450f859349", title: "🍔 Burger King", sub: "Juicy bites" },
   { image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87", title: "🥤 Cool Drinks", sub: "Chill refresh" },
-  { image: "/src/assets/images/chicken_fry_hero.png", title: "🍗 Chicken Fry", sub: "Crispy & tasty" },
-  { image: "/src/assets/images/noodles_hero.png", title: "🍜 Noodles", sub: "Street style" },
+  { image: "https://img.magnific.com/free-photo/boneless-chicken-with-fries-top-view_23-2149972943.jpg?semt=ais_hybrid", title: "🍗 Chicken Fry", sub: "Crispy & tasty" },
+  { image: "", title: "🍜 Noodles", sub: "Street style" },
   { image: "/src/assets/images/meals_hero.png", title: "🍛 Meals", sub: "Full meals" },
   { image: "/src/assets/images/veg_special_hero.png", title: "🥗 Veg Special", sub: "Healthy" },
   { image: "https://images.unsplash.com/photo-1551024601-bec78aea704b", title: "🍰 Desserts", sub: "Sweet treat" },

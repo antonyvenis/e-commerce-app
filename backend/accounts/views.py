@@ -681,52 +681,195 @@ def remove_like(request):
         return Response({"error": "User not found"})
 
 
+# # ================================
+# # 🛒 CART
+# # ================================
+# @api_view(['POST'])
+# def add_to_cart(request):
+#     try:
+#         user = CustomUser.objects.get(username=request.data.get("username"))
+
+#         item, created = CartItem.objects.get_or_create(
+#             user=user,
+#             item_name=request.data.get("item_name"),
+#             defaults={
+#                 "price": request.data.get("price"),
+#                 "quantity": 1,
+#                 "image": request.data.get("image")
+#             }
+#         )
+
+#         if not created:
+#             item.quantity += 1
+#             item.save()
+
+#         return Response({"message": "Added 🛒"})
+
+#     except:
+#         return Response({"error": "User not found"})
+
+
+# @api_view(['GET'])
+# def get_cart(request):
+#     try:
+#         user = CustomUser.objects.get(username=request.GET.get("username"))
+#         cart = CartItem.objects.filter(user=user)
+
+#         return Response([
+#             {
+#                 "id": c.id,
+#                 "item_name": c.item_name,
+#                 "price": c.price,
+#                 "quantity": c.quantity,
+#                 "image": c.image
+#             } for c in cart
+#         ])
+
+#     except:
+#         return Response([])
+
 # ================================
-# 🛒 CART
+# 🛒 ADD TO CART
 # ================================
 @api_view(['POST'])
 def add_to_cart(request):
-    try:
-        user = CustomUser.objects.get(username=request.data.get("username"))
 
+    try:
+
+        user = CustomUser.objects.get(
+            username=request.data.get("username")
+        )
+
+        # ✅ PRODUCT ID
+        product_id = request.data.get("product_id")
+
+        # ✅ GET PRODUCT
+        product = Product.objects.get(id=product_id)
+
+        # ✅ OFFER LOGIC
+        offer = product.offer or 0
+
+        final_price = float(product.price)
+
+        if offer > 0:
+            final_price = (
+                float(product.price)
+                - (
+                    float(product.price) *
+                    float(offer) / 100
+                )
+            )
+
+        # ✅ CREATE / UPDATE CART
         item, created = CartItem.objects.get_or_create(
+
             user=user,
-            item_name=request.data.get("item_name"),
+
+            product_id=product.id,
+
             defaults={
-                "price": request.data.get("price"),
+
+                "item_name": product.name,
+
+                "price": round(final_price, 2),
+
                 "quantity": 1,
-                "image": request.data.get("image")
+
+                "image": product.image.url
+                if product.image else ""
             }
         )
 
+        # ✅ IF ALREADY EXISTS
         if not created:
+
             item.quantity += 1
+
+            # 🔥 UPDATE PRICE INSTANT
+            item.price = round(final_price, 2)
+
             item.save()
 
-        return Response({"message": "Added 🛒"})
+        return Response({
+            "message": "Added 🛒"
+        })
 
-    except:
-        return Response({"error": "User not found"})
+    except Exception as e:
+
+        return Response({
+            "error": str(e)
+        })
 
 
+# ================================
+# 🛒 GET CART
+# ================================
 @api_view(['GET'])
 def get_cart(request):
+
     try:
-        user = CustomUser.objects.get(username=request.GET.get("username"))
+
+        user = CustomUser.objects.get(
+            username=request.GET.get("username")
+        )
+
         cart = CartItem.objects.filter(user=user)
 
-        return Response([
-            {
-                "id": c.id,
-                "item_name": c.item_name,
-                "price": c.price,
-                "quantity": c.quantity,
-                "image": c.image
-            } for c in cart
-        ])
+        data = []
 
-    except:
-        return Response([])
+        for c in cart:
+
+            # ✅ GET PRODUCT
+            product = Product.objects.get(
+                id=c.product_id
+            )
+
+            # ✅ OFFER
+            offer = product.offer or 0
+
+            final_price = float(product.price)
+
+            # ✅ APPLY OFFER
+            if offer > 0:
+
+                final_price = (
+                    float(product.price)
+                    - (
+                        float(product.price)
+                        * float(offer) / 100
+                    )
+                )
+
+            # ✅ UPDATE CART PRICE INSTANT
+            c.price = round(final_price, 2)
+
+            c.save()
+
+            data.append({
+
+                "id": c.id,
+
+                "product_id": product.id,
+
+                "item_name": product.name,
+
+                "price": round(final_price, 2),
+
+                "quantity": c.quantity,
+
+                "image": product.image.url
+                if product.image else "",
+
+                "offer": offer
+            })
+
+        return Response(data)
+
+    except Exception as e:
+
+        return Response({
+            "error": str(e)
+        })
 
 
 @api_view(['POST'])
