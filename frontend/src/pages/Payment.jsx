@@ -242,14 +242,14 @@ function Payment() {
               </div>
             </div>
           ))}
-
+          <div className="payment-section">
           <h3>Total: ₹{total}</h3>
 
           {cart.length > 0 && (
-            <button onClick={handlePayment}>
+            <button onClick={handlePayment}  className="pay-btn">
               Pay Now 💳
             </button>
-          )}
+          )}</div>
 
         </motion.div>
       </AnimatePresence>

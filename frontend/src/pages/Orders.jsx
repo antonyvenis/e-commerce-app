@@ -254,7 +254,7 @@ function Orders() {
       {/* 🔥 LOADING */}
       {loading ? (
         <h2 style={{ textAlign: "center" }}>
-          Loading Orders... ⏳
+          Loading Orders... 📦
         </h2>
       ) : (
 
