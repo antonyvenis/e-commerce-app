@@ -781,10 +781,6 @@ def add_to_cart(request):
     except Exception as e:
         return Response({"error": str(e)}, status=500)
 
-
-# ================================
-# 🛒 GET CART (OPTIMIZED)
-# ================================
 @api_view(['GET'])
 def get_cart(request):
 
@@ -792,7 +788,6 @@ def get_cart(request):
 
         username = request.GET.get("username")
 
-        # ✅ SAFE USER
         try:
             user = CustomUser.objects.get(username=username)
         except CustomUser.DoesNotExist:
@@ -804,24 +799,43 @@ def get_cart(request):
 
         for c in cart:
 
-            # ⚡ NO NEED EXTRA DB CALL (OPTIMIZED)
             try:
                 product = Product.objects.get(id=c.product_id)
             except Product.DoesNotExist:
                 continue
 
             offer = product.offer or 0
-            final_price = float(product.price)
+
+            original_price = float(product.price)
+
+            final_price = original_price
 
             if offer > 0:
-                final_price = float(product.price) - (float(product.price) * float(offer) / 100)
+                final_price = original_price - (original_price * offer / 100)
 
             data.append({
+
                 "id": c.id,
+
                 "item_name": product.name,
+
+                # 💰 ORIGINAL PRICE (IMPORTANT)
+                "original_price": round(original_price, 2),
+
+                # 🔥 FINAL PRICE
                 "price": round(final_price, 2),
+
                 "quantity": c.quantity,
+
                 "image": product.image.url if product.image else "",
+
+                # ⭐ FIX: rating add
+                "rating": product.rating if hasattr(product, "rating") else 4.5,
+
+                # 🍽️ FIX: category add
+                "category": product.category if hasattr(product, "category") else "Food",
+
+                # 🔥 OFFER
                 "offer": offer
             })
 
