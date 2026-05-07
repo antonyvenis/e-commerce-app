@@ -362,39 +362,77 @@ import toast from "react-hot-toast";
 const API = "https://e-commerce-app-8jg4.onrender.com";
 
 function Cart() {
+
   const navigate = useNavigate();
+
+  // ✅ FIXED
   const [cart, setCart] = useState([]);
+
   const [loading, setLoading] = useState(true);
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(
+    localStorage.getItem("user")
+  );
 
   /* ================================
      🟢 FETCH CART
   ================================ */
   const fetchCart = async () => {
+
     if (!user) return;
 
     try {
-      const res = await axios.get(`${API}/api/cart/`, {
-        params: { username: user.username }
-      });
 
-      setCart(res.data);
+      const res = await axios.get(
+        `${API}/api/cart/`,
+        {
+          params: {
+            username: user.username
+          }
+        }
+      );
 
-      localStorage.setItem("cartCount", res.data.length);
+      // ✅ FIXED
+      setCart(
+        Array.isArray(res.data)
+          ? res.data
+          : []
+      );
 
-      window.dispatchEvent(new Event("cartUpdated"));
+      localStorage.setItem(
+        "cartCount",
+        Array.isArray(res.data)
+          ? res.data.length
+          : 0
+      );
+
+      window.dispatchEvent(
+        new Event("cartUpdated")
+      );
 
     } catch (err) {
-      console.log("FETCH CART ERROR 👉", err.response?.data);
+
+      console.log(
+        "FETCH CART ERROR 👉",
+        err.response?.data
+      );
+
       toast.error("Cart load error ❌");
+
+      // ✅ FIXED
+      setCart([]);
+
     } finally {
+
       setLoading(false);
+
     }
   };
 
   useEffect(() => {
+
     fetchCart();
+
   }, []);
 
   /* ================================
@@ -405,20 +443,32 @@ function Cart() {
     setCart(prev =>
       prev.map(p =>
         p.id === item.id
-          ? { ...p, quantity: p.quantity + 1 }
+          ? {
+              ...p,
+              quantity: p.quantity + 1
+            }
           : p
       )
     );
 
     try {
-      await axios.post(`${API}/api/update-quantity/`, {
-        username: user.username,
-        id: item.id,
-        quantity: item.quantity + 1
-      });
+
+      await axios.post(
+        `${API}/api/update-quantity/`,
+        {
+          username: user.username,
+          id: item.id,
+          quantity: item.quantity + 1
+        }
+      );
 
     } catch (err) {
-      console.log("INCREASE ERROR 👉", err.response?.data);
+
+      console.log(
+        "INCREASE ERROR 👉",
+        err.response?.data
+      );
+
     }
   };
 
@@ -426,25 +476,38 @@ function Cart() {
      ➖ DECREASE
   ================================ */
   const decreaseQty = async (item) => {
+
     if (item.quantity <= 1) return;
 
     setCart(prev =>
       prev.map(p =>
         p.id === item.id
-          ? { ...p, quantity: p.quantity - 1 }
+          ? {
+              ...p,
+              quantity: p.quantity - 1
+            }
           : p
       )
     );
 
     try {
-      await axios.post(`${API}/api/update-quantity/`, {
-        username: user.username,
-        id: item.id,
-        quantity: item.quantity - 1
-      });
+
+      await axios.post(
+        `${API}/api/update-quantity/`,
+        {
+          username: user.username,
+          id: item.id,
+          quantity: item.quantity - 1
+        }
+      );
 
     } catch (err) {
-      console.log("DECREASE ERROR 👉", err.response?.data);
+
+      console.log(
+        "DECREASE ERROR 👉",
+        err.response?.data
+      );
+
     }
   };
 
@@ -452,73 +515,101 @@ function Cart() {
      ❌ REMOVE
   ================================ */
   const removeItem = async (item) => {
-    try {
-      await axios.post(`${API}/api/remove-cart/`, {
-        username: user.username,
-        id: item.id
-      });
 
-      setCart(prev =>
-        prev.filter(p => p.id !== item.id)
+    try {
+
+      await axios.post(
+        `${API}/api/remove-cart/`,
+        {
+          username: user.username,
+          id: item.id
+        }
       );
 
-      const newCount = cart.length - 1;
+      setCart(prev =>
+        prev.filter(
+          p => p.id !== item.id
+        )
+      );
 
-      localStorage.setItem("cartCount", newCount);
+      const newCount =
+        cart.length - 1;
+
+      localStorage.setItem(
+        "cartCount",
+        newCount
+      );
 
       toast.success(
         `${item.item_name} removed from cart ❌`
       );
 
     } catch (err) {
-      console.log("REMOVE ERROR 👉", err.response?.data);
+
+      console.log(
+        "REMOVE ERROR 👉",
+        err.response?.data
+      );
+
     }
   };
 
   /* ================================
-     💰 TOTAL WITH OFFER
+     💰 TOTAL
   ================================ */
 
-  // ✅ FIXED OFFER TOTAL
-  const total = cart.reduce((acc, item) => {
+  // ✅ FIXED
+  const total = Array.isArray(cart)
 
-    const offerPercent = Number(
-      item.offer ?? item.discount ?? 0
-    );
+    ? cart.reduce((acc, item) => {
 
-    const finalPrice =
-      offerPercent > 0
-        ? item.price -
-          (item.price * offerPercent) / 100
-        : item.price;
+        const price =
+          Number(item.price) || 0;
 
-    return acc + finalPrice * item.quantity;
+        const qty =
+          Number(item.quantity) || 1;
 
-  }, 0);
+        return acc + price * qty;
+
+      }, 0)
+
+    : 0;
 
   /* ================================
      💳 CHECKOUT
   ================================ */
   const handleCheckout = () => {
+
     if (cart.length === 0) {
+
       toast.error("Cart empty ❌");
+
       return;
     }
 
-    navigate("/payment", { state: { cart } });
+    navigate("/payment", {
+      state: { cart }
+    });
   };
 
   /* ================================
      🎨 UI
   ================================ */
   return (
+
     <div className="cart-container">
 
       {/* 🔥 LOADING */}
       {loading ? (
-        <h2 style={{ textAlign: "center" }}>
+
+        <h2
+          style={{
+            textAlign: "center"
+          }}
+        >
           Loading Cart... 🛒
         </h2>
+
       ) : (
 
         <AnimatePresence mode="wait">
@@ -527,15 +618,28 @@ function Cart() {
 
             <motion.div
               key="empty"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -50 }}
+              initial={{
+                opacity: 0,
+                y: 50
+              }}
+              animate={{
+                opacity: 1,
+                y: 0
+              }}
+              exit={{
+                opacity: 0,
+                y: -50
+              }}
             >
 
-              <h2>🛒 Your Cart is Empty 😢</h2>
+              <h2>
+                🛒 Your Cart is Empty 😢
+              </h2>
 
               <button
-                onClick={() => navigate("/menu")}
+                onClick={() =>
+                  navigate("/menu")
+                }
               >
                 Go Shopping 🛍️
               </button>
@@ -557,20 +661,9 @@ function Cart() {
 
               {cart.map(item => {
 
-                // ✅ OFFER LOGIC
-                const offerPercent = Number(
-                  item.offer ?? item.discount ?? 0
-                );
-
-                const isOffer = offerPercent > 0;
-
-                const finalPrice = isOffer
-                  ? (
-                      item.price -
-                      (item.price * offerPercent) /
-                        100
-                    ).toFixed(2)
-                  : item.price;
+                // ✅ FIXED
+                const isOffer =
+                  Number(item.offer) > 0;
 
                 return (
 
@@ -583,7 +676,9 @@ function Cart() {
                     <img
                       src={
                         item.image
-                          ? item.image.startsWith("http")
+                          ? item.image.startsWith(
+                              "http"
+                            )
                             ? item.image.replace(
                                 "/upload/",
                                 "/upload/w_300,q_auto,f_auto/"
@@ -591,24 +686,27 @@ function Cart() {
                             : `${API}${item.image}`
                           : "https://dummyimage.com/150"
                       }
-                      alt={item.name}
+                      alt={item.item_name}
                       loading="lazy"
                       className="cart-img"
                     />
 
                     <div className="cart-info">
 
-                      <h3>{item.item_name}</h3>
+                      <h3>
+                        {item.item_name}
+                      </h3>
 
-                      {/* ✅ OFFER PRICE */}
+                      {/* ✅ OFFER */}
                       {isOffer ? (
+
                         <>
                           <p
                             style={{
-                              textDecoration:
-                                "line-through",
-                              color: "gray",
-                              fontSize: "14px"
+                              color: "green",
+                              fontWeight:
+                                "bold",
+                              fontSize: "20px"
                             }}
                           >
                             ₹{item.price}
@@ -616,32 +714,29 @@ function Cart() {
 
                           <p
                             style={{
-                              color: "green",
-                              fontWeight: "bold",
-                              fontSize: "20px"
-                            }}
-                          >
-                            ₹{finalPrice}
-                          </p>
-
-                          <p
-                            style={{
                               color: "red",
                               fontSize: "13px",
-                              fontWeight: "bold"
+                              fontWeight:
+                                "bold"
                             }}
                           >
-                            🔥 {offerPercent}% OFF
+                            🔥 {item.offer}% OFF
                           </p>
                         </>
+
                       ) : (
-                        <p>₹{item.price}</p>
+
+                        <p>
+                          ₹{item.price}
+                        </p>
+
                       )}
 
                     </div>
 
                     {/* 🔢 QTY */}
                     <div className="qty">
+
                       <button
                         onClick={() =>
                           decreaseQty(item)
@@ -650,7 +745,9 @@ function Cart() {
                         -
                       </button>
 
-                      <span>{item.quantity}</span>
+                      <span>
+                        {item.quantity}
+                      </span>
 
                       <button
                         onClick={() =>
@@ -659,6 +756,7 @@ function Cart() {
                       >
                         +
                       </button>
+
                     </div>
 
                     {/* ❌ REMOVE */}
@@ -678,7 +776,8 @@ function Cart() {
               <div className="total-box">
 
                 <h3>
-                  Total: ₹{total.toFixed(2)}
+                  Total: ₹
+                  {total.toFixed(2)}
                 </h3>
 
                 <button

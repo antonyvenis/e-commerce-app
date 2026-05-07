@@ -801,9 +801,76 @@ def add_to_cart(request):
         })
 
 
-# ================================
-# 🛒 GET CART
-# ================================
+# # ================================
+# # 🛒 GET CART
+# # ================================
+# @api_view(['GET'])
+# def get_cart(request):
+
+#     try:
+
+#         user = CustomUser.objects.get(
+#             username=request.GET.get("username")
+#         )
+
+#         cart = CartItem.objects.filter(user=user)
+
+#         data = []
+
+#         for c in cart:
+
+#             # ✅ GET PRODUCT
+#             product = Product.objects.get(
+#                 id=c.product_id
+#             )
+
+#             # ✅ OFFER
+#             offer = product.offer or 0
+
+#             final_price = float(product.price)
+
+#             # ✅ APPLY OFFER
+#             if offer > 0:
+
+#                 final_price = (
+#                     float(product.price)
+#                     - (
+#                         float(product.price)
+#                         * float(offer) / 100
+#                     )
+#                 )
+
+#             # ✅ UPDATE CART PRICE INSTANT
+#             c.price = round(final_price, 2)
+
+#             c.save()
+
+#             data.append({
+
+#                 "id": c.id,
+
+#                 "product_id": product.id,
+
+#                 "item_name": product.name,
+
+#                 "price": round(final_price, 2),
+
+#                 "quantity": c.quantity,
+
+#                 "image": product.image.url
+#                 if product.image else "",
+
+#                 "offer": offer
+#             })
+
+#         return Response(data)
+
+#     except Exception as e:
+
+#         return Response({
+#             "error": str(e)
+#         })
+
 @api_view(['GET'])
 def get_cart(request):
 
@@ -819,17 +886,14 @@ def get_cart(request):
 
         for c in cart:
 
-            # ✅ GET PRODUCT
             product = Product.objects.get(
                 id=c.product_id
             )
 
-            # ✅ OFFER
             offer = product.offer or 0
 
             final_price = float(product.price)
 
-            # ✅ APPLY OFFER
             if offer > 0:
 
                 final_price = (
@@ -840,16 +904,9 @@ def get_cart(request):
                     )
                 )
 
-            # ✅ UPDATE CART PRICE INSTANT
-            c.price = round(final_price, 2)
-
-            c.save()
-
             data.append({
 
                 "id": c.id,
-
-                "product_id": product.id,
 
                 "item_name": product.name,
 
@@ -867,9 +924,10 @@ def get_cart(request):
 
     except Exception as e:
 
-        return Response({
-            "error": str(e)
-        })
+        print(e)
+
+        # 🔥 MUST RETURN ARRAY
+        return Response([])
 
 
 @api_view(['POST'])
