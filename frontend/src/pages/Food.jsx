@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import ProductDetails from "./ProductDetails";
+import { useCart } from "./CartContext";
+import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
 function Food() {
 
@@ -9,6 +11,19 @@ function Food() {
   const [search, setSearch] = useState("");
 
   const [loading, setLoading] = useState(true);
+
+  const { addToCart } = useCart();
+
+  /* =========================================================
+     💾 LOAD LIKES
+  ========================================================= */
+  const [liked, setLiked] = useState(() => {
+
+    return JSON.parse(
+      localStorage.getItem("likes")
+    ) || [];
+
+  });
 
   /* =========================================================
      🍔 FETCH FOOD DATA
@@ -75,6 +90,18 @@ function Food() {
   }, []);
 
   /* =========================================================
+     💾 SAVE LIKES
+  ========================================================= */
+  useEffect(() => {
+
+    localStorage.setItem(
+      "likes",
+      JSON.stringify(liked)
+    );
+
+  }, [liked]);
+
+  /* =========================================================
      🔍 SEARCH FILTER
   ========================================================= */
   const filtered = data.filter((product) =>
@@ -82,6 +109,56 @@ function Food() {
       .toLowerCase()
       .includes(search.toLowerCase())
   );
+
+  /* =========================================================
+     ❤️ TOGGLE LIKE
+  ========================================================= */
+  const toggleLike = (id, name) => {
+
+    if (liked.includes(id)) {
+
+      setLiked(
+        liked.filter(item => item !== id)
+      );
+
+      toast("🗑️ Removed from wishlist ❌");
+
+    } else {
+
+      setLiked([...liked, id]);
+
+      toast.success(
+        `${name} added to wishlist ❤️`
+      );
+    }
+  };
+
+  /* =========================================================
+     🛒 ADD TO CART
+  ========================================================= */
+  const handleAdd = (item) => {
+
+    const product = {
+
+      id: item.id,
+
+      name: item.name,
+
+      image: item.image,
+
+      price: item.price,
+
+      category: item.category,
+
+      quantity: 1
+    };
+
+    addToCart(product);
+
+    toast.success(
+      `${item.name} added to cart 🛒🔥`
+    );
+  };
 
   /* =========================================================
      🎨 UI
@@ -133,7 +210,6 @@ function Food() {
 
           display: "grid",
 
-          // ✅ 4 OR 5 CARDS DESKTOP
           gridTemplateColumns:
             "repeat(auto-fit, minmax(260px, 1fr))",
 
@@ -173,148 +249,237 @@ function Food() {
 
         ) : filtered.length > 0 ? (
 
-          /* 🍔 REAL DATA */
-          filtered.map((product) => (
+          filtered.map((product) => {
 
-            <div
-              key={product.id}
-              style={{
+            const isLiked =
+              liked.includes(product.id);
 
-                background: "#fff",
+            return (
 
-                borderRadius: "20px",
-
-                overflow: "hidden",
-
-                boxShadow:
-                  "0 4px 15px rgba(0,0,0,0.1)",
-
-                transition: "0.3s",
-
-                minHeight: "520px",
-
-                display: "flex",
-
-                flexDirection: "column"
-              }}
-            >
-
-              {/* 🖼️ IMAGE */}
-              <img
-                src={product.image}
-                alt={product.name}
-                loading="lazy"
+              <motion.div
+                key={product.id}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.98 }}
                 style={{
 
-                  width: "100%",
+                  background: "#fff",
 
-                  height: "230px",
+                  borderRadius: "20px",
 
-                  objectFit: "cover"
-                }}
-              />
+                  overflow: "hidden",
 
-              {/* 📦 DETAILS */}
-              <div
-                style={{
+                  boxShadow:
+                    "0 4px 15px rgba(0,0,0,0.1)",
 
-                  padding: "18px",
+                  transition: "0.3s",
+
+                  minHeight: "520px",
+
+                  position: "relative",
 
                   display: "flex",
 
-                  flexDirection: "column",
-
-                  flex: 1
+                  flexDirection: "column"
                 }}
               >
 
-                <h2
+                {/* ❤️ LIKE */}
+                <span
+                  onClick={() =>
+                    toggleLike(
+                      product.id,
+                      product.name
+                    )
+                  }
                   style={{
+
+                    position: "absolute",
+
+                    top: "15px",
+
+                    right: "15px",
 
                     fontSize: "24px",
 
-                    fontWeight: "bold",
+                    cursor: "pointer",
 
-                    marginBottom: "10px",
-
-                    color: "#222"
+                    zIndex: 10
                   }}
                 >
-                  {product.name}
-                </h2>
+                  {isLiked ? "❤️" : "🤍"}
+                </span>
 
-                {/* 🍽️ CATEGORY */}
-                <p
-                  style={{
-                    color: "#666",
-                    marginBottom: "8px"
-                  }}
-                >
-                  🍽️ {product.category}
-                </p>
-
-                {/* 🌍 CUISINE */}
-                <p
-                  style={{
-                    color: "#666",
-                    marginBottom: "8px"
-                  }}
-                >
-                  🌍 {product.cuisine}
-                </p>
-
-                {/* ⭐ RATING */}
-                <p
-                  style={{
-                    color: "#666",
-                    marginBottom: "8px"
-                  }}
-                >
-                  ⭐ {product.rating}
-                </p>
-
-                {/* ⏱️ TIME */}
-                <p
-                  style={{
-                    color: "#666",
-                    marginBottom: "14px"
-                  }}
-                >
-                  ⏱️ {product.timing} mins
-                </p>
-
-                {/* 💰 PRICE */}
-                <p
+                {/* 🖼️ IMAGE */}
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  loading="lazy"
                   style={{
 
-                    fontSize: "30px",
+                    width: "100%",
 
-                    fontWeight: "bold",
+                    height: "230px",
 
-                    color: "#ff6600",
+                    objectFit: "cover"
+                  }}
+                />
 
-                    marginBottom: "20px"
+                {/* 📦 DETAILS */}
+                <div
+                  style={{
+
+                    padding: "18px",
+
+                    display: "flex",
+
+                    flexDirection: "column",
+
+                    flex: 1
                   }}
                 >
-                  ₹{product.price}
-                </p>
 
-                {/* 🛒 PRODUCT CARD */}
-                <div style={{ marginTop: "auto" }}>
-                  <ProductDetails
-                    product={product}
-                  />
+                  {/* 🍔 NAME */}
+                  <h2
+                    style={{
+
+                      fontSize: "24px",
+
+                      fontWeight: "bold",
+
+                      marginBottom: "10px",
+
+                      color: "#222"
+                    }}
+                  >
+                    {product.name}
+                  </h2>
+
+                  {/* 🍽️ CATEGORY */}
+                  <p
+                    style={{
+                      color: "#666",
+                      marginBottom: "8px"
+                    }}
+                  >
+                    🍽️ {product.category}
+                  </p>
+
+                  {/* 🌍 CUISINE */}
+                  <p
+                    style={{
+                      color: "#666",
+                      marginBottom: "8px"
+                    }}
+                  >
+                    🌍 {product.cuisine}
+                  </p>
+
+                  {/* ⭐ RATING */}
+                  <p
+                    style={{
+                      color: "#666",
+                      marginBottom: "8px"
+                    }}
+                  >
+                    ⭐ {product.rating}
+                  </p>
+
+                  {/* ⏱️ TIME */}
+                  <p
+                    style={{
+                      color: "#666",
+                      marginBottom: "14px"
+                    }}
+                  >
+                    ⏱️ {product.timing} mins
+                  </p>
+
+                  {/* 💰 PRICE */}
+                  <p
+                    style={{
+
+                      fontSize: "30px",
+
+                      fontWeight: "bold",
+
+                      color: "#ff6600",
+
+                      marginBottom: "20px"
+                    }}
+                  >
+                    ₹{product.price}
+                  </p>
+
+                  {/* ⭐ RATING */}
+                  <div
+                    style={{
+                      marginBottom: "20px"
+                    }}
+                  >
+
+                    {[1,2,3,4,5].map(star => (
+
+                      <span
+                        key={star}
+                        style={{
+
+                          color:
+                            star <=
+                            Math.round(product.rating)
+                              ? "gold"
+                              : "#ccc",
+
+                          fontSize: "22px",
+
+                          marginRight: "4px"
+                        }}
+                      >
+                        ★
+                      </span>
+
+                    ))}
+
+                  </div>
+
+                  {/* 🛒 BUTTON */}
+                  <button
+                    onClick={() =>
+                      handleAdd(product)
+                    }
+                    style={{
+
+                      marginTop: "auto",
+
+                      background:
+                        "linear-gradient(135deg,#ff7b00,#ff5100)",
+
+                      color: "#fff",
+
+                      border: "none",
+
+                      padding: "14px",
+
+                      borderRadius: "14px",
+
+                      fontSize: "16px",
+
+                      fontWeight: "bold",
+
+                      cursor: "pointer"
+                    }}
+                  >
+                    Add to Cart 🛒
+                  </button>
+
                 </div>
 
-              </div>
+              </motion.div>
 
-            </div>
-
-          ))
+            );
+          })
 
         ) : (
 
-          /* ❌ NO RESULT */
           <p
             style={{
               fontSize: "22px",
@@ -330,7 +495,7 @@ function Food() {
 
       </div>
 
-      {/* 🔥 LOADING ANIMATION */}
+      {/* 🔥 LOADING */}
       <style>
         {`
           @keyframes loading {
@@ -344,7 +509,6 @@ function Food() {
             }
           }
 
-          /* 📱 MOBILE */
           @media (max-width: 768px) {
 
             .grid {
