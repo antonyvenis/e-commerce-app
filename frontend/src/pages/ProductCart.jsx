@@ -956,11 +956,11 @@ function ProductCard({ product }) {
       <h3>{product.name}</h3>
 
       <p className="category">
-        🍽️ {product.category}
+        🍽️ {product.category || "Food"}
       </p>
 
       <p className="rating-text">
-        ⭐ {product.rating}
+        ⭐ {product.rating || "4.5"}
       </p>
 
       {/* 💸 PRICE */}

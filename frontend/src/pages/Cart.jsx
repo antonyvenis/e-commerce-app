@@ -97,6 +97,262 @@
 
 // export default Cart;
 
+// import { useEffect, useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import axios from "axios";
+// import { motion, AnimatePresence } from "framer-motion";
+// import toast from "react-hot-toast";
+
+// const API = "https://e-commerce-app-8jg4.onrender.com";
+
+// function Cart() {
+//   const navigate = useNavigate();
+//   const [cart, setCart] = useState([]);
+//   const [loading, setLoading] = useState(true); // 🔥 NEW
+
+//   const user = JSON.parse(localStorage.getItem("user"));
+
+//   /* ================================
+//      🟢 FETCH CART (FAST)
+//   ================================ */
+//   const fetchCart = async () => {
+//     if (!user) return;
+
+//     try {
+//       const res = await axios.get(`${API}/api/cart/`, {
+//         params: { username: user.username }
+//       });
+
+//       setCart(res.data);
+
+//       localStorage.setItem("cartCount", res.data.length);
+
+//       // 🔥 MUST ADD THIS
+//      window.dispatchEvent(new Event("cartUpdated"));
+
+//     } catch (err) {
+//       console.log("FETCH CART ERROR 👉", err.response?.data);
+//       toast.error("Cart load error ❌");
+//     } finally {
+//       setLoading(false); // 🔥 stop loading
+//     }
+//   };
+
+//   useEffect(() => {
+//     fetchCart();
+//   }, []);
+
+//   /* ================================
+//      ➕ INCREASE (INSTANT UI 🔥)
+//   ================================ */
+//   const increaseQty = async (item) => {
+
+//     // 🔥 instant UI update
+//     setCart(prev =>
+//       prev.map(p =>
+//         p.id === item.id ? { ...p, quantity: p.quantity + 1 } : p
+//       )
+//     );
+
+//     try {
+//       await axios.post(`${API}/api/update-quantity/`, {
+//         username: user.username,
+//         id: item.id,
+//         quantity: item.quantity + 1
+//       });
+
+//     } catch (err) {
+//       console.log("INCREASE ERROR 👉", err.response?.data);
+//     }
+//   };
+
+//   /* ================================
+//      ➖ DECREASE (INSTANT UI 🔥)
+//   ================================ */
+//   const decreaseQty = async (item) => {
+//     if (item.quantity <= 1) return;
+
+//     setCart(prev =>
+//       prev.map(p =>
+//         p.id === item.id ? { ...p, quantity: p.quantity - 1 } : p
+//       )
+//     );
+
+//     try {
+//       await axios.post(`${API}/api/update-quantity/`, {
+//         username: user.username,
+//         id: item.id,
+//         quantity: item.quantity - 1
+//       });
+
+//     } catch (err) {
+//       console.log("DECREASE ERROR 👉", err.response?.data);
+//     }
+//   };
+
+//   /* ================================
+//      ❌ REMOVE
+//   ================================ */
+//   const removeItem = async (item) => {
+//     try {
+//       await axios.post(`${API}/api/remove-cart/`, {
+//         username: user.username,
+//         id: item.id
+//       });
+
+//       setCart(prev => prev.filter(p => p.id !== item.id));
+
+//       const newCount = cart.length - 1;
+//       localStorage.setItem("cartCount", newCount);
+
+//       toast.success(`${item.item_name} removed from cart ❌`);
+
+//     } catch (err) {
+//       console.log("REMOVE ERROR 👉", err.response?.data);
+//     }
+//   };
+
+//   /* ================================
+//      💰 TOTAL
+//   ================================ */
+//   const total = cart.reduce(
+//     (acc, item) => acc + item.price * item.quantity,
+//     0
+//   );
+
+//   /* ================================
+//      💳 CHECKOUT
+//   ================================ */
+//   const handleCheckout = () => {
+//     if (cart.length === 0) {
+//       toast.error("Cart empty ❌");
+//       return;
+//     }
+
+//     navigate("/payment", { state: { cart } });
+//   };
+
+//   /* ================================
+//      🖼 IMAGE FIX
+//   ================================ */
+//   const getImage = (img) => {
+//     if (!img) return "https://via.placeholder.com/80";
+
+//     return img.startsWith("http")
+//       ? img
+//       : `${API}${img}`;
+//   };
+
+//   /* ================================
+//      🎨 UI
+//   ================================ */
+//   return (
+//     <div className="cart-container">
+
+//       {/* 🔥 LOADING */}
+//       {loading ? (
+//         <h2 style={{ textAlign: "center" }}>Loading Cart... 🛒</h2>
+//       ) : (
+
+//         <AnimatePresence mode="wait">
+
+//           {cart.length === 0 ? (
+//             <motion.div
+//               key="empty"
+//               initial={{ opacity: 0, y: 50 }}
+//               animate={{ opacity: 1, y: 0 }}
+//               exit={{ opacity: 0, y: -50 }}
+//             >
+//               <h2>🛒 Your Cart is Empty 😢</h2>
+
+//               <button onClick={() => navigate("/menu")}>
+//                 Go Shopping 🛍️
+//               </button>
+//             </motion.div>
+
+//           ) : (
+
+//             <motion.div
+//               key="cart"
+//               initial={{ opacity: 0 }}
+//               animate={{ opacity: 1 }}
+//               exit={{ opacity: 0 }}
+//             >
+
+//               <h2 className="cart-title">
+//                 🛒 Cart ({cart.length})
+//               </h2>
+
+//               {cart.map(item => (
+//                 <div key={item.id} className="cart-item">
+
+//                   {/* 🖼 SAME SIZE IMAGE */}
+//                   {/* <img
+//                     src={
+//                   item.image
+//                     ? `https://e-commerce-app-8jg4.onrender.com${item.image}`
+//                     : "https://dummyimage.com/150"
+//                     }
+//                     alt={item.item_name}
+//                     className="cart-img"
+//                   /> */}
+//                     <img
+//              src={
+//               item.image
+//               ? item.image.startsWith("http")
+//               ? item.image.replace('/upload/', '/upload/w_300,q_auto,f_auto/')
+//               : `https://e-commerce-app-8jg4.onrender.com${item.image}`
+//               : "https://dummyimage.com/150"
+//            }
+//            alt={item.name}
+//            loading="lazy"
+//            className="cart-img"
+//             />
+
+//                   <div className="cart-info">
+//                     <h3>{item.item_name}</h3>
+//                     <p>₹{item.price}</p>
+//                   </div>
+
+//                   {/* 🔢 QTY */}
+//                   <div className="qty">
+//                     <button onClick={() => decreaseQty(item)}>-</button>
+//                     <span>{item.quantity}</span>
+//                     <button onClick={() => increaseQty(item)}>+</button>
+//                   </div>
+
+//                   {/* ❌ REMOVE */}
+//                   <button onClick={() => removeItem(item)}>
+//                     Remove ❌
+//                   </button>
+
+//                 </div>
+//               ))}
+
+//               {/* 💰 TOTAL */}
+//               <div className="total-box">
+//                 <h3>Total: ₹{total}</h3>
+
+//                 <button
+//                   className="checkout-btn"
+//                   onClick={handleCheckout}
+//                 >
+//                   Proceed to Pay 💳
+//                 </button>
+//               </div>
+
+//             </motion.div>
+//           )}
+
+//         </AnimatePresence>
+//       )}
+
+//     </div>
+//   );
+// }
+
+// export default Cart;
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -108,12 +364,12 @@ const API = "https://e-commerce-app-8jg4.onrender.com";
 function Cart() {
   const navigate = useNavigate();
   const [cart, setCart] = useState([]);
-  const [loading, setLoading] = useState(true); // 🔥 NEW
+  const [loading, setLoading] = useState(true);
 
   const user = JSON.parse(localStorage.getItem("user"));
 
   /* ================================
-     🟢 FETCH CART (FAST)
+     🟢 FETCH CART
   ================================ */
   const fetchCart = async () => {
     if (!user) return;
@@ -127,14 +383,13 @@ function Cart() {
 
       localStorage.setItem("cartCount", res.data.length);
 
-      // 🔥 MUST ADD THIS
-     window.dispatchEvent(new Event("cartUpdated"));
+      window.dispatchEvent(new Event("cartUpdated"));
 
     } catch (err) {
       console.log("FETCH CART ERROR 👉", err.response?.data);
       toast.error("Cart load error ❌");
     } finally {
-      setLoading(false); // 🔥 stop loading
+      setLoading(false);
     }
   };
 
@@ -143,14 +398,15 @@ function Cart() {
   }, []);
 
   /* ================================
-     ➕ INCREASE (INSTANT UI 🔥)
+     ➕ INCREASE
   ================================ */
   const increaseQty = async (item) => {
 
-    // 🔥 instant UI update
     setCart(prev =>
       prev.map(p =>
-        p.id === item.id ? { ...p, quantity: p.quantity + 1 } : p
+        p.id === item.id
+          ? { ...p, quantity: p.quantity + 1 }
+          : p
       )
     );
 
@@ -167,14 +423,16 @@ function Cart() {
   };
 
   /* ================================
-     ➖ DECREASE (INSTANT UI 🔥)
+     ➖ DECREASE
   ================================ */
   const decreaseQty = async (item) => {
     if (item.quantity <= 1) return;
 
     setCart(prev =>
       prev.map(p =>
-        p.id === item.id ? { ...p, quantity: p.quantity - 1 } : p
+        p.id === item.id
+          ? { ...p, quantity: p.quantity - 1 }
+          : p
       )
     );
 
@@ -200,12 +458,17 @@ function Cart() {
         id: item.id
       });
 
-      setCart(prev => prev.filter(p => p.id !== item.id));
+      setCart(prev =>
+        prev.filter(p => p.id !== item.id)
+      );
 
       const newCount = cart.length - 1;
+
       localStorage.setItem("cartCount", newCount);
 
-      toast.success(`${item.item_name} removed from cart ❌`);
+      toast.success(
+        `${item.item_name} removed from cart ❌`
+      );
 
     } catch (err) {
       console.log("REMOVE ERROR 👉", err.response?.data);
@@ -213,12 +476,25 @@ function Cart() {
   };
 
   /* ================================
-     💰 TOTAL
+     💰 TOTAL WITH OFFER
   ================================ */
-  const total = cart.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
-  );
+
+  // ✅ FIXED OFFER TOTAL
+  const total = cart.reduce((acc, item) => {
+
+    const offerPercent = Number(
+      item.offer ?? item.discount ?? 0
+    );
+
+    const finalPrice =
+      offerPercent > 0
+        ? item.price -
+          (item.price * offerPercent) / 100
+        : item.price;
+
+    return acc + finalPrice * item.quantity;
+
+  }, 0);
 
   /* ================================
      💳 CHECKOUT
@@ -233,17 +509,6 @@ function Cart() {
   };
 
   /* ================================
-     🖼 IMAGE FIX
-  ================================ */
-  const getImage = (img) => {
-    if (!img) return "https://via.placeholder.com/80";
-
-    return img.startsWith("http")
-      ? img
-      : `${API}${img}`;
-  };
-
-  /* ================================
      🎨 UI
   ================================ */
   return (
@@ -251,23 +516,30 @@ function Cart() {
 
       {/* 🔥 LOADING */}
       {loading ? (
-        <h2 style={{ textAlign: "center" }}>Loading Cart... 🛒</h2>
+        <h2 style={{ textAlign: "center" }}>
+          Loading Cart... 🛒
+        </h2>
       ) : (
 
         <AnimatePresence mode="wait">
 
           {cart.length === 0 ? (
+
             <motion.div
               key="empty"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -50 }}
             >
+
               <h2>🛒 Your Cart is Empty 😢</h2>
 
-              <button onClick={() => navigate("/menu")}>
+              <button
+                onClick={() => navigate("/menu")}
+              >
                 Go Shopping 🛍️
               </button>
+
             </motion.div>
 
           ) : (
@@ -283,55 +555,131 @@ function Cart() {
                 🛒 Cart ({cart.length})
               </h2>
 
-              {cart.map(item => (
-                <div key={item.id} className="cart-item">
+              {cart.map(item => {
 
-                  {/* 🖼 SAME SIZE IMAGE */}
-                  {/* <img
-                    src={
-                  item.image
-                    ? `https://e-commerce-app-8jg4.onrender.com${item.image}`
-                    : "https://dummyimage.com/150"
-                    }
-                    alt={item.item_name}
-                    className="cart-img"
-                  /> */}
+                // ✅ OFFER LOGIC
+                const offerPercent = Number(
+                  item.offer ?? item.discount ?? 0
+                );
+
+                const isOffer = offerPercent > 0;
+
+                const finalPrice = isOffer
+                  ? (
+                      item.price -
+                      (item.price * offerPercent) /
+                        100
+                    ).toFixed(2)
+                  : item.price;
+
+                return (
+
+                  <div
+                    key={item.id}
+                    className="cart-item"
+                  >
+
+                    {/* 🖼 IMAGE */}
                     <img
-             src={
-              item.image
-              ? item.image.startsWith("http")
-              ? item.image.replace('/upload/', '/upload/w_300,q_auto,f_auto/')
-              : `https://e-commerce-app-8jg4.onrender.com${item.image}`
-              : "https://dummyimage.com/150"
-           }
-           alt={item.name}
-           loading="lazy"
-           className="cart-img"
-            />
+                      src={
+                        item.image
+                          ? item.image.startsWith("http")
+                            ? item.image.replace(
+                                "/upload/",
+                                "/upload/w_300,q_auto,f_auto/"
+                              )
+                            : `${API}${item.image}`
+                          : "https://dummyimage.com/150"
+                      }
+                      alt={item.name}
+                      loading="lazy"
+                      className="cart-img"
+                    />
 
-                  <div className="cart-info">
-                    <h3>{item.item_name}</h3>
-                    <p>₹{item.price}</p>
+                    <div className="cart-info">
+
+                      <h3>{item.item_name}</h3>
+
+                      {/* ✅ OFFER PRICE */}
+                      {isOffer ? (
+                        <>
+                          <p
+                            style={{
+                              textDecoration:
+                                "line-through",
+                              color: "gray",
+                              fontSize: "14px"
+                            }}
+                          >
+                            ₹{item.price}
+                          </p>
+
+                          <p
+                            style={{
+                              color: "green",
+                              fontWeight: "bold",
+                              fontSize: "20px"
+                            }}
+                          >
+                            ₹{finalPrice}
+                          </p>
+
+                          <p
+                            style={{
+                              color: "red",
+                              fontSize: "13px",
+                              fontWeight: "bold"
+                            }}
+                          >
+                            🔥 {offerPercent}% OFF
+                          </p>
+                        </>
+                      ) : (
+                        <p>₹{item.price}</p>
+                      )}
+
+                    </div>
+
+                    {/* 🔢 QTY */}
+                    <div className="qty">
+                      <button
+                        onClick={() =>
+                          decreaseQty(item)
+                        }
+                      >
+                        -
+                      </button>
+
+                      <span>{item.quantity}</span>
+
+                      <button
+                        onClick={() =>
+                          increaseQty(item)
+                        }
+                      >
+                        +
+                      </button>
+                    </div>
+
+                    {/* ❌ REMOVE */}
+                    <button
+                      onClick={() =>
+                        removeItem(item)
+                      }
+                    >
+                      Remove ❌
+                    </button>
+
                   </div>
-
-                  {/* 🔢 QTY */}
-                  <div className="qty">
-                    <button onClick={() => decreaseQty(item)}>-</button>
-                    <span>{item.quantity}</span>
-                    <button onClick={() => increaseQty(item)}>+</button>
-                  </div>
-
-                  {/* ❌ REMOVE */}
-                  <button onClick={() => removeItem(item)}>
-                    Remove ❌
-                  </button>
-
-                </div>
-              ))}
+                );
+              })}
 
               {/* 💰 TOTAL */}
               <div className="total-box">
-                <h3>Total: ₹{total}</h3>
+
+                <h3>
+                  Total: ₹{total.toFixed(2)}
+                </h3>
 
                 <button
                   className="checkout-btn"
@@ -339,6 +687,7 @@ function Cart() {
                 >
                   Proceed to Pay 💳
                 </button>
+
               </div>
 
             </motion.div>
