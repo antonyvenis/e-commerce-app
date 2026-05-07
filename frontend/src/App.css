@@ -2743,7 +2743,8 @@ input {
 }
 
 .pay-btn{
-  padding: 12px 25px;
+  padding: 14px 40px;
+  width: 280px; 
   border: none;
   border-radius: 10px;
   cursor: pointer;
