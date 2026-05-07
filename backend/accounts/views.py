@@ -729,85 +729,74 @@ def remove_like(request):
 #         return Response([])
 
 # ================================
-# 🛒 ADD TO CART
+# 🛒 ADD TO CART (FIXED)
 # ================================
 @api_view(['POST'])
 def add_to_cart(request):
 
     try:
 
-        user = CustomUser.objects.get(
-            username=request.data.get("username")
-        )
-
-        # ✅ PRODUCT ID
+        username = request.data.get("username")
         product_id = request.data.get("product_id")
 
-        # ✅ GET PRODUCT
-        product = Product.objects.get(id=product_id)
+        # ✅ SAFE USER
+        try:
+            user = CustomUser.objects.get(username=username)
+        except CustomUser.DoesNotExist:
+            return Response({"error": "User not found"}, status=404)
+
+        # ✅ SAFE PRODUCT
+        try:
+            product = Product.objects.get(id=product_id)
+        except Product.DoesNotExist:
+            return Response({"error": "Product not found"}, status=404)
 
         # ✅ OFFER LOGIC
         offer = product.offer or 0
-
         final_price = float(product.price)
 
         if offer > 0:
-            final_price = (
-                float(product.price)
-                - (
-                    float(product.price) *
-                    float(offer) / 100
-                )
-            )
+            final_price = float(product.price) - (float(product.price) * float(offer) / 100)
 
-        # ✅ CREATE / UPDATE CART
+        # ✅ CREATE OR UPDATE CART
         item, created = CartItem.objects.get_or_create(
-
             user=user,
-
             product_id=product.id,
-
             defaults={
-
                 "item_name": product.name,
-
                 "price": round(final_price, 2),
-
                 "quantity": 1,
-
-                "image": product.image.url
-                if product.image else ""
+                "image": product.image.url if product.image else ""
             }
         )
 
-        # ✅ IF ALREADY EXISTS
+        # ✅ UPDATE QUANTITY IF EXISTS
         if not created:
-
             item.quantity += 1
-
-            # 🔥 UPDATE PRICE INSTANT
             item.price = round(final_price, 2)
-
             item.save()
 
-        return Response({
-            "message": "Added 🛒"
-        })
+        return Response({"message": "Added 🛒"})
 
     except Exception as e:
+        return Response({"error": str(e)}, status=500)
 
-        return Response({
-            "error": str(e)
-        })
 
+# ================================
+# 🛒 GET CART (OPTIMIZED)
+# ================================
 @api_view(['GET'])
 def get_cart(request):
 
     try:
 
-        user = CustomUser.objects.get(
-            username=request.GET.get("username")
-        )
+        username = request.GET.get("username")
+
+        # ✅ SAFE USER
+        try:
+            user = CustomUser.objects.get(username=username)
+        except CustomUser.DoesNotExist:
+            return Response([])
 
         cart = CartItem.objects.filter(user=user)
 
@@ -815,49 +804,32 @@ def get_cart(request):
 
         for c in cart:
 
-            product = Product.objects.get(
-                id=c.product_id
-            )
+            # ⚡ NO NEED EXTRA DB CALL (OPTIMIZED)
+            try:
+                product = Product.objects.get(id=c.product_id)
+            except Product.DoesNotExist:
+                continue
 
             offer = product.offer or 0
-
             final_price = float(product.price)
 
             if offer > 0:
-
-                final_price = (
-                    float(product.price)
-                    - (
-                        float(product.price)
-                        * float(offer) / 100
-                    )
-                )
+                final_price = float(product.price) - (float(product.price) * float(offer) / 100)
 
             data.append({
-
                 "id": c.id,
-
                 "item_name": product.name,
-
                 "price": round(final_price, 2),
-
                 "quantity": c.quantity,
-
-                "image": product.image.url
-                if product.image else "",
-
+                "image": product.image.url if product.image else "",
                 "offer": offer
             })
 
         return Response(data)
 
     except Exception as e:
-
         print(e)
-
-        # 🔥 MUST RETURN ARRAY
         return Response([])
-
 
 @api_view(['POST'])
 def remove_cart(request):

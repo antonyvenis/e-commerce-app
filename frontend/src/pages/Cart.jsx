@@ -801,191 +801,340 @@
 
 // export default Cart;
 
-import { useCart } from "./CartContext";
-import { useState, useEffect, memo } from "react";
-import { motion } from "framer-motion";
-import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { motion, AnimatePresence } from "framer-motion";
+import toast from "react-hot-toast";
 
-function ProductCard({ product }) {
-  const { addToCart } = useCart();
+const API = "https://e-commerce-app-8jg4.onrender.com";
 
-  const [liked, setLiked] = useState(false);
-  const [rating, setRating] = useState(0);
+function Cart() {
+
+  const navigate = useNavigate();
+
+  const [cart, setCart] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const user = JSON.parse(localStorage.getItem("user"));
 
-  /* ================= IMAGE ================= */
-  const imageUrl = product.image
-    ? product.image.startsWith("http")
-      ? product.image
-      : `https://e-commerce-app-8jg4.onrender.com${product.image}`
-    : "https://via.placeholder.com/200";
+  /* ================================
+     🟢 FETCH CART
+  ================================ */
+  const fetchCart = async () => {
 
-  /* ================= OFFER LOGIC ================= */
-  const offerPercent = Number(product.offer ?? product.discount ?? 0);
-
-  const isOffer = offerPercent && Number(offerPercent) > 0;
-
-  const offerPrice = isOffer
-    ? (
-        Number(product.price) -
-        (Number(product.price) * Number(offerPercent)) / 100
-      ).toFixed(2)
-    : Number(product.price).toFixed(2);
-
-  /* ================= LOAD ================= */
-  useEffect(() => {
     if (!user) return;
 
-    axios
-      .get("https://e-commerce-app-8jg4.onrender.com/api/likes/", {
-        params: { username: user.username }
-      })
-      .then(res => {
-        const likedIds = res.data.map(item => item.id);
-        setLiked(likedIds.includes(product.id));
-      });
-
-    const savedRatings =
-      JSON.parse(localStorage.getItem("ratings")) || {};
-
-    setRating(savedRatings[product.id] || 0);
-  }, [product.id]);
-
-  /* ================= LIKE ================= */
-  const toggleLike = () => {
-    if (!user) return toast.error("Login first ❌");
-
-    const newLiked = !liked;
-    setLiked(newLiked);
-
-    toast.success(
-      newLiked
-        ? `${product.name} Added to Wishlist ❤️`
-        : `${product.name} Removed from Wishlist ❌`
-    );
-
-    axios.post(
-      `https://e-commerce-app-8jg4.onrender.com/api/${
-        newLiked ? "add-like" : "remove-like"
-      }/`,
-      {
-        username: user.username,
-        item_name: product.name,
-        image: imageUrl,
-        price: product.price,
-        id: product.id
-      }
-    );
-  };
-
-  /* ================= CART (FIXED) ================= */
-  const handleAdd = async () => {
-    if (product.is_active === false) {
-      return toast.error("This product is disabled ❌");
-    }
-
-    if (!user) return toast.error("Login first ❌");
-
     try {
-      // ❌ REMOVE LOCAL CONTEXT CART (IMPORTANT FIX)
-      // addToCart(product);
 
-      // ✅ BACKEND CART ONLY
-      await axios.post(
-        "https://e-commerce-app-8jg4.onrender.com/api/add-cart/",
+      const res = await axios.get(
+        `${API}/api/cart/`,
         {
-          username: user.username,
-          product_id: product.id
+          params: {
+            username: user.username
+          }
         }
       );
 
-      toast.success(`${product.name} Added to cart 🛒`);
+      const data = Array.isArray(res.data) ? res.data : [];
 
-      // 🔥 refresh cart in Cart page
-      window.dispatchEvent(new Event("cartUpdated"));
+      setCart(data);
+
+      localStorage.setItem(
+        "cartCount",
+        data.length
+      );
 
     } catch (err) {
-      console.log(err.response?.data);
-      toast.error("Failed to add ❌");
+
+      console.log("FETCH CART ERROR 👉", err.response?.data);
+
+      toast.error("Cart load error ❌");
+
+      setCart([]);
+
+    } finally {
+
+      setLoading(false);
+
     }
   };
 
-  /* ================= ⭐ RATING ================= */
-  const handleRating = (value) => {
-    const savedRatings =
-      JSON.parse(localStorage.getItem("ratings")) || {};
+  useEffect(() => {
+    fetchCart();
 
-    savedRatings[product.id] = value;
+    // ✅ REALTIME UPDATE FIX
+    window.addEventListener("cartUpdated", fetchCart);
 
-    localStorage.setItem("ratings", JSON.stringify(savedRatings));
+    return () => {
+      window.removeEventListener("cartUpdated", fetchCart);
+    };
 
-    setRating(value);
+  }, []);
 
-    toast.success(`${product.name} rated ${value} ⭐`);
+  /* ================================
+     ➕ INCREASE
+  ================================ */
+  const increaseQty = async (item) => {
+
+    setCart(prev =>
+      prev.map(p =>
+        p.id === item.id
+          ? { ...p, quantity: p.quantity + 1 }
+          : p
+      )
+    );
+
+    try {
+
+      await axios.post(
+        `${API}/api/update-quantity/`,
+        {
+          username: user.username,
+          id: item.id,
+          quantity: item.quantity + 1
+        }
+      );
+
+    } catch (err) {
+
+      console.log("INCREASE ERROR 👉", err.response?.data);
+
+    }
   };
 
-  /* ================= UI ================= */
+  /* ================================
+     ➖ DECREASE
+  ================================ */
+  const decreaseQty = async (item) => {
+
+    if (item.quantity <= 1) return;
+
+    setCart(prev =>
+      prev.map(p =>
+        p.id === item.id
+          ? { ...p, quantity: p.quantity - 1 }
+          : p
+      )
+    );
+
+    try {
+
+      await axios.post(
+        `${API}/api/update-quantity/`,
+        {
+          username: user.username,
+          id: item.id,
+          quantity: item.quantity - 1
+        }
+      );
+
+    } catch (err) {
+
+      console.log("DECREASE ERROR 👉", err.response?.data);
+
+    }
+  };
+
+  /* ================================
+     ❌ REMOVE
+  ================================ */
+  const removeItem = async (item) => {
+
+    try {
+
+      await axios.post(
+        `${API}/api/remove-cart/`,
+        {
+          username: user.username,
+          id: item.id
+        }
+      );
+
+      const updatedCart =
+        cart.filter(p => p.id !== item.id);
+
+      setCart(updatedCart);
+
+      localStorage.setItem(
+        "cartCount",
+        updatedCart.length
+      );
+
+      toast.success(
+        `${item.item_name} removed ❌`
+      );
+
+    } catch (err) {
+
+      console.log("REMOVE ERROR 👉", err.response?.data);
+
+    }
+  };
+
+  /* ================================
+     💰 TOTAL
+  ================================ */
+  const total = Array.isArray(cart)
+    ? cart.reduce((acc, item) => {
+        const price = Number(item.price) || 0;
+        const qty = Number(item.quantity) || 1;
+        return acc + price * qty;
+      }, 0)
+    : 0;
+
+  /* ================================
+     💳 CHECKOUT
+  ================================ */
+  const handleCheckout = () => {
+
+    if (!cart.length) {
+      toast.error("Cart empty ❌");
+      return;
+    }
+
+    navigate("/payment", {
+      state: { cart }
+    });
+  };
+
+  /* ================================
+     🎨 UI
+  ================================ */
   return (
-    <motion.div className="card" whileHover={{ scale: 1.03 }}>
 
-      {isOffer && (
-        <div className="offer-badge">
-          🔥 {offerPercent}% OFF
-        </div>
+    <div className="cart-container">
+
+      {loading ? (
+
+        <h2 style={{ textAlign: "center" }}>
+          Loading Cart... 🛒
+        </h2>
+
+      ) : (
+
+        <AnimatePresence mode="wait">
+
+          {cart.length === 0 ? (
+
+            <motion.div
+              key="empty"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -50 }}
+            >
+
+              <h2>🛒 Your Cart is Empty 😢</h2>
+
+              <button onClick={() => navigate("/menu")}>
+                Go Shopping 🛍️
+              </button>
+
+            </motion.div>
+
+          ) : (
+
+            <motion.div
+              key="cart"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+
+              <h2 className="cart-title">
+                🛒 Cart ({cart.length})
+              </h2>
+
+              {cart.map(item => {
+
+                const isOffer = Number(item.offer) > 0;
+
+                return (
+
+                  <div key={item.id} className="cart-item">
+
+                    <img
+                      src={
+                        item.image
+                          ? item.image.startsWith("http")
+                            ? item.image.replace(
+                                "/upload/",
+                                "/upload/w_300,q_auto,f_auto/"
+                              )
+                            : `${API}${item.image}`
+                          : "https://dummyimage.com/150"
+                      }
+                      alt={item.item_name}
+                      className="cart-img"
+                    />
+
+                    <div className="cart-info">
+
+                      <h3>{item.item_name}</h3>
+
+                      {isOffer ? (
+                        <>
+                          <p style={{
+                            color: "green",
+                            fontWeight: "bold",
+                            fontSize: "20px"
+                          }}>
+                            ₹{item.price}
+                          </p>
+
+                          <p style={{
+                            color: "red",
+                            fontSize: "13px",
+                            fontWeight: "bold"
+                          }}>
+                            🔥 {item.offer}% OFF
+                          </p>
+                        </>
+                      ) : (
+                        <p>₹{item.price}</p>
+                      )}
+
+                    </div>
+
+                    <div className="qty">
+
+                      <button onClick={() => decreaseQty(item)}>-</button>
+
+                      <span>{item.quantity}</span>
+
+                      <button onClick={() => increaseQty(item)}>+</button>
+
+                    </div>
+
+                    <button onClick={() => removeItem(item)}>
+                      Remove ❌
+                    </button>
+
+                  </div>
+                );
+              })}
+
+              <div className="total-box">
+
+                <h3>Total: ₹{total.toFixed(2)}</h3>
+
+                <button
+                  className="checkout-btn"
+                  onClick={handleCheckout}
+                >
+                  Proceed to Pay 💳
+                </button>
+
+              </div>
+
+            </motion.div>
+          )}
+
+        </AnimatePresence>
       )}
 
-      {product.is_active === false && (
-        <div className="disabled-overlay">NOT AVAILABLE</div>
-      )}
-
-      <div className="like-btn" onClick={toggleLike}>
-        <span style={{ color: liked ? "red" : "#999", fontSize: "22px" }}>
-          {liked ? "❤️" : "🤍"}
-        </span>
-      </div>
-
-      <img src={imageUrl} alt={product.name} className="product-img" />
-
-      <h3>{product.name}</h3>
-
-      <p>🍽️ {product.category || "Food"}</p>
-
-      <p>⭐ {product.rating || "4.5"}</p>
-
-      <div className="price-section">
-        {isOffer ? (
-          <>
-            <p>₹{product.price}</p>
-            <p>₹{offerPrice}</p>
-          </>
-        ) : (
-          <p>₹{product.price}</p>
-        )}
-      </div>
-
-      <div className="star-rating">
-        {[1, 2, 3, 4, 5].map(star => (
-          <span
-            key={star}
-            onClick={() => handleRating(star)}
-            style={{
-              color: rating >= star ? "gold" : "gray",
-              cursor: "pointer"
-            }}
-          >
-            ★
-          </span>
-        ))}
-      </div>
-
-      <button className="cart-btn" onClick={handleAdd}>
-        Add to Cart 🛒
-      </button>
-
-    </motion.div>
+    </div>
   );
 }
 
-export default memo(ProductCard);
+export default Cart;
