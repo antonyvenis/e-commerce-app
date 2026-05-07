@@ -2674,10 +2674,6 @@ input {
   position: relative;
 }
 
-.products {
-  gap: 20px;
-}
-
 /* 🔥 PRODUCT GRID */
 .grid {
   display: grid;
