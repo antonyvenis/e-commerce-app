@@ -2701,3 +2701,34 @@ input {
   width: 100%;
   max-width: 320px;
 }
+
+.contact-form{
+   height: auto;
+   min-height: auto;
+   padding-bottom: 20px;
+}
+
+@media (max-width: 768px){
+
+  .contact-form{
+    height: auto !important;
+    min-height: auto !important;
+    padding: 20px;
+    padding-bottom: 15px;
+  }
+
+  .input-group{
+    margin-bottom: 15px;
+  }
+
+  .input-group textarea{
+    height: 120px;
+  }
+
+  .send-btn{
+    margin-top: 10px;
+    margin-bottom: 0;
+    width: 100%;
+  }
+
+}
