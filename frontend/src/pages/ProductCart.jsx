@@ -1045,6 +1045,195 @@
 
 // export default memo(ProductCard);
 
+// import { useCart } from "./CartContext";
+// import { useState, useEffect, memo } from "react";
+// import { motion } from "framer-motion";
+// import toast from "react-hot-toast";
+// import axios from "axios";
+
+// function ProductCard({ product }) {
+//   const { addToCart } = useCart();
+
+//   const [liked, setLiked] = useState(false);
+//   const [rating, setRating] = useState(0);
+
+//   const user = JSON.parse(localStorage.getItem("user"));
+
+//   /* ================= IMAGE ================= */
+//   const imageUrl = product.image
+//     ? product.image.startsWith("http")
+//       ? product.image
+//       : `https://e-commerce-app-8jg4.onrender.com${product.image}`
+//     : "https://via.placeholder.com/200";
+
+//   /* ================= OFFER LOGIC ================= */
+//   const offerPercent = Number(product.offer ?? product.discount ?? 0);
+
+//   const isOffer = offerPercent && Number(offerPercent) > 0;
+
+//   const offerPrice = isOffer
+//     ? (
+//         Number(product.price) -
+//         (Number(product.price) * Number(offerPercent)) / 100
+//       ).toFixed(2)
+//     : Number(product.price).toFixed(2);
+
+//   /* ================= LOAD ================= */
+//   useEffect(() => {
+//     if (!user) return;
+
+//     axios
+//       .get("https://e-commerce-app-8jg4.onrender.com/api/likes/", {
+//         params: { username: user.username }
+//       })
+//       .then(res => {
+//         const likedIds = res.data.map(item => item.id);
+//         setLiked(likedIds.includes(product.id));
+//       });
+
+//     const savedRatings =
+//       JSON.parse(localStorage.getItem("ratings")) || {};
+
+//     setRating(savedRatings[product.id] || 0);
+//   }, [product.id]);
+
+//   /* ================= LIKE ================= */
+//   const toggleLike = () => {
+//     if (!user) return toast.error("Login first ❌");
+
+//     const newLiked = !liked;
+//     setLiked(newLiked);
+
+//     toast.success(
+//       newLiked
+//         ? `${product.name} Added to Wishlist ❤️`
+//         : `${product.name} Removed from Wishlist ❌`
+//     );
+
+//     axios.post(
+//       `https://e-commerce-app-8jg4.onrender.com/api/${
+//         newLiked ? "add-like" : "remove-like"
+//       }/`,
+//       {
+//         username: user.username,
+//         item_name: product.name,
+//         image: imageUrl,
+//         price: product.price,
+//         id: product.id
+//       }
+//     );
+//   };
+
+//   /* ================= CART (FIXED) ================= */
+//   const handleAdd = async () => {
+//     if (product.is_active === false) {
+//       return toast.error("This product is disabled ❌");
+//     }
+
+//     if (!user) return toast.error("Login first ❌");
+
+//     try {
+//       // ❌ REMOVE LOCAL CONTEXT CART (IMPORTANT FIX)
+//       // addToCart(product);
+
+//       // ✅ BACKEND CART ONLY
+//       await axios.post(
+//         "https://e-commerce-app-8jg4.onrender.com/api/add-cart/",
+//         {
+//           username: user.username,
+//           product_id: product.id
+//         }
+//       );
+
+//       toast.success(`${product.name} Added to cart 🛒`);
+
+//       // 🔥 refresh cart in Cart page
+//       window.dispatchEvent(new Event("cartUpdated"));
+
+//     } catch (err) {
+//       console.log(err.response?.data);
+//       toast.error("Failed to add ❌");
+//     }
+//   };
+
+//   /* ================= ⭐ RATING ================= */
+//   const handleRating = (value) => {
+//     const savedRatings =
+//       JSON.parse(localStorage.getItem("ratings")) || {};
+
+//     savedRatings[product.id] = value;
+
+//     localStorage.setItem("ratings", JSON.stringify(savedRatings));
+
+//     setRating(value);
+
+//     toast.success(`${product.name} rated ${value} ⭐`);
+//   };
+
+//   /* ================= UI ================= */
+//   return (
+//     <motion.div className="card" whileHover={{ scale: 1.03 }}>
+
+//       {isOffer && (
+//         <div className="offer-badge">
+//           🔥 {offerPercent}% OFF
+//         </div>
+//       )}
+
+//       {product.is_active === false && (
+//         <div className="disabled-overlay">NOT AVAILABLE</div>
+//       )}
+
+//       <div className="like-btn" onClick={toggleLike}>
+//         <span style={{ color: liked ? "red" : "#999", fontSize: "22px" }}>
+//           {liked ? "❤️" : "🤍"}
+//         </span>
+//       </div>
+
+//       <img src={imageUrl} alt={product.name} className="product-img" />
+
+//       <h3>{product.name}</h3>
+
+//       <p>🍽️ {product.category || "Food"}</p>
+
+//       <p>⭐ {product.rating || "4.5"}</p>
+
+//       <div className="price-section">
+//         {isOffer ? (
+//           <>
+//             <p>₹{product.price}</p>
+//             <p>₹{offerPrice}</p>
+//           </>
+//         ) : (
+//           <p>₹{product.price}</p>
+//         )}
+//       </div>
+
+//       <div className="star-rating">
+//         {[1, 2, 3, 4, 5].map(star => (
+//           <span
+//             key={star}
+//             onClick={() => handleRating(star)}
+//             style={{
+//               color: rating >= star ? "gold" : "gray",
+//               cursor: "pointer"
+//             }}
+//           >
+//             ★
+//           </span>
+//         ))}
+//       </div>
+
+//       <button className="cart-btn" onClick={handleAdd}>
+//         Add to Cart 🛒
+//       </button>
+
+//     </motion.div>
+//   );
+// }
+
+// export default memo(ProductCard);
+
 import { useCart } from "./CartContext";
 import { useState, useEffect, memo } from "react";
 import { motion } from "framer-motion";
@@ -1068,13 +1257,12 @@ function ProductCard({ product }) {
 
   /* ================= OFFER LOGIC ================= */
   const offerPercent = Number(product.offer ?? product.discount ?? 0);
-
-  const isOffer = offerPercent && Number(offerPercent) > 0;
+  const isOffer = offerPercent > 0;
 
   const offerPrice = isOffer
     ? (
         Number(product.price) -
-        (Number(product.price) * Number(offerPercent)) / 100
+        (Number(product.price) * offerPercent) / 100
       ).toFixed(2)
     : Number(product.price).toFixed(2);
 
@@ -1124,7 +1312,7 @@ function ProductCard({ product }) {
     );
   };
 
-  /* ================= CART (FIXED) ================= */
+  /* ================= CART ================= */
   const handleAdd = async () => {
     if (product.is_active === false) {
       return toast.error("This product is disabled ❌");
@@ -1133,10 +1321,6 @@ function ProductCard({ product }) {
     if (!user) return toast.error("Login first ❌");
 
     try {
-      // ❌ REMOVE LOCAL CONTEXT CART (IMPORTANT FIX)
-      // addToCart(product);
-
-      // ✅ BACKEND CART ONLY
       await axios.post(
         "https://e-commerce-app-8jg4.onrender.com/api/add-cart/",
         {
@@ -1147,7 +1331,6 @@ function ProductCard({ product }) {
 
       toast.success(`${product.name} Added to cart 🛒`);
 
-      // 🔥 refresh cart in Cart page
       window.dispatchEvent(new Event("cartUpdated"));
 
     } catch (err) {
@@ -1184,31 +1367,41 @@ function ProductCard({ product }) {
         <div className="disabled-overlay">NOT AVAILABLE</div>
       )}
 
+      {/* ❤️ LIKE */}
       <div className="like-btn" onClick={toggleLike}>
         <span style={{ color: liked ? "red" : "#999", fontSize: "22px" }}>
           {liked ? "❤️" : "🤍"}
         </span>
       </div>
 
+      {/* 🖼 IMAGE */}
       <img src={imageUrl} alt={product.name} className="product-img" />
 
       <h3>{product.name}</h3>
 
       <p>🍽️ {product.category || "Food"}</p>
 
-      <p>⭐ {product.rating || "4.5"}</p>
+      {/* ⭐ FIXED RATING DISPLAY */}
+      <p>⭐ {product.rating ?? "4.5"}</p>
 
+      {/* 💰 PRICE */}
       <div className="price-section">
         {isOffer ? (
           <>
-            <p>₹{product.price}</p>
-            <p>₹{offerPrice}</p>
+            <p style={{ textDecoration: "line-through", color: "gray" }}>
+              ₹{product.price}
+            </p>
+
+            <p style={{ color: "green", fontWeight: "bold" }}>
+              ₹{offerPrice}
+            </p>
           </>
         ) : (
           <p>₹{product.price}</p>
         )}
       </div>
 
+      {/* ⭐ RATING */}
       <div className="star-rating">
         {[1, 2, 3, 4, 5].map(star => (
           <span
