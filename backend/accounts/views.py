@@ -886,7 +886,8 @@ def get_products(request):
             "image": request.build_absolute_uri(p.image.url) if p.image else "",  # 🔥 FIX
             "category": p.category,
             "rating": p.rating,
-            "stock": p.stock
+            "stock": p.stock,
+            "offer":p.offer
         }
         for p in products
     ]
