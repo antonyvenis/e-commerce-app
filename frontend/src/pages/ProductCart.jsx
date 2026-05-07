@@ -337,12 +337,223 @@
 
 // export default memo(ProductCard);  // 🔥 IMPORTANT
 
+// import { useCart } from "./CartContext";
+// import { useState, useEffect } from "react";
+// import { motion } from "framer-motion";
+// import toast from "react-hot-toast";
+// import axios from "axios";
+// import { memo } from "react";
+
+// function ProductCard({ product }) {
+//   const { addToCart } = useCart();
+
+//   const [liked, setLiked] = useState(false);
+//   const [rating, setRating] = useState(0);
+
+//   const user = JSON.parse(localStorage.getItem("user"));
+
+//   /* ================= IMAGE ================= */
+//   const imageUrl = product.image
+//     ? product.image.startsWith("http")
+//       ? product.image
+//       : `https://e-commerce-app-8jg4.onrender.com${product.image}`
+//     : "https://via.placeholder.com/200";
+
+//   /* ================= OFFER LOGIC ================= */
+//   const offerPercent = product.offer || product.discount || 0;
+//   const isOffer = offerPercent > 0;
+
+//   const offerPrice = isOffer
+//     ? (product.price - (product.price * offerPercent) / 100).toFixed(2)
+//     : product.price;
+
+//   /* ================= LOAD ================= */
+//   useEffect(() => {
+//     if (!user) return;
+
+//     axios
+//       .get("https://e-commerce-app-8jg4.onrender.com/api/likes/", {
+//         params: { username: user.username }
+//       })
+//       .then(res => {
+//         const likedIds = res.data.map(item => item.id);
+//         setLiked(likedIds.includes(product.id));
+//       });
+
+//     const savedRatings = JSON.parse(localStorage.getItem("ratings")) || {};
+//     setRating(savedRatings[product.id] || 0);
+
+//   }, [product.id]);
+
+//   /* ================= LIKE ================= */
+//   const toggleLike = () => {
+//     if (!user) return toast.error("Login first ❌");
+
+//     const newLiked = !liked;
+//     setLiked(newLiked);
+
+//     toast.success(
+//       newLiked
+//         ? `${product.name} Added to Wishlist ❤️`
+//         : `${product.name} Removed from Wishlist ❌`
+//     );
+
+//     axios.post(
+//       `https://e-commerce-app-8jg4.onrender.com/api/${newLiked ? "add-like" : "remove-like"}/`,
+//       {
+//         username: user.username,
+//         item_name: product.name,
+//         image: imageUrl,
+//         price: product.price,
+//         id: product.id
+//       }
+//     );
+//   };
+
+//   /* ================= CART ================= */
+//   const handleAdd = () => {
+//     if (product.is_active === false) {
+//       return toast.error("This product is disabled ❌");
+//     }
+
+//     if (!user) return toast.error("Login first ❌");
+
+//     addToCart(product);
+//     toast.success(`${product.name} Added to cart 🛒`);
+
+//     axios.post("https://e-commerce-app-8jg4.onrender.com/api/add-cart/", {
+//       username: user.username,
+//       item_name: product.name,
+//       price: product.price,
+//       quantity: 1,
+//       image: imageUrl,
+//       id: product.id
+//     });
+//   };
+
+//   /* ================= ⭐ RATING ================= */
+//   const handleRating = (value) => {
+//     const savedRatings = JSON.parse(localStorage.getItem("ratings")) || {};
+//     savedRatings[product.id] = value;
+
+//     localStorage.setItem("ratings", JSON.stringify(savedRatings));
+//     setRating(value);
+
+//     // 🔥 UPDATED TOAST MESSAGE
+//     toast.success(`${product.name} rated ${value} ⭐`);
+//   };
+
+//   /* ================= UI ================= */
+//   return (
+//     <motion.div className="card" whileHover={{ scale: 1.05 }}>
+
+//       {/* 🔥 OFFER BADGE */}
+//       {isOffer && (
+//         <div
+//           style={{
+//             position: "absolute",
+//             top: "10px",
+//             left: "10px",
+//             background: "red",
+//             color: "white",
+//             padding: "5px 8px",
+//             fontSize: "12px",
+//             borderRadius: "5px",
+//             fontWeight: "bold"
+//           }}
+//         >
+//           {offerPercent}% OFF
+//         </div>
+//       )}
+
+//       {/* 🚫 DISABLED OVERLAY */}
+//       {product.is_active === false && (
+//         <div
+//           style={{
+//             position: "absolute",
+//             inset: 0,
+//             background: "rgba(0,0,0,0.6)",
+//             color: "white",
+//             display: "flex",
+//             alignItems: "center",
+//             justifyContent: "center",
+//             fontWeight: "bold"
+//           }}
+//         >
+//           NOT AVAILABLE
+//         </div>
+//       )}
+
+//       {/* ❤️ LIKE */}
+//       <div className="like-btn" onClick={toggleLike}>
+//         <span style={{ color: liked ? "red" : "#999", fontSize: "22px" }}>
+//           {liked ? "❤️" : "🤍"}
+//         </span>
+//       </div>
+
+//       {/* 🖼 IMAGE (optimized) */}
+//       <img
+//         src={imageUrl.replace('/upload/', '/upload/w_300,q_auto,f_auto/')}
+//         alt={product.name}
+//         className="product-img"
+//         loading="lazy"
+//       />
+
+//       {/* DETAILS */}
+//       <h3>{product.name}</h3>
+//       <p>🍽️ {product.category}</p><br />
+//       <p>⭐ {product.rating}</p><br />
+
+//       {/* 💸 PRICE */}
+//       <div>
+//         {isOffer ? (
+//           <>
+//             <p style={{ textDecoration: "line-through", color: "gray" }}>
+//               ₹{product.price}
+//             </p>
+//             <p style={{ color: "green", fontWeight: "bold" }}>
+//               ₹{offerPrice}
+//             </p>
+//           </>
+//         ) : (
+//           <p>₹{product.price}</p>
+//         )}
+//       </div>
+
+//       {/* ⭐ RATING */}
+//       <div>
+//         {[1, 2, 3, 4, 5].map(star => (
+//           <span
+//             key={star}
+//             onClick={() => handleRating(star)}
+//             style={{
+//               color: rating >= star ? "gold" : "gray",
+//               cursor: "pointer",
+//               fontSize: "18px"
+//             }}
+//           >
+//             ★
+//           </span>
+//         ))}
+//       </div>
+
+//       {/* 🛒 BUTTON */}
+//       <button onClick={handleAdd}>
+//         Add to Cart 🛒
+//       </button>
+//     </motion.div>
+//   );
+// }
+
+// export default memo(ProductCard);
+
 import { useCart } from "./CartContext";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { memo } from "react";
+import "./ProductCard.css";
 
 function ProductCard({ product }) {
   const { addToCart } = useCart();
@@ -360,11 +571,15 @@ function ProductCard({ product }) {
     : "https://via.placeholder.com/200";
 
   /* ================= OFFER LOGIC ================= */
-  const offerPercent = product.offer || product.discount || 0;
+  const offerPercent = Number(product.offer || product.discount || 0);
+
   const isOffer = offerPercent > 0;
 
   const offerPrice = isOffer
-    ? (product.price - (product.price * offerPercent) / 100).toFixed(2)
+    ? (
+        product.price -
+        (product.price * offerPercent) / 100
+      ).toFixed(2)
     : product.price;
 
   /* ================= LOAD ================= */
@@ -380,7 +595,9 @@ function ProductCard({ product }) {
         setLiked(likedIds.includes(product.id));
       });
 
-    const savedRatings = JSON.parse(localStorage.getItem("ratings")) || {};
+    const savedRatings =
+      JSON.parse(localStorage.getItem("ratings")) || {};
+
     setRating(savedRatings[product.id] || 0);
 
   }, [product.id]);
@@ -399,7 +616,9 @@ function ProductCard({ product }) {
     );
 
     axios.post(
-      `https://e-commerce-app-8jg4.onrender.com/api/${newLiked ? "add-like" : "remove-like"}/`,
+      `https://e-commerce-app-8jg4.onrender.com/api/${
+        newLiked ? "add-like" : "remove-like"
+      }/`,
       {
         username: user.username,
         item_name: product.name,
@@ -419,81 +638,78 @@ function ProductCard({ product }) {
     if (!user) return toast.error("Login first ❌");
 
     addToCart(product);
+
     toast.success(`${product.name} Added to cart 🛒`);
 
-    axios.post("https://e-commerce-app-8jg4.onrender.com/api/add-cart/", {
-      username: user.username,
-      item_name: product.name,
-      price: product.price,
-      quantity: 1,
-      image: imageUrl,
-      id: product.id
-    });
+    axios.post(
+      "https://e-commerce-app-8jg4.onrender.com/api/add-cart/",
+      {
+        username: user.username,
+        item_name: product.name,
+        price: product.price,
+        quantity: 1,
+        image: imageUrl,
+        id: product.id
+      }
+    );
   };
 
   /* ================= ⭐ RATING ================= */
   const handleRating = (value) => {
-    const savedRatings = JSON.parse(localStorage.getItem("ratings")) || {};
+    const savedRatings =
+      JSON.parse(localStorage.getItem("ratings")) || {};
+
     savedRatings[product.id] = value;
 
-    localStorage.setItem("ratings", JSON.stringify(savedRatings));
+    localStorage.setItem(
+      "ratings",
+      JSON.stringify(savedRatings)
+    );
+
     setRating(value);
 
-    // 🔥 UPDATED TOAST MESSAGE
     toast.success(`${product.name} rated ${value} ⭐`);
   };
 
   /* ================= UI ================= */
   return (
-    <motion.div className="card" whileHover={{ scale: 1.05 }}>
+    <motion.div
+      className="card"
+      whileHover={{ scale: 1.03 }}
+    >
 
       {/* 🔥 OFFER BADGE */}
       {isOffer && (
-        <div
-          style={{
-            position: "absolute",
-            top: "10px",
-            left: "10px",
-            background: "red",
-            color: "white",
-            padding: "5px 8px",
-            fontSize: "12px",
-            borderRadius: "5px",
-            fontWeight: "bold"
-          }}
-        >
-          {offerPercent}% OFF
+        <div className="offer-badge">
+          🔥 {offerPercent}% OFF
         </div>
       )}
 
       {/* 🚫 DISABLED OVERLAY */}
       {product.is_active === false && (
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background: "rgba(0,0,0,0.6)",
-            color: "white",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontWeight: "bold"
-          }}
-        >
+        <div className="disabled-overlay">
           NOT AVAILABLE
         </div>
       )}
 
       {/* ❤️ LIKE */}
       <div className="like-btn" onClick={toggleLike}>
-        <span style={{ color: liked ? "red" : "#999", fontSize: "22px" }}>
+        <span
+          style={{
+            color: liked ? "red" : "#999",
+            fontSize: "22px"
+          }}
+        >
           {liked ? "❤️" : "🤍"}
         </span>
       </div>
 
-      {/* 🖼 IMAGE (optimized) */}
+      {/* 🖼 IMAGE */}
       <img
-        src={imageUrl.replace('/upload/', '/upload/w_300,q_auto,f_auto/')}
+        src={imageUrl.replace(
+          "/upload/",
+          "/upload/w_400,q_auto,f_auto/"
+        )}
         alt={product.name}
         className="product-img"
         loading="lazy"
@@ -501,35 +717,45 @@ function ProductCard({ product }) {
 
       {/* DETAILS */}
       <h3>{product.name}</h3>
-      <p>🍽️ {product.category}</p><br />
-      <p>⭐ {product.rating}</p><br />
+
+      <p className="category">
+        🍽️ {product.category}
+      </p>
+
+      <p className="rating-text">
+        ⭐ {product.rating}
+      </p>
 
       {/* 💸 PRICE */}
-      <div>
+      <div className="price-section">
         {isOffer ? (
           <>
-            <p style={{ textDecoration: "line-through", color: "gray" }}>
+            <p className="old-price">
               ₹{product.price}
             </p>
-            <p style={{ color: "green", fontWeight: "bold" }}>
+
+            <p className="offer-price">
               ₹{offerPrice}
             </p>
           </>
         ) : (
-          <p>₹{product.price}</p>
+          <p className="normal-price">
+            ₹{product.price}
+          </p>
         )}
       </div>
 
       {/* ⭐ RATING */}
-      <div>
+      <div className="star-rating">
         {[1, 2, 3, 4, 5].map(star => (
           <span
             key={star}
             onClick={() => handleRating(star)}
             style={{
-              color: rating >= star ? "gold" : "gray",
+              color:
+                rating >= star ? "gold" : "gray",
               cursor: "pointer",
-              fontSize: "18px"
+              fontSize: "20px"
             }}
           >
             ★
@@ -538,7 +764,10 @@ function ProductCard({ product }) {
       </div>
 
       {/* 🛒 BUTTON */}
-      <button onClick={handleAdd}>
+      <button
+        className="cart-btn"
+        onClick={handleAdd}
+      >
         Add to Cart 🛒
       </button>
     </motion.div>
