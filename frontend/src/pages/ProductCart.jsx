@@ -553,7 +553,6 @@ import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { memo } from "react";
-import "./ProductCard.css";
 
 function ProductCard({ product }) {
   const { addToCart } = useCart();
