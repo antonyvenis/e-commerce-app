@@ -878,17 +878,33 @@ function ProductCard({ product }) {
 
     toast.success(`${product.name} Added to cart 🛒`);
 
+    // axios.post(
+    //   "https://e-commerce-app-8jg4.onrender.com/api/add-cart/",
+    //   {
+    //     username: user.username,
+    //     item_name: product.name,
+    //     price: product.price,
+    //     quantity: 1,
+    //     image: imageUrl,
+    //     id: product.id
+    //   }
+    // );
     axios.post(
-      "https://e-commerce-app-8jg4.onrender.com/api/add-cart/",
-      {
-        username: user.username,
-        item_name: product.name,
-        price: product.price,
-        quantity: 1,
-        image: imageUrl,
-        id: product.id
-      }
-    );
+  "https://e-commerce-app-8jg4.onrender.com/api/add-cart/",
+  {
+    username: user.username,
+    item_name: product.name,
+
+    // 🔥 OFFER PRICE
+    price: isOffer
+      ? Number(offerPrice)
+      : Number(product.price),
+
+    quantity: 1,
+    image: imageUrl,
+    id: product.id
+  }
+);
   };
 
   /* ================= ⭐ RATING ================= */
