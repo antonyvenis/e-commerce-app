@@ -235,11 +235,15 @@ function Food2() {
      🛒 ADD TO CART
   ========================================================= */
   const handleAdd = (item) => {
+
+    const randomPrice =
+      (item.id * 37) % 300 + 120;
+
     const product = {
       id: item.id,
       name: item.name,
       image: item.image,
-      price: Math.floor(Math.random() * 300) + 100,
+      price: randomPrice,
       qty: 1
     };
 
@@ -255,7 +259,7 @@ function Food2() {
     <div
       style={{
         padding: "20px",
-        maxWidth: "1400px",
+        maxWidth: "1500px",
         margin: "0 auto"
       }}
     >
@@ -271,7 +275,7 @@ function Food2() {
           width: "100%",
           marginBottom: "30px",
           borderRadius: "12px",
-          border: "1px solid #ddd",
+          border: "1px solid #ccc",
           fontSize: "16px",
           outline: "none",
           boxSizing: "border-box"
@@ -282,17 +286,23 @@ function Food2() {
       <div
         style={{
           display: "grid",
+
           gridTemplateColumns:
-            "repeat(auto-fit, minmax(280px, 1fr))",
+            "repeat(auto-fit, minmax(320px, 320px))",
+
+          justifyContent: "center",
+
           gap: "28px",
+
           alignItems: "stretch"
         }}
       >
 
         {filteredFoods.map(item => {
-          const isLiked = liked.includes(item.id);
 
-          // 🔥 FIXED RANDOM PRICE
+          const isLiked =
+            liked.includes(item.id);
+
           const foodPrice =
             (item.id * 37) % 300 + 120;
 
@@ -303,14 +313,27 @@ function Food2() {
               whileTap={{ scale: 0.97 }}
               style={{
                 background: "#fff",
+
                 borderRadius: "20px",
+
                 overflow: "hidden",
+
                 boxShadow:
-                  "0 8px 25px rgba(0,0,0,0.08)",
+                  "0 4px 15px rgba(0,0,0,0.1)",
+
                 position: "relative",
+
+                width: "100%",
+
+                maxWidth: "320px",
+
+                margin: "0 auto",
+
                 display: "flex",
+
                 flexDirection: "column",
-                minHeight: "480px"
+
+                minHeight: "500px"
               }}
             >
 
@@ -321,10 +344,15 @@ function Food2() {
                 }
                 style={{
                   position: "absolute",
+
                   top: "15px",
+
                   right: "15px",
+
                   fontSize: "24px",
+
                   cursor: "pointer",
+
                   zIndex: 10
                 }}
               >
@@ -335,41 +363,58 @@ function Food2() {
               <div
                 style={{
                   width: "100%",
-                  height: "220px",
+
+                  height: "240px",
+
                   overflow: "hidden"
                 }}
               >
+
                 <img
                   src={item.image}
                   alt={item.name}
                   loading="lazy"
                   style={{
                     width: "100%",
-                    height: "100%",
+
+                    height: "240px",
+
                     objectFit: "cover",
+
                     display: "block"
                   }}
                 />
+
               </div>
 
-              {/* 📦 CONTENT */}
+              {/* 📦 DETAILS */}
               <div
                 style={{
                   padding: "18px",
+
                   display: "flex",
+
                   flexDirection: "column",
+
                   flex: 1,
+
                   justifyContent: "space-between"
                 }}
               >
 
                 <div>
+
                   <h3
                     style={{
-                      marginBottom: "10px",
-                      fontSize: "24px",
+                      fontSize: "26px",
+
                       fontWeight: "700",
-                      color: "#222"
+
+                      marginBottom: "12px",
+
+                      color: "#222",
+
+                      lineHeight: "1.3"
                     }}
                   >
                     {item.name}
@@ -377,8 +422,10 @@ function Food2() {
 
                   <p
                     style={{
-                      marginBottom: "8px",
                       color: "#666",
+
+                      marginBottom: "8px",
+
                       fontSize: "15px"
                     }}
                   >
@@ -387,8 +434,10 @@ function Food2() {
 
                   <p
                     style={{
-                      marginBottom: "8px",
                       color: "#666",
+
+                      marginBottom: "8px",
+
                       fontSize: "15px"
                     }}
                   >
@@ -397,8 +446,10 @@ function Food2() {
 
                   <p
                     style={{
-                      marginBottom: "12px",
                       color: "#666",
+
+                      marginBottom: "14px",
+
                       fontSize: "15px"
                     }}
                   >
@@ -407,37 +458,53 @@ function Food2() {
 
                   <p
                     style={{
-                      fontSize: "28px",
+                      fontSize: "30px",
+
                       fontWeight: "bold",
+
                       color: "#ff6600",
-                      marginBottom: "18px"
+
+                      marginBottom: "20px"
                     }}
                   >
                     ₹{foodPrice}
                   </p>
+
                 </div>
 
                 {/* 🛒 BUTTON */}
                 <button
-                  onClick={() => handleAdd(item)}
+                  onClick={() =>
+                    handleAdd(item)
+                  }
                   style={{
                     background:
                       "linear-gradient(135deg,#ff8c00,#ff5e00)",
+
                     color: "#fff",
+
                     border: "none",
+
                     padding: "14px",
+
                     borderRadius: "12px",
+
                     cursor: "pointer",
+
                     width: "100%",
+
                     fontSize: "16px",
+
                     fontWeight: "bold",
-                    transition: "0.3s"
+
+                    marginTop: "auto"
                   }}
                 >
                   Add to Cart 🛒
                 </button>
 
               </div>
+
             </motion.div>
           );
         })}
