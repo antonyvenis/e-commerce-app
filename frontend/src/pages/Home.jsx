@@ -192,7 +192,7 @@ function Home() {
   { image: "https://images.unsplash.com/photo-1550547660-d9450f859349", title: "🍔 Burger King", sub: "Juicy bites" },
   { image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87", title: "🥤 Cool Drinks", sub: "Chill refresh" },
   { image: "https://img.magnific.com/free-photo/boneless-chicken-with-fries-top-view_23-2149972943.jpg?semt=ais_hybrid", title: "🍗 Chicken Fry", sub: "Crispy & tasty" },
-  { image: "", title: "🍜 Noodles", sub: "Street style" },
+  { image: "https://static.vecteezy.com/system/resources/previews/027/679/809/large_2x/side-anglegraphy-of-delicious-noodles-in-white-background-photo.jpg", title: "🍜 Noodles", sub: "Street style" },
   { image: "/src/assets/images/meals_hero.png", title: "🍛 Meals", sub: "Full meals" },
   { image: "/src/assets/images/veg_special_hero.png", title: "🥗 Veg Special", sub: "Healthy" },
   { image: "https://images.unsplash.com/photo-1551024601-bec78aea704b", title: "🍰 Desserts", sub: "Sweet treat" },
