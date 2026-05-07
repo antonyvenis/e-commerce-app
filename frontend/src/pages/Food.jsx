@@ -1,82 +1,3 @@
-// import { useEffect, useState } from "react";
-// import axios from "axios";
-// import ProductDetails from "./ProductDetails";
-
-
-// function Food() {
-//   const [data, setData] = useState([]);
-//   const [search, setSearch] = useState("");
-//   const [loading, setLoading] = useState(true); // ✅ ADD
-
-//   // 🍔 Fetch Food Data
-//   useEffect(() => {
-//     axios
-//       .get("https://www.themealdb.com/api/json/v1/1/search.php?s=")
-//       .then((res) => {
-//         const meals = res.data.meals.map((item) => ({
-//           id: item.idMeal,
-//           title: item.strMeal,
-//           name: item.strMeal,
-//           image: item.strMealThumb,
-//           price: Math.floor(Math.random() * 200) + 100,
-//         }));
-
-//         setData(meals);
-//         setLoading(false); // ✅ STOP LOADING
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//         setLoading(false);
-//       });
-//   }, []);
-
-//   // 🔍 Search Filter
-//   const filtered = data.filter((product) =>
-//     product.name.toLowerCase().includes(search.toLowerCase())
-//   );
-
-//   return (
-//     <div className="food-page">
-
-//       {/* 🔍 Search */}
-//       <input
-//         type="text"
-//         placeholder="Search food...🔍"
-//         value={search}
-//         onChange={(e) => setSearch(e.target.value)}
-//         className="search"
-//       />
-
-//       {/* 🍽️ GRID */}
-//       <div className="grid">
-
-//         {/* 💀 LOADING SKELETON */}
-//         {loading ? (
-//           [...Array(6)].map((_, i) => (
-//             <div className="skeleton" key={i}></div>
-//           ))
-//         ) : filtered.length > 0 ? (
-
-//           /* 🍔 REAL DATA */
-//           filtered.map((product) => (
-//             <ProductDetails key={product.id} product={product} />
-//           ))
-
-//         ) : (
-
-//           /* ❌ NO RESULT */
-//           <p>No food found 😢</p>
-
-//         )}
-
-//       </div>
-
-//     </div>
-//   );
-// }
-
-// export default Food;
-
 import { useEffect, useState } from "react";
 import axios from "axios";
 import ProductDetails from "./ProductDetails";
@@ -104,7 +25,8 @@ function Food() {
         const meals = res.data.meals.map(
           (item) => ({
 
-            id: item.idMeal,
+            // ✅ UNIQUE ID
+            id: `meal-${item.idMeal}`,
 
             title: item.strMeal,
 
@@ -112,9 +34,27 @@ function Food() {
 
             image: item.strMealThumb,
 
+            // ✅ RANDOM PRICE
             price:
-              Math.floor(Math.random() * 200) +
-              100,
+              Math.floor(Math.random() * 300) +
+              120,
+
+            // ✅ CATEGORY
+            category:
+              item.strCategory || "Food",
+
+            // ✅ AREA / CUISINE
+            cuisine:
+              item.strArea || "International",
+
+            // ✅ RANDOM RATING
+            rating:
+              (Math.random() * 2 + 3).toFixed(1),
+
+            // ✅ RANDOM TIME
+            timing:
+              Math.floor(Math.random() * 40) +
+              10,
           })
         );
 
@@ -152,7 +92,7 @@ function Food() {
       className="food-page"
       style={{
         padding: "20px",
-        maxWidth: "1500px",
+        maxWidth: "1700px",
         margin: "0 auto"
       }}
     >
@@ -167,15 +107,16 @@ function Food() {
         }
         className="search"
         style={{
+
           width: "100%",
 
-          padding: "14px",
+          padding: "15px",
 
-          borderRadius: "12px",
+          borderRadius: "14px",
 
           border: "1px solid #ccc",
 
-          marginBottom: "30px",
+          marginBottom: "35px",
 
           fontSize: "16px",
 
@@ -192,10 +133,9 @@ function Food() {
 
           display: "grid",
 
+          // ✅ 4 OR 5 CARDS DESKTOP
           gridTemplateColumns:
-            "repeat(auto-fit, minmax(320px, 320px))",
-
-          justifyContent: "center",
+            "repeat(auto-fit, minmax(260px, 1fr))",
 
           gap: "28px",
 
@@ -206,16 +146,16 @@ function Food() {
         {/* 💀 LOADING */}
         {loading ? (
 
-          [...Array(6)].map((_, i) => (
+          [...Array(8)].map((_, i) => (
 
             <div
               className="skeleton"
               key={i}
               style={{
 
-                width: "320px",
+                width: "100%",
 
-                height: "480px",
+                height: "500px",
 
                 borderRadius: "20px",
 
@@ -239,15 +179,134 @@ function Food() {
             <div
               key={product.id}
               style={{
-                width: "100%",
-                maxWidth: "320px",
-                margin: "0 auto"
+
+                background: "#fff",
+
+                borderRadius: "20px",
+
+                overflow: "hidden",
+
+                boxShadow:
+                  "0 4px 15px rgba(0,0,0,0.1)",
+
+                transition: "0.3s",
+
+                minHeight: "520px",
+
+                display: "flex",
+
+                flexDirection: "column"
               }}
             >
 
-              <ProductDetails
-                product={product}
+              {/* 🖼️ IMAGE */}
+              <img
+                src={product.image}
+                alt={product.name}
+                loading="lazy"
+                style={{
+
+                  width: "100%",
+
+                  height: "230px",
+
+                  objectFit: "cover"
+                }}
               />
+
+              {/* 📦 DETAILS */}
+              <div
+                style={{
+
+                  padding: "18px",
+
+                  display: "flex",
+
+                  flexDirection: "column",
+
+                  flex: 1
+                }}
+              >
+
+                <h2
+                  style={{
+
+                    fontSize: "24px",
+
+                    fontWeight: "bold",
+
+                    marginBottom: "10px",
+
+                    color: "#222"
+                  }}
+                >
+                  {product.name}
+                </h2>
+
+                {/* 🍽️ CATEGORY */}
+                <p
+                  style={{
+                    color: "#666",
+                    marginBottom: "8px"
+                  }}
+                >
+                  🍽️ {product.category}
+                </p>
+
+                {/* 🌍 CUISINE */}
+                <p
+                  style={{
+                    color: "#666",
+                    marginBottom: "8px"
+                  }}
+                >
+                  🌍 {product.cuisine}
+                </p>
+
+                {/* ⭐ RATING */}
+                <p
+                  style={{
+                    color: "#666",
+                    marginBottom: "8px"
+                  }}
+                >
+                  ⭐ {product.rating}
+                </p>
+
+                {/* ⏱️ TIME */}
+                <p
+                  style={{
+                    color: "#666",
+                    marginBottom: "14px"
+                  }}
+                >
+                  ⏱️ {product.timing} mins
+                </p>
+
+                {/* 💰 PRICE */}
+                <p
+                  style={{
+
+                    fontSize: "30px",
+
+                    fontWeight: "bold",
+
+                    color: "#ff6600",
+
+                    marginBottom: "20px"
+                  }}
+                >
+                  ₹{product.price}
+                </p>
+
+                {/* 🛒 PRODUCT CARD */}
+                <div style={{ marginTop: "auto" }}>
+                  <ProductDetails
+                    product={product}
+                  />
+                </div>
+
+              </div>
 
             </div>
 
@@ -275,6 +334,7 @@ function Food() {
       <style>
         {`
           @keyframes loading {
+
             0% {
               background-position: 200% 0;
             }
@@ -284,6 +344,7 @@ function Food() {
             }
           }
 
+          /* 📱 MOBILE */
           @media (max-width: 768px) {
 
             .grid {
