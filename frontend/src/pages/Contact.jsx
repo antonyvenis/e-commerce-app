@@ -99,6 +99,7 @@ ${form.message}
           />
           <label>Message</label>
 
+        </div>  
           
         <motion.button
           type="submit"
@@ -107,8 +108,6 @@ ${form.message}
         >
           Send 🚀
         </motion.button>
-        
-        </div>
 
       </motion.form>
 
