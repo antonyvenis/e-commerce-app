@@ -620,48 +620,159 @@ def update_profile(request):
         return Response({"error": "User not found"})
 
 
+# # ================================
+# # ❤️ LIKE
+# # ================================
+# @api_view(['POST'])
+# def add_like(request):
+#     try:
+#         user = CustomUser.objects.get(username=request.data.get("username"))
+#         item_id = request.data.get("id")
+
+#         if Like.objects.filter(user=user, product_id=item_id).exists():
+#             return Response({"message": "Already liked"})
+
+#         Like.objects.create(
+#             user=user,
+#             item_name=request.data.get("item_name"),
+#             image=request.data.get("image"),
+#             price=request.data.get("price"),
+#             product_id=item_id
+#         )
+
+#         return Response({"message": "Liked ❤️"})
+
+#     except CustomUser.DoesNotExist:
+#         return Response({"error": "User not found"})
+
+
+# @api_view(['GET'])
+# def get_likes(request):
+#     try:
+#         user = CustomUser.objects.get(username=request.GET.get("username"))
+#         likes = Like.objects.filter(user=user)
+
+#         return Response([
+#             {
+#                 "id": l.product_id,
+#                 "item_name": l.item_name,
+#                 "image": l.image,
+#                 "price": l.price
+#             } for l in likes
+#         ])
+
+#     except:
+#         return Response([])
+
 # ================================
 # ❤️ LIKE
 # ================================
 @api_view(['POST'])
 def add_like(request):
     try:
-        user = CustomUser.objects.get(username=request.data.get("username"))
-        item_id = request.data.get("id")
-
-        if Like.objects.filter(user=user, product_id=item_id).exists():
-            return Response({"message": "Already liked"})
-
-        Like.objects.create(
-            user=user,
-            item_name=request.data.get("item_name"),
-            image=request.data.get("image"),
-            price=request.data.get("price"),
-            product_id=item_id
+        user = CustomUser.objects.get(
+            username=request.data.get("username")
         )
 
-        return Response({"message": "Liked ❤️"})
+        item_id = request.data.get("id")
+
+        # 🔥 already liked check
+        if Like.objects.filter(
+            user=user,
+            product_id=item_id
+        ).exists():
+
+            return Response({
+                "message": "Already liked"
+            })
+
+        # 🔥 get latest product
+        product = Product.objects.get(id=item_id)
+
+        # 🔥 save like
+        Like.objects.create(
+            user=user,
+            item_name=product.name,
+            image=(
+                product.image.url
+                if product.image else ""
+            ),
+            price=product.price,
+            product_id=product.id
+        )
+
+        return Response({
+            "message": "Liked ❤️"
+        })
 
     except CustomUser.DoesNotExist:
-        return Response({"error": "User not found"})
+
+        return Response({
+            "error": "User not found"
+        })
+
+    except Product.DoesNotExist:
+
+        return Response({
+            "error": "Product not found"
+        })
 
 
+# ================================
+# ❤️ GET LIKES
+# ================================
 @api_view(['GET'])
 def get_likes(request):
+
     try:
-        user = CustomUser.objects.get(username=request.GET.get("username"))
+
+        user = CustomUser.objects.get(
+            username=request.GET.get("username")
+        )
+
         likes = Like.objects.filter(user=user)
 
-        return Response([
-            {
-                "id": l.product_id,
-                "item_name": l.item_name,
-                "image": l.image,
-                "price": l.price
-            } for l in likes
-        ])
+        data = []
+
+        for l in likes:
+
+            try:
+
+                # 🔥 latest product fetch
+                product = Product.objects.get(
+                    id=l.product_id
+                )
+
+                data.append({
+
+                    "id": product.id,
+
+                    "item_name": product.name,
+
+                    "image": (
+                        product.image.url
+                        if product.image else ""
+                    ),
+
+                    "price": product.price,
+
+                    # 🔥 dynamic offer
+                    "offer": product.offer,
+
+                    "category": product.category,
+
+                    "rating": product.rating,
+
+                    "is_active": product.is_active
+                })
+
+            except Product.DoesNotExist:
+                pass
+
+        return Response(data)
 
     except:
+
         return Response([])
 
 
