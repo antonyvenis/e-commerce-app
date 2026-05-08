@@ -347,10 +347,10 @@ function Profile() {
 
   <Link to="/profilechange" id="Link-Text">✏️ Edit</Link>
 
-  <h3>{userData.username}</h3>
-  <p>📧 {userData.email}</p>
-  <p>📞 {userData.phone}</p>
-</div>
+        <h3>{userData.username}</h3>
+        <p>📧 {userData.email}</p>
+        <p>📞 {userData.phone}</p>
+    </div>
 
           <button>
             <Link to="/about" id="Link-text">Aboutℹ️</Link>
