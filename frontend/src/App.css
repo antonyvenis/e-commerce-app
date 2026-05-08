@@ -3189,7 +3189,7 @@ input {
   white-space: nowrap;
   border-radius: 0;
   height: 100%;                /* ← button full height — இதுதான் fix! */
-  width: 110px;                /* ← fixed width */
+  width: 130px;                /* ← fixed width */
   transition: background 0.2s;
 }
 
@@ -3220,7 +3220,7 @@ input {
 
   .search-box button {
     font-size: 13px;
-    width: 90px;
+    width: 130px;
   }
 }
 
