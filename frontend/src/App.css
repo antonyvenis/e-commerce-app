@@ -3136,3 +3136,92 @@ input {
     font-size: 13px;
   }
 }
+
+.search-box {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  width: 60%;
+  max-width: 560px;
+  min-width: 320px;
+  margin: 20px auto;
+  border-radius: 50px;
+  overflow: hidden;
+  border: 2.5px solid #ff6600;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 4px 20px rgba(255, 102, 0, 0.25);
+  height: 52px;                /* ← fixed height போடு */
+}
+
+.search-box input {
+  flex: 1;
+  min-width: 0;
+  padding: 0 22px;             /* ← top/bottom 0, height parent handle பண்ணும் */
+  border: none;
+  outline: none;
+  font-size: 15px;
+  background: transparent;
+  color: #333;
+  border-radius: 0;
+  height: 100%;                /* ← full height */
+}
+
+.search-box input::placeholder {
+  color: #aaa;
+  font-size: 14px;
+}
+
+.search-box a {
+  display: flex;
+  flex-shrink: 0;
+  text-decoration: none;
+  height: 100%;                /* ← link full height */
+}
+
+.search-box button {
+  padding: 0 28px;
+  background: #ff6600;
+  color: #fff;
+  border: none;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  border-radius: 0;
+  height: 100%;                /* ← button full height — இதுதான் fix! */
+  width: 110px;                /* ← fixed width */
+  transition: background 0.2s;
+}
+
+.search-box button:hover {
+  background: #e05500;
+}
+
+/* 💻 Tablet */
+@media (max-width: 768px) {
+  .search-box {
+    width: 80%;
+    height: 48px;
+  }
+}
+
+/* 📱 Mobile */
+@media (max-width: 480px) {
+  .search-box {
+    width: 88%;
+    height: 46px;
+    border-width: 2px;
+  }
+
+  .search-box input {
+    font-size: 13px;
+    padding: 0 14px;
+  }
+
+  .search-box button {
+    font-size: 13px;
+    width: 90px;
+  }
+}
+
+/*----------------------------- FOOTER CSS --------------------------------------------------*/
