@@ -317,7 +317,7 @@ function Home() {
           </h1>
 
           <p>Order your favorite meals anytime</p>
-
+{/* 
           <div className="search-box">
             <input
               type="text"
@@ -329,7 +329,55 @@ function Home() {
             <Link to="/menu">
               <button>Search</button>
             </Link>
-          </div>
+          </div> */}
+
+          <div className="search-box" style={{
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  width: "60%",
+  maxWidth: "560px",
+  minWidth: "300px",
+  margin: "20px auto",
+  borderRadius: "50px",
+  overflow: "hidden",
+  border: "2.5px solid #ff6600",
+  background: "rgba(255,255,255,0.92)",
+  boxShadow: "0 4px 20px rgba(255,102,0,0.25)"
+}}>
+  <input
+    type="text"
+    placeholder="Search for food...🔍"
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+    style={{
+      flex: 1,
+      minWidth: 0,
+      padding: "14px 20px",
+      border: "none",
+      outline: "none",
+      fontSize: "15px",
+      background: "transparent",
+      color: "#333",
+      borderRadius: 0
+    }}
+  />
+  <Link to="/menu" style={{ textDecoration: "none", flexShrink: 0 }}>
+    <button style={{
+      padding: "14px 28px",   /* ← input padding-க்கு match */
+      background: "#ff6600",
+      color: "#fff",
+      border: "none",
+      fontSize: "15px",
+      fontWeight: 700,
+      cursor: "pointer",
+      borderRadius: 0,
+      whiteSpace: "nowrap"
+    }}>
+      Search
+    </button>
+  </Link>
+</div>
 
           <button
             className="order-btn"
