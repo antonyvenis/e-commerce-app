@@ -2807,3 +2807,7 @@ input {
   object-fit: cover;
   border-radius: 12px;
 }
+
+.card {
+  min-height: 420px;
+}
