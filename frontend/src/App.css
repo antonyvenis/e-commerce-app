@@ -3044,3 +3044,95 @@ input {
   color: #666;
   margin: 3px 0;
 }
+
+/*------------------------------ SEARCH BOX CSS --------------------------------------------------*/
+
+/* 🔍 SEARCH BOX - Desktop Perfect */
+.search-box {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  width: 60%;                  /* ← desktop-ல் 60% போதும் */
+  max-width: 560px;
+  min-width: 320px;
+  margin: 20px auto;
+  border-radius: 50px;
+  overflow: hidden;
+  border: 2.5px solid #ff6600;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 4px 20px rgba(255, 102, 0, 0.25);  /* ← glow effect */
+}
+
+.search-box input {
+  flex: 1;
+  min-width: 0;
+  padding: 14px 22px;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  background: transparent;
+  color: #333;
+  border-radius: 0;
+}
+
+.search-box input::placeholder {
+  color: #aaa;
+  font-size: 14px;
+}
+
+.search-box a {
+  display: flex;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.search-box button {
+  padding: 0 28px;
+  background: #ff6600;
+  color: #fff;
+  border: none;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  border-radius: 0;
+  transition: background 0.2s;
+  letter-spacing: 0.3px;
+}
+
+.search-box button:hover {
+  background: #e05500;
+}
+
+/* 🖥️ Large Desktop */
+@media (min-width: 1024px) {
+  .search-box {
+    width: 55%;
+    max-width: 600px;
+  }
+}
+
+/* 💻 Tablet */
+@media (max-width: 768px) {
+  .search-box {
+    width: 80%;
+  }
+}
+
+/* 📱 Mobile */
+@media (max-width: 480px) {
+  .search-box {
+    width: 88%;
+    border-width: 2px;
+  }
+
+  .search-box input {
+    padding: 11px 15px;
+    font-size: 13px;
+  }
+
+  .search-box button {
+    padding: 0 18px;
+    font-size: 13px;
+  }
+}
