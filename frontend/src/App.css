@@ -3150,7 +3150,7 @@ input {
   border: 2.5px solid #ff6600;
   background: rgba(255, 255, 255, 0.92);
   box-shadow: 0 4px 20px rgba(255, 102, 0, 0.25);
-  height: 58px;                /* ← fixed height போடு */
+  height: 50px;                /* ← fixed height போடு */
 }
 
 .search-box input {
@@ -3188,7 +3188,7 @@ input {
   cursor: pointer;
   white-space: nowrap;
   border-radius: 0;
-  height: 40px;                /* ← button full height — இதுதான் fix! */
+  height: 70px;                /* ← button full height — இதுதான் fix! */
   width: 130px;                /* ← fixed width */
   transition: background 0.2s;
 }
