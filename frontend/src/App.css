@@ -3150,7 +3150,7 @@ input {
   border: 2.5px solid #ff6600;
   background: rgba(255, 255, 255, 0.92);
   box-shadow: 0 4px 20px rgba(255, 102, 0, 0.25);
-  height: 40px;                /* ← fixed height போடு */
+  height: 58px;                /* ← fixed height போடு */
 }
 
 .search-box input {
@@ -3163,7 +3163,7 @@ input {
   background: transparent;
   color: #333;
   border-radius: 0;
-  height: 40px;                /* ← full height */
+  height: 100%;                /* ← full height */
 }
 
 .search-box input::placeholder {
@@ -3175,7 +3175,7 @@ input {
   display: flex;
   flex-shrink: 0;
   text-decoration: none;
-  height: 40px;                /* ← link full height */
+  height: 100%;                /* ← link full height */
 }
 
 .search-box button {
