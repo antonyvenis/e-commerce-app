@@ -3179,7 +3179,7 @@ input {
 }
 
 .search-box button {
-  padding: 0 28px;
+  padding: 0 38px;
   background: #ff6600;
   color: #fff;
   border: none;
@@ -3188,7 +3188,7 @@ input {
   cursor: pointer;
   white-space: nowrap;
   border-radius: 0;
-  height: 70px;                /* ← button full height — இதுதான் fix! */
+  height: 50px;                /* ← button full height — இதுதான் fix! */
   width: 130px;                /* ← fixed width */
   transition: background 0.2s;
 }
