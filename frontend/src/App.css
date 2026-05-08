@@ -3163,7 +3163,7 @@ input {
   background: transparent;
   color: #333;
   border-radius: 0;
-  height: 100%;                /* ← full height */
+  height: 40px;                /* ← full height */
 }
 
 .search-box input::placeholder {
@@ -3175,7 +3175,7 @@ input {
   display: flex;
   flex-shrink: 0;
   text-decoration: none;
-  height: 100%;                /* ← link full height */
+  height: 40px;                /* ← link full height */
 }
 
 .search-box button {
@@ -3188,7 +3188,7 @@ input {
   cursor: pointer;
   white-space: nowrap;
   border-radius: 0;
-  height: 100%;                /* ← button full height — இதுதான் fix! */
+  height: 40px;                /* ← button full height — இதுதான் fix! */
   width: 130px;                /* ← fixed width */
   transition: background 0.2s;
 }
