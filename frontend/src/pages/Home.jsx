@@ -342,11 +342,11 @@ function Home() {
       </div>
 
       {/* ⚡ SPEED */}
-      <div style={{ textAlign: "center", margin: "15px" }}>
+      {/* <div style={{ textAlign: "center", margin: "15px" }}>
         <button onClick={() => setSpeed(speed === "slow" ? "fast" : "slow")}>
           {speed === "slow" ? "✨ Slow" : "⚡ Fast"}
         </button>
-      </div>
+      </div> */}
 
       {/* 🍔 AUTO SCROLL */}
       <div className="scroll-container">
