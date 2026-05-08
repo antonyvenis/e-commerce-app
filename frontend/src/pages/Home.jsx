@@ -187,20 +187,20 @@ function Home() {
      🔥 HERO SLIDER (15)
   ========================= */
   const heroSlides = [
-  { image: "https://img.magnific.com/premium-photo/flying-chicken-biryani-spicy-indian-hyderabadi-biryani-generative-ai_21085-36430.jpg?w=2000", title: "🔥 Biryani Special", sub: "Hot & spicy" },
-  { image: "https://images.unsplash.com/photo-1594007654729-407eedc4be65", title: "🍕 Pizza Blast", sub: "Cheesy love" },
-  { image: "https://images.unsplash.com/photo-1550547660-d9450f859349", title: "🍔 Burger King", sub: "Juicy bites" },
-  { image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87", title: "🥤 Cool Drinks", sub: "Chill refresh" },
-  { image: "https://img.magnific.com/free-photo/boneless-chicken-with-fries-top-view_23-2149972943.jpg?semt=ais_hybrid", title: "🍗 Chicken Fry", sub: "Crispy & tasty" },
-  { image: "https://static.vecteezy.com/system/resources/previews/027/679/809/large_2x/side-anglegraphy-of-delicious-noodles-in-white-background-photo.jpg", title: "🍜 Noodles", sub: "Street style" },
-  { image: "https://st2.depositphotos.com/1354142/7950/i/950/depositphotos_79501054-stock-photo-south-indian-meals-served-on.jpg", title: "🍛 Meals", sub: "Full meals" },
-  { image: "https://i.pinimg.com/originals/0f/13/7d/0f137d2a243f7b63e5716ab4c10c3ee3.jpg", title: "🥗 Veg Special", sub: "Healthy" },
-  { image: "https://images.unsplash.com/photo-1551024601-bec78aea704b", title: "🍰 Desserts", sub: "Sweet treat" },
-  { image: "https://wallpaperaccess.com/full/1401021.jpg", title: "🥘 Chinese", sub: "Rich taste" },
-  { image: "https://wallpapercave.com/wp/wp6818614.jpg", title: "🍖 BBQ", sub: "Smoky flavor" },
-  { image: "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0", title: "🍞 Breakfast", sub: "Start fresh" },
-  { image: "https://images.unsplash.com/photo-1525385133512-2f3bdd039054", title: "🍹 Juice", sub: "Natural energy" },
-  { image: "https://images.unsplash.com/photo-1600891964599-f61ba0e24092", title: "🔥 Combo Offers", sub: "Save big" }
+  { image: "https://img.magnific.com/premium-photo/flying-chicken-biryani-spicy-indian-hyderabadi-biryani-generative-ai_21085-36430.jpg?w=2000", title: "🔥 Biryani Special", sub: "Hot & spicy", loading="lazy"},
+  { image: "https://images.unsplash.com/photo-1594007654729-407eedc4be65", title: "🍕 Pizza Blast", sub: "Cheesy love",loading="lazy" },
+  { image: "https://images.unsplash.com/photo-1550547660-d9450f859349", title: "🍔 Burger King", sub: "Juicy bites",loading="lazy" },
+  { image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87", title: "🥤 Cool Drinks", sub: "Chill refresh",loading="lazy" },
+  { image: "https://img.magnific.com/free-photo/boneless-chicken-with-fries-top-view_23-2149972943.jpg?semt=ais_hybrid", title: "🍗 Chicken Fry", sub: "Crispy & tasty" ,loading="lazy"},
+  { image: "https://static.vecteezy.com/system/resources/previews/027/679/809/large_2x/side-anglegraphy-of-delicious-noodles-in-white-background-photo.jpg", title: "🍜 Noodles", sub: "Street style" ,loading="lazy"},
+  { image: "https://st2.depositphotos.com/1354142/7950/i/950/depositphotos_79501054-stock-photo-south-indian-meals-served-on.jpg", title: "🍛 Meals", sub: "Full meals",loading="lazy" },
+  { image: "https://i.pinimg.com/originals/0f/13/7d/0f137d2a243f7b63e5716ab4c10c3ee3.jpg", title: "🥗 Veg Special", sub: "Healthy",loading="lazy" },
+  { image: "https://images.unsplash.com/photo-1551024601-bec78aea704b", title: "🍰 Desserts", sub: "Sweet treat",loading="lazy" },
+  { image: "https://wallpaperaccess.com/full/1401021.jpg", title: "🥘 Chinese", sub: "Rich taste",loading="lazy" },
+  { image: "https://wallpapercave.com/wp/wp6818614.jpg", title: "🍖 BBQ", sub: "Smoky flavor",loading="lazy" },
+  { image: "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0", title: "🍞 Breakfast", sub: "Start fresh",loading="lazy" },
+  { image: "https://images.unsplash.com/photo-1525385133512-2f3bdd039054", title: "🍹 Juice", sub: "Natural energy",loading="lazy" },
+  { image: "https://images.unsplash.com/photo-1600891964599-f61ba0e24092", title: "🔥 Combo Offers", sub: "Save big",loading="lazy" }
 ];
 
 
