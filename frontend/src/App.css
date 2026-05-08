@@ -2818,40 +2818,43 @@ input {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  max-width: 700px;   /* 🔥 increase pannirukken */
-  margin: 20px auto;
+  width: 90%;
+  max-width: 800px;
+  margin: 25px auto;
 }
 
 .search-box input{
-  flex: 1;
-  padding: 16px;
+  width: 100%;
+  min-width: 500px;   /* 🔥 important */
+  padding: 18px;
   font-size: 18px;
   border: none;
   outline: none;
-  border-radius: 10px 0 0 10px;
-  width: 100%;
+  border-radius: 12px 0 0 12px;
 }
 
 .search-box button{
-  padding: 16px 28px;
+  padding: 18px 30px;
   font-size: 18px;
   border: none;
   background: orange;
   color: white;
-  border-radius: 0 10px 10px 0;
   cursor: pointer;
+  border-radius: 0 12px 12px 0;
+  white-space: nowrap;
 }
 
-@media (max-width: 768px){
+@media (max-width:768px){
 
   .search-box{
-    max-width: 95%;
+    width: 95%;
   }
 
   .search-box input{
-    font-size: 16px;
+    min-width: unset;
+    width: 100%;
     padding: 14px;
+    font-size: 16px;
   }
 
   .search-box button{
