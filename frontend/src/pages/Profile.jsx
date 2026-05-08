@@ -313,7 +313,7 @@ function Profile() {
           <h2>👤 Profile</h2>
 
           {/* 👤 User Info */}
-          <div className="profile-card">
+          {/* <div className="profile-card">
             <img
               src={userData.image || "https://via.placeholder.com/100"}
               alt="profile"
@@ -326,7 +326,31 @@ function Profile() {
             <h3>{userData.username}</h3>
             <p>Email: {userData.email}</p>
             <p>Phone: {userData.phone}</p>
-          </div>
+          </div> */}
+
+          <div className="profile-card">
+  {/* Avatar + Edit grouped */}
+  <div style={{ position: "relative", display: "inline-block" }}>
+    <img
+      src={userData.image || "https://via.placeholder.com/100"}
+      alt="profile"
+      style={{
+        width: "90px",
+        height: "90px", 
+        borderRadius: "50%",
+        objectFit: "cover",
+        border: "3px solid #ff6600",
+        display: "block"   /* ← rotate fix */
+      }}
+    />
+  </div>
+
+  <Link to="/profilechange" id="Link-Text">✏️ Edit</Link>
+
+  <h3>{userData.username}</h3>
+  <p>📧 {userData.email}</p>
+  <p>📞 {userData.phone}</p>
+</div>
 
           <button>
             <Link to="/about" id="Link-text">Aboutℹ️</Link>

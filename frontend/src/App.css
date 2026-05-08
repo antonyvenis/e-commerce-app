@@ -3040,7 +3040,7 @@ input {
 }
 
 .profile-name {
-  color: #fff;
+  color: white;
   font-size: 20px;
   font-weight: 600;
   margin: 0;
@@ -3133,7 +3133,7 @@ input {
   width: 100%;
   padding: 11px;
   background: #ff6600;
-  color: aqua;
+  color: white;
   border: none;
   border-radius: 12px;
   font-size: 14px;
@@ -3186,4 +3186,60 @@ input {
   font-size: 14px;
   color: #666;
   margin: 4px 0;
+}
+
+/* ✅ Edit button fix - rotate போகும் */
+#Link-Text {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: #ff6600;
+  text-decoration: none;
+  background: #fff3e0;
+  padding: 4px 14px;
+  border-radius: 20px;
+  
+  /* 🔑 KEY FIX */
+  transform: none !important;
+  rotate: none !important;
+  writing-mode: horizontal-tb !important;
+}
+
+/* Profile card - flex column center */
+.profile-card {
+  display: flex;
+  flex-direction: column;   /* ← இது போடு */
+  align-items: center;
+  text-align: center;
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  max-width: 400px;
+  margin: 0 auto;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.profile-card img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #ff6600;
+  margin-bottom: 8px;
+  /* 🔑 image rotate fix */
+  transform: none !important;
+  image-orientation: from-image;
+}
+
+.profile-card h3 {
+  margin: 8px 0 4px;
+  font-size: 18px;
+  color: #222;
+}
+
+.profile-card p {
+  font-size: 14px;
+  color: #666;
+  margin: 3px 0;
 }
