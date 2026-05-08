@@ -2794,7 +2794,7 @@ input {
 .price-section p {
   font-size: 18px;
   font-weight: bold;
-  color: green;
+  color: black;
 }
 
 .star-rating span {
@@ -2808,6 +2808,6 @@ input {
   border-radius: 12px;
 }
 
-.card {
+/* .card {
   min-height: 420px;
-}
+} */
