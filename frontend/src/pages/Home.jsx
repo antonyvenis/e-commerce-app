@@ -324,7 +324,6 @@ function Home() {
               placeholder="Search for food...🔍"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="search"
             />
 
             <Link to="/menu">
