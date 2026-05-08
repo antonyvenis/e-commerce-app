@@ -1,38 +1,3 @@
-// import { Link, useNavigate } from "react-router-dom";
-
-// function Logout() {
-//   const navigate = useNavigate();
-
-//   const user = JSON.parse(localStorage.getItem("user"));
-
-//   const logout = () => {
-//     localStorage.removeItem("user");
-//     localStorage.removeItem("likes");
-//     localStorage.removeItem("cart");
-//     localStorage.removeItem("orders");
-
-//     navigate("/login");
-//     return alert("Logout exists ⬅️")
-//   };
-
-//   return (
-//     <div className="header fade-in">
-
-//       <h1>🫂</h1>
-
-//       {/* 👤 USER NAME */}
-//       <h3>Bye, {user?.username} 👋</h3>
-//       <h2>THANK YOU FOR VISITING 🤝</h2>
-//       <h5>come again , {user?.username} 💫👍 </h5>
-
-//       <button onClick={logout} >Logout 🚪</button>
-
-//     </div>
-//   );
-// }
-
-// export default Logout;
-
 import { useNavigate } from "react-router-dom";
 
 function Logout() {
