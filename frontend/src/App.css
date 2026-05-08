@@ -3141,8 +3141,8 @@ input {
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  width: 60%;
-  max-width: 560px;
+  width: 80%;
+  max-width: 600px;
   min-width: 320px;
   margin: 20px auto;
   border-radius: 50px;
@@ -3150,7 +3150,7 @@ input {
   border: 2.5px solid #ff6600;
   background: rgba(255, 255, 255, 0.92);
   box-shadow: 0 4px 20px rgba(255, 102, 0, 0.25);
-  height: 52px;                /* ← fixed height போடு */
+  height: 40px;                /* ← fixed height போடு */
 }
 
 .search-box input {
