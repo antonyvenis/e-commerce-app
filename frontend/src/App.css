@@ -3224,4 +3224,71 @@ input {
   }
 }
 
-/*----------------------------- FOOTER CSS --------------------------------------------------*/
+/*----------------------------- SEARCH HOME CSS --------------------------------------------------*/
+
+/* =========================
+   🔍 SEARCH BOX FIX
+========================= */
+
+.search-box{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+  border-radius: 50px;
+  background: #fff;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.search-box input{
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 14px 18px;
+  font-size: 16px;
+  border-radius: 50px 0 0 50px;
+  background: transparent;
+}
+
+.search-box button{
+  border: none;
+  outline: none;
+  padding: 14px 28px;
+  background: #ff7a00;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 0 50px 50px 0;
+  transition: 0.3s;
+  min-width: 130px;
+}
+
+.search-box button:hover{
+  background: #ff5500;
+}
+
+/* 📱 MOBILE FIX */
+@media (max-width: 768px){
+
+  .search-box{
+    max-width: 95%;
+  }
+
+  .search-box input{
+    font-size: 14px;
+    padding: 12px 14px;
+  }
+
+  .search-box button{
+    padding: 12px 18px;
+    min-width: 100px;
+    font-size: 14px;
+  }
+
+}
