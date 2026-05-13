@@ -226,36 +226,78 @@ function ProductCard({ product }) {
   };
 
   /* ================= CART ================= */
+  // const handleAdd = async () => {
+
+  //   if (product.is_active === false) {
+  //     return toast.error("This product is disabled ❌");
+  //   }
+
+  //   if (!user) return toast.error("Login first ❌");
+
+  //   // ⚡ INSTANT TOAST
+  //   toast.success(`${product.name} Added to cart 🛒`);
+
+  //   try {
+
+  //     await axios.post(
+  //       "https://e-commerce-app-8jg4.onrender.com/api/add-cart/",
+  //       {
+  //         username: user.username,
+  //         product_id: product.id
+  //       }
+  //     );
+
+  //     window.dispatchEvent(new Event("cartUpdated"));
+
+  //   } catch (err) {
+
+  //     console.log(err.response?.data);
+
+  //     toast.error("Failed to add ❌");
+  //   }
+  // };
+
   const handleAdd = async () => {
 
-    if (product.is_active === false) {
-      return toast.error("This product is disabled ❌");
-    }
+  if (product.is_active === false) {
+    return toast.error("This product is disabled ❌");
+  }
 
-    if (!user) return toast.error("Login first ❌");
+  if (!user) return toast.error("Login first ❌");
 
-    // ⚡ INSTANT TOAST
-    toast.success(`${product.name} Added to cart 🛒`);
+  toast.success(`${product.name} Added to cart 🛒`);
 
-    try {
+  try {
 
-      await axios.post(
-        "https://e-commerce-app-8jg4.onrender.com/api/add-cart/",
-        {
-          username: user.username,
-          product_id: product.id
-        }
-      );
+    await axios.post(
+      "https://e-commerce-app-8jg4.onrender.com/api/add-cart/",
+      {
+        username: user.username,
+        product_id: product.id
+      }
+    );
 
-      window.dispatchEvent(new Event("cartUpdated"));
+    // 🔥 LOCAL CART UPDATE
+    const existingCart =
+      JSON.parse(localStorage.getItem("cart")) || [];
 
-    } catch (err) {
+    existingCart.push(product);
 
-      console.log(err.response?.data);
+    localStorage.setItem(
+      "cart",
+      JSON.stringify(existingCart)
+    );
 
-      toast.error("Failed to add ❌");
-    }
-  };
+    // 🔥 NAVBAR UPDATE
+    window.dispatchEvent(new Event("cartUpdated"));
+
+  } catch (err) {
+
+    console.log(err.response?.data);
+
+    toast.error("Failed to add ❌");
+  }
+};
 
   /* ================= ⭐ RATING ================= */
   const handleRating = (value) => {
