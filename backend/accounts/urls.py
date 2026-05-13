@@ -21,7 +21,9 @@ from .views import (
     get_products,
     load_products,
     add_products_bulk,
-    verify_register_otp
+    verify_register_otp,
+    test_email,
+    place_order
 )
 
 urlpatterns = [
@@ -36,6 +38,8 @@ urlpatterns = [
     path('verify-register-otp/', verify_register_otp),
     path('reset-password/', reset_password),
     path('forgot-password-otp/', forgot_password_send_otp),
+    path('test-email/', test_email),
+    path('place-order/', place_order),
 
     # =========================
     # 👤 PROFILE

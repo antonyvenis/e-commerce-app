@@ -3,6 +3,7 @@ import random
 from django.core.mail import send_mail
 from django.conf import settings
 
+
 import os
 import re
 import traceback
@@ -23,9 +24,13 @@ from django.utils import timezone
 
 from .models import Product
 
+from django.core.mail import EmailMessage
+from .utils import generate_invoice
+
+
 # ================================
 # 📧 SEND OTP (DB 🔥)
-#=================================
+# ================================
 # 🔹 function
 def send_email_otp(email, otp):
     try:
@@ -1194,3 +1199,64 @@ def add_product(request):
     except Exception as e:
         print("❌ ERROR 👉", str(e))
         return Response({"error": str(e)}, status=500)
+
+
+# ================================
+# email test (for brevo)
+# ================================
+@api_view(['GET'])
+def test_email(request):
+
+    send_mail(
+        "Test Email",
+        "Brevo working successfully 🔥",
+        "antonyvenis1212@gmail.com",
+        ["customer@gmail.com"],
+        fail_silently=False,
+    )
+
+    return Response({"message": "Email sent"})
+
+
+# ================================
+# 🧾 INVOICE EMAIL
+# ================================
+
+def send_invoice_email(order):
+
+    pdf_buffer = generate_invoice(order)
+
+    email = EmailMessage(
+        subject="Your Invoice 🧾",
+        body="Thank you for shopping with us ❤️",
+        from_email=None,
+        to=[order.user.email]
+    )
+
+    email.attach(
+        f"invoice_{order.id}.pdf",
+        pdf_buffer.getvalue(),
+        "application/pdf"
+    )
+
+    email.send()
+
+# ================================
+# 🧾 PLACE ORDER (with invoice email)
+# ================================
+
+@api_view(['POST'])
+def place_order(request):
+
+    # order save logic
+    order = Order.objects.create(
+        user=request.user,
+        total_price=500
+    )
+
+    # 🔥 Send Invoice Email
+    send_invoice_email(order)
+
+    return Response({
+        "message": "Order placed successfully"
+    })

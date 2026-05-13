@@ -13,6 +13,7 @@ import dj_database_url
 import os
 from pathlib import Path
 import cloudinary
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -184,11 +185,34 @@ CSRF_TRUSTED_ORIGINS = [
 
 CORS_ALLOW_CREDENTIALS = True
 
+# cloudinary.config(
+#     cloud_name = "dlrdich6b",
+#     api_key = "557433242649128",
+#     api_secret = "Xh49r0aZErVNkvqClzUwZqZ_9mQ"
+# )
+
 cloudinary.config(
-    cloud_name = "dlrdich6b",
-    api_key = "557433242649128",
-    api_secret = "Xh49r0aZErVNkvqClzUwZqZ_9mQ"
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET")
 )
 
+
+load_dotenv()
+
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp-relay.brevo.com'
+
+EMAIL_PORT = 587
+
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = 'antonyvenis1212@gmail.com'
+
+EMAIL_HOST_PASSWORD = os.environ.get("BREVO_SMTP_KEY")
+
+DEFAULT_FROM_EMAIL = 'antonyvenis1212@gmail.com'
 
