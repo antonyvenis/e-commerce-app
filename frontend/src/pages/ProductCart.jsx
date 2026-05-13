@@ -726,6 +726,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 
 function ProductCard({ product }) {
+
   const { addToCart } = useCart();
 
   const [liked, setLiked] = useState(false);
@@ -741,7 +742,8 @@ function ProductCard({ product }) {
     : "https://via.placeholder.com/200";
 
   /* ================= OFFER LOGIC ================= */
-  const offerPercent = Number(product.offer ?? product.discount ?? 0);
+  const offerPercent =
+    Number(product.offer ?? product.discount ?? 0);
 
   const isOffer = offerPercent > 0;
 
@@ -758,21 +760,33 @@ function ProductCard({ product }) {
     if (!user) return;
 
     axios
-      .get("https://e-commerce-app-8jg4.onrender.com/api/likes/", {
-        params: { username: user.username }
-      })
+      .get(
+        "https://e-commerce-app-8jg4.onrender.com/api/likes/",
+        {
+          params: {
+            username: user.username
+          }
+        }
+      )
       .then(res => {
 
-        const likedIds = res.data.map(item => item.id);
+        const likedIds =
+          res.data.map(item => item.id);
 
-        setLiked(likedIds.includes(product.id));
+        setLiked(
+          likedIds.includes(product.id)
+        );
 
       });
 
     const savedRatings =
-      JSON.parse(localStorage.getItem("ratings")) || {};
+      JSON.parse(
+        localStorage.getItem("ratings")
+      ) || {};
 
-    setRating(savedRatings[product.id] || 0);
+    setRating(
+      savedRatings[product.id] || 0
+    );
 
   }, [product.id]);
 
@@ -780,7 +794,9 @@ function ProductCard({ product }) {
   const toggleLike = () => {
 
     if (!user) {
-      return toast.error("Login first ❌");
+      return toast.error(
+        "Login first ❌"
+      );
     }
 
     const newLiked = !liked;
@@ -795,7 +811,9 @@ function ProductCard({ product }) {
 
     axios.post(
       `https://e-commerce-app-8jg4.onrender.com/api/${
-        newLiked ? "add-like" : "remove-like"
+        newLiked
+          ? "add-like"
+          : "remove-like"
       }/`,
       {
         username: user.username,
@@ -811,11 +829,15 @@ function ProductCard({ product }) {
   const handleAdd = async () => {
 
     if (product.is_active === false) {
-      return toast.error("This product is disabled ❌");
+      return toast.error(
+        "This product is disabled ❌"
+      );
     }
 
     if (!user) {
-      return toast.error("Login first ❌");
+      return toast.error(
+        "Login first ❌"
+      );
     }
 
     try {
@@ -831,44 +853,41 @@ function ProductCard({ product }) {
 
       // ✅ GET CURRENT CART
       let cart =
-        JSON.parse(localStorage.getItem("cart")) || [];
+        JSON.parse(
+          localStorage.getItem("cart")
+        ) || [];
 
       // ✅ CHECK PRODUCT EXISTS
-      const existingIndex = cart.findIndex(
-        item => item.id === product.id
-      );
+      const existingIndex =
+        cart.findIndex(
+          item => item.id === product.id
+        );
 
       if (existingIndex !== -1) {
 
-        // ✅ QUANTITY INCREASE
+        // ✅ ONLY QUANTITY UPDATE
         cart[existingIndex].quantity =
           (cart[existingIndex].quantity || 1) + 1;
 
       } else {
 
-        // ✅ NEW PRODUCT
+        // ✅ NEW PRODUCT ADD
         cart.push({
           ...product,
           quantity: 1
         });
       }
 
-      // ✅ SAVE LOCAL CART
+      // ✅ SAVE UPDATED CART
       localStorage.setItem(
         "cart",
         JSON.stringify(cart)
       );
 
-      // ✅ UPDATE CART COUNT
-      const totalCount = cart.reduce(
-        (sum, item) =>
-          sum + (item.quantity || 1),
-        0
-      );
-
+      // ✅ ONLY PRODUCT COUNT
       localStorage.setItem(
         "cartCount",
-        totalCount
+        cart.length
       );
 
       // ✅ NAVBAR LIVE UPDATE
@@ -883,9 +902,13 @@ function ProductCard({ product }) {
 
     } catch (err) {
 
-      console.log(err.response?.data);
+      console.log(
+        err.response?.data
+      );
 
-      toast.error("Failed to add ❌");
+      toast.error(
+        "Failed to add ❌"
+      );
     }
   };
 
@@ -893,7 +916,9 @@ function ProductCard({ product }) {
   const handleRating = (value) => {
 
     const savedRatings =
-      JSON.parse(localStorage.getItem("ratings")) || {};
+      JSON.parse(
+        localStorage.getItem("ratings")
+      ) || {};
 
     savedRatings[product.id] = value;
 
@@ -936,7 +961,9 @@ function ProductCard({ product }) {
       >
         <span
           style={{
-            color: liked ? "red" : "#999",
+            color: liked
+              ? "red"
+              : "#999",
             fontSize: "22px"
           }}
         >
@@ -953,10 +980,14 @@ function ProductCard({ product }) {
 
       <h3>{product.name}</h3>
 
-      <p>🍽️ {product.category || "Food"}</p>
+      <p>
+        🍽️ {product.category || "Food"}
+      </p>
 
       {/* ⭐ DISPLAY */}
-      <p>⭐ {product.rating ?? "4.5"}</p>
+      <p>
+        ⭐ {product.rating ?? "4.5"}
+      </p>
 
       {/* 💰 PRICE */}
       <div className="price-section">
@@ -965,7 +996,8 @@ function ProductCard({ product }) {
           <>
             <p
               style={{
-                textDecoration: "line-through",
+                textDecoration:
+                  "line-through",
                 color: "gray"
               }}
             >
@@ -994,9 +1026,14 @@ function ProductCard({ product }) {
 
           <span
             key={star}
-            onClick={() => handleRating(star)}
+            onClick={() =>
+              handleRating(star)
+            }
             style={{
-              color: rating >= star ? "gold" : "gray",
+              color:
+                rating >= star
+                  ? "gold"
+                  : "gray",
               cursor: "pointer"
             }}
           >
