@@ -3326,3 +3326,41 @@ input {
   }
 
 }
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 50px;
+  overflow: hidden;
+  border: 2px solid #ff6b00;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.search-box input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  background: transparent;
+  color: #333;
+}
+
+.search-btn {
+  background: #ff6b00;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 0 50px 50px 0;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.search-btn:hover {
+  background: #e65c00;
+}
