@@ -320,7 +320,7 @@ function Orders() {
                   className="reorder-btn"
                   style={{ marginTop: "10px", background: "#28a745" }}
                   onClick={() =>
-                    window.open(`${API}/invoice/${order.id}/`, '_blank')
+                    window.open(`${API}/api/invoice/${order.id}/`, '_blank')
                   }
                 >
                   📄 Download Invoice
