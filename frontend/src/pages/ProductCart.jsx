@@ -345,33 +345,84 @@ function ProductCard({ product }) {
   };
 
   /* ================= BUY NOW ================= */
-  const handleBuyNow = async () => {
+  // const handleBuyNow = async () => {
 
-    if (product.is_active === false) {
-      return toast.error(
-        "This product is disabled ❌"
-      );
+  //   if (product.is_active === false) {
+  //     return toast.error(
+  //       "This product is disabled ❌"
+  //     );
+  //   }
+
+  //   if (!user) {
+  //     return toast.error(
+  //       "Login first ❌"
+  //     );
+  //   }
+
+  //   const buyNowProduct = [
+  //     {
+  //       ...product,
+  //       quantity: 1
+  //     }
+  //   ];
+
+  //   navigate("/payment", {
+  //     state: {
+  //       cart: buyNowProduct
+  //     }
+  //   });
+  // };
+
+  /* ================= BUY NOW ================= */
+const handleBuyNow = async () => {
+
+  if (product.is_active === false) {
+    return toast.error(
+      "This product is disabled ❌"
+    );
+  }
+
+  if (!user) {
+    return toast.error(
+      "Login first ❌"
+    );
+  }
+
+  // ✅ FULL PRODUCT DATA
+  const buyNowProduct = [
+    {
+      id: product.id,
+      item_name: product.name,
+      name: product.name,
+
+      // ✅ IMAGE IMPORTANT
+      image: imageUrl,
+
+      // ✅ PRICE
+      price: Number(
+        isOffer
+          ? offerPrice
+          : product.price
+      ),
+
+      // ✅ OFFER
+      offer: offerPercent,
+
+      // ✅ QTY IMPORTANT
+      quantity: 1,
+
+      // ✅ CATEGORY
+      category:
+        product.category || "Food"
     }
+  ];
 
-    if (!user) {
-      return toast.error(
-        "Login first ❌"
-      );
+  navigate("/payment", {
+    state: {
+      cart: buyNowProduct
     }
-
-    const buyNowProduct = [
-      {
-        ...product,
-        quantity: 1
-      }
-    ];
-
-    navigate("/payment", {
-      state: {
-        cart: buyNowProduct
-      }
-    });
-  };
+  });
+};
 
   /* ================= ⭐ RATING ================= */
   const handleRating = (value) => {
