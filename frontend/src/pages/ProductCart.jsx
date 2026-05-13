@@ -147,6 +147,290 @@
 
 // export default ProductCard;
 
+// import { useCart } from "./CartContext";
+// import { useState, useEffect, memo } from "react";
+// import { motion } from "framer-motion";
+// import toast from "react-hot-toast";
+// import axios from "axios";
+
+// function ProductCard({ product }) {
+//   const { addToCart } = useCart();
+
+//   const [liked, setLiked] = useState(false);
+//   const [rating, setRating] = useState(0);
+
+//   const user = JSON.parse(localStorage.getItem("user"));
+
+//   /* ================= IMAGE ================= */
+//   const imageUrl = product.image
+//     ? product.image.startsWith("http")
+//       ? product.image
+//       : `https://e-commerce-app-8jg4.onrender.com${product.image}`
+//     : "https://via.placeholder.com/200";
+
+//   /* ================= OFFER LOGIC ================= */
+//   const offerPercent = Number(product.offer ?? product.discount ?? 0);
+//   const isOffer = offerPercent > 0;
+
+//   const offerPrice = isOffer
+//     ? (
+//         Number(product.price) -
+//         (Number(product.price) * offerPercent) / 100
+//       ).toFixed(2)
+//     : Number(product.price).toFixed(2);
+
+//   /* ================= LOAD ================= */
+//   useEffect(() => {
+//     if (!user) return;
+
+//     axios
+//       .get("https://e-commerce-app-8jg4.onrender.com/api/likes/", {
+//         params: { username: user.username }
+//       })
+//       .then(res => {
+//         const likedIds = res.data.map(item => item.id);
+//         setLiked(likedIds.includes(product.id));
+//       });
+
+//     const savedRatings =
+//       JSON.parse(localStorage.getItem("ratings")) || {};
+
+//     setRating(savedRatings[product.id] || 0);
+//   }, [product.id]);
+
+//   /* ================= LIKE ================= */
+//   const toggleLike = () => {
+//     if (!user) return toast.error("Login first ❌");
+
+//     const newLiked = !liked;
+//     setLiked(newLiked);
+
+//     toast.success(
+//       newLiked
+//         ? `${product.name} Added to Wishlist ❤️`
+//         : `${product.name} Removed from Wishlist ❌`
+//     );
+
+//     axios.post(
+//       `https://e-commerce-app-8jg4.onrender.com/api/${
+//         newLiked ? "add-like" : "remove-like"
+//       }/`,
+//       {
+//         username: user.username,
+//         item_name: product.name,
+//         image: imageUrl,
+//         price: product.price,
+//         id: product.id
+//       }
+//     );
+//   };
+
+//   /* ================= CART ================= */
+//   // const handleAdd = async () => {
+
+//   //   if (product.is_active === false) {
+//   //     return toast.error("This product is disabled ❌");
+//   //   }
+
+//   //   if (!user) return toast.error("Login first ❌");
+
+//   //   // ⚡ INSTANT TOAST
+//   //   toast.success(`${product.name} Added to cart 🛒`);
+
+//   //   try {
+
+//   //     await axios.post(
+//   //       "https://e-commerce-app-8jg4.onrender.com/api/add-cart/",
+//   //       {
+//   //         username: user.username,
+//   //         product_id: product.id
+//   //       }
+//   //     );
+
+//   //     window.dispatchEvent(new Event("cartUpdated"));
+
+//   //   } catch (err) {
+
+//   //     console.log(err.response?.data);
+
+//   //     toast.error("Failed to add ❌");
+//   //   }
+//   // };
+
+// //   const handleAdd = async () => {
+
+// //   if (product.is_active === false) {
+// //     return toast.error("This product is disabled ❌");
+// //   }
+
+// //   if (!user) return toast.error("Login first ❌");
+
+// //   toast.success(`${product.name} Added to cart 🛒`);
+
+// //   try {
+
+// //     await axios.post(
+// //       "https://e-commerce-app-8jg4.onrender.com/api/add-cart/",
+// //       {
+// //         username: user.username,
+// //         product_id: product.id
+// //       }
+// //     );
+
+// //     // 🔥 LOCAL CART UPDATE
+// //     const existingCart =
+// //       JSON.parse(localStorage.getItem("cart")) || [];
+
+// //     existingCart.push(product);
+
+// //     localStorage.setItem(
+// //       "cart",
+// //       JSON.stringify(existingCart)
+// //     );
+
+// //     // 🔥 NAVBAR UPDATE
+// //     window.dispatchEvent(new Event("cartUpdated"));
+
+// //   } catch (err) {
+
+// //     console.log(err.response?.data);
+
+// //     toast.error("Failed to add ❌");
+// //   }
+// // };
+
+// const handleAdd = async () => {
+
+//   if (product.is_active === false) {
+//     return toast.error("This product is disabled ❌");
+//   }
+
+//   if (!user) return toast.error("Login first ❌");
+
+//   toast.success(`${product.name} Added to cart 🛒`);
+
+//   try {
+
+//     await axios.post(
+//       "https://e-commerce-app-8jg4.onrender.com/api/add-cart/",
+//       {
+//         username: user.username,
+//         product_id: product.id
+//       }
+//     );
+
+//     // 🔥 GET EXISTING CART
+//     const existingCart =
+//       JSON.parse(localStorage.getItem("cart")) || [];
+
+//     // 🔥 ADD NEW PRODUCT
+//     const updatedCart = [...existingCart, product];
+
+//     // 🔥 SAVE
+//     localStorage.setItem(
+//       "cart",
+//       JSON.stringify(updatedCart)
+//     );
+
+//     // 🔥 UPDATE NAVBAR
+//     window.dispatchEvent(new Event("cartUpdated"));
+
+//   } catch (err) {
+
+//     console.log(err.response?.data);
+
+//     toast.error("Failed to add ❌");
+//   }
+// };
+
+//   /* ================= ⭐ RATING ================= */
+//   const handleRating = (value) => {
+//     const savedRatings =
+//       JSON.parse(localStorage.getItem("ratings")) || {};
+
+//     savedRatings[product.id] = value;
+
+//     localStorage.setItem("ratings", JSON.stringify(savedRatings));
+
+//     setRating(value);
+
+//     toast.success(`${product.name} rated ${value} ⭐`);
+//   };
+
+//   /* ================= UI ================= */
+//   return (
+//     <motion.div className="card" whileHover={{ scale: 1.03 }}>
+
+//       {isOffer && (
+//         <div className="offer-badge">
+//           🔥 {offerPercent}% OFF
+//         </div>
+//       )}
+
+//       {product.is_active === false && (
+//         <div className="disabled-overlay">NOT AVAILABLE</div>
+//       )}
+
+//       {/* ❤️ LIKE */}
+//       <div className="like-btn" onClick={toggleLike}>
+//         <span style={{ color: liked ? "red" : "#999", fontSize: "22px" }}>
+//           {liked ? "❤️" : "🤍"}
+//         </span>
+//       </div>
+
+//       {/* 🖼 IMAGE */}
+//       <img src={imageUrl} alt={product.name} className="product-img" />
+
+//       <h3>{product.name}</h3>
+
+//       <p>🍽️ {product.category || "Food"}</p>
+
+//       {/* ⭐ FIXED RATING DISPLAY */}
+//       <p>⭐ {product.rating ?? "4.5"}</p>
+
+//       {/* 💰 PRICE */}
+//       <div className="price-section">
+//         {isOffer ? (
+//           <>
+//             <p style={{ textDecoration: "line-through", color: "gray" }}>
+//               ₹{product.price}
+//             </p>
+
+//             <p style={{ color: "green", fontWeight: "bold" }}>
+//               ₹{offerPrice}
+//             </p>
+//           </>
+//         ) : (
+//           <p>₹{product.price}</p>
+//         )}
+//       </div>
+
+//       {/* ⭐ RATING */}
+//       <div className="star-rating">
+//         {[1, 2, 3, 4, 5].map(star => (
+//           <span
+//             key={star}
+//             onClick={() => handleRating(star)}
+//             style={{
+//               color: rating >= star ? "gold" : "gray",
+//               cursor: "pointer"
+//             }}
+//           >
+//             ★
+//           </span>
+//         ))}
+//       </div>
+
+//       <button className="cart-btn" onClick={handleAdd}>
+//         Add to Cart 🛒
+//       </button>
+
+//     </motion.div>
+//   );
+// }
+
+// export default memo(ProductCard);
+
 import { useCart } from "./CartContext";
 import { useState, useEffect, memo } from "react";
 import { motion } from "framer-motion";
@@ -170,6 +454,7 @@ function ProductCard({ product }) {
 
   /* ================= OFFER LOGIC ================= */
   const offerPercent = Number(product.offer ?? product.discount ?? 0);
+
   const isOffer = offerPercent > 0;
 
   const offerPrice = isOffer
@@ -189,6 +474,7 @@ function ProductCard({ product }) {
       })
       .then(res => {
         const likedIds = res.data.map(item => item.id);
+
         setLiked(likedIds.includes(product.id));
       });
 
@@ -196,13 +482,18 @@ function ProductCard({ product }) {
       JSON.parse(localStorage.getItem("ratings")) || {};
 
     setRating(savedRatings[product.id] || 0);
+
   }, [product.id]);
 
   /* ================= LIKE ================= */
   const toggleLike = () => {
-    if (!user) return toast.error("Login first ❌");
+
+    if (!user) {
+      return toast.error("Login first ❌");
+    }
 
     const newLiked = !liked;
+
     setLiked(newLiked);
 
     toast.success(
@@ -226,87 +517,91 @@ function ProductCard({ product }) {
   };
 
   /* ================= CART ================= */
-  // const handleAdd = async () => {
-
-  //   if (product.is_active === false) {
-  //     return toast.error("This product is disabled ❌");
-  //   }
-
-  //   if (!user) return toast.error("Login first ❌");
-
-  //   // ⚡ INSTANT TOAST
-  //   toast.success(`${product.name} Added to cart 🛒`);
-
-  //   try {
-
-  //     await axios.post(
-  //       "https://e-commerce-app-8jg4.onrender.com/api/add-cart/",
-  //       {
-  //         username: user.username,
-  //         product_id: product.id
-  //       }
-  //     );
-
-  //     window.dispatchEvent(new Event("cartUpdated"));
-
-  //   } catch (err) {
-
-  //     console.log(err.response?.data);
-
-  //     toast.error("Failed to add ❌");
-  //   }
-  // };
-
   const handleAdd = async () => {
 
-  if (product.is_active === false) {
-    return toast.error("This product is disabled ❌");
-  }
+    if (product.is_active === false) {
+      return toast.error("This product is disabled ❌");
+    }
 
-  if (!user) return toast.error("Login first ❌");
+    if (!user) {
+      return toast.error("Login first ❌");
+    }
 
-  toast.success(`${product.name} Added to cart 🛒`);
+    try {
 
-  try {
+      await axios.post(
+        "https://e-commerce-app-8jg4.onrender.com/api/add-cart/",
+        {
+          username: user.username,
+          product_id: product.id
+        }
+      );
 
-    await axios.post(
-      "https://e-commerce-app-8jg4.onrender.com/api/add-cart/",
-      {
-        username: user.username,
-        product_id: product.id
+      // 🔥 GET EXISTING CART
+      const existingCart =
+        JSON.parse(localStorage.getItem("cart")) || [];
+
+      // 🔥 CHECK DUPLICATE
+      const alreadyExists = existingCart.find(
+        item => item.id === product.id
+      );
+
+      let updatedCart;
+
+      if (alreadyExists) {
+
+        updatedCart = existingCart.map(item =>
+          item.id === product.id
+            ? {
+                ...item,
+                quantity: (item.quantity || 1) + 1
+              }
+            : item
+        );
+
+      } else {
+
+        updatedCart = [
+          ...existingCart,
+          {
+            ...product,
+            quantity: 1
+          }
+        ];
       }
-    );
 
-    // 🔥 LOCAL CART UPDATE
-    const existingCart =
-      JSON.parse(localStorage.getItem("cart")) || [];
+      // 🔥 SAVE UPDATED CART
+      localStorage.setItem(
+        "cart",
+        JSON.stringify(updatedCart)
+      );
 
-    existingCart.push(product);
+      // 🔥 UPDATE NAVBAR
+      window.dispatchEvent(new Event("cartUpdated"));
 
-    localStorage.setItem(
-      "cart",
-      JSON.stringify(existingCart)
-    );
+      // 🔥 SUCCESS TOAST
+      toast.success(`${product.name} Added to cart 🛒`);
 
-    // 🔥 NAVBAR UPDATE
-    window.dispatchEvent(new Event("cartUpdated"));
+    } catch (err) {
 
-  } catch (err) {
+      console.log(err.response?.data);
 
-    console.log(err.response?.data);
-
-    toast.error("Failed to add ❌");
-  }
-};
+      toast.error("Failed to add ❌");
+    }
+  };
 
   /* ================= ⭐ RATING ================= */
   const handleRating = (value) => {
+
     const savedRatings =
       JSON.parse(localStorage.getItem("ratings")) || {};
 
     savedRatings[product.id] = value;
 
-    localStorage.setItem("ratings", JSON.stringify(savedRatings));
+    localStorage.setItem(
+      "ratings",
+      JSON.stringify(savedRatings)
+    );
 
     setRating(value);
 
@@ -315,7 +610,10 @@ function ProductCard({ product }) {
 
   /* ================= UI ================= */
   return (
-    <motion.div className="card" whileHover={{ scale: 1.03 }}>
+    <motion.div
+      className="card"
+      whileHover={{ scale: 1.03 }}
+    >
 
       {isOffer && (
         <div className="offer-badge">
@@ -324,46 +622,74 @@ function ProductCard({ product }) {
       )}
 
       {product.is_active === false && (
-        <div className="disabled-overlay">NOT AVAILABLE</div>
+        <div className="disabled-overlay">
+          NOT AVAILABLE
+        </div>
       )}
 
       {/* ❤️ LIKE */}
-      <div className="like-btn" onClick={toggleLike}>
-        <span style={{ color: liked ? "red" : "#999", fontSize: "22px" }}>
+      <div
+        className="like-btn"
+        onClick={toggleLike}
+      >
+        <span
+          style={{
+            color: liked ? "red" : "#999",
+            fontSize: "22px"
+          }}
+        >
           {liked ? "❤️" : "🤍"}
         </span>
       </div>
 
       {/* 🖼 IMAGE */}
-      <img src={imageUrl} alt={product.name} className="product-img" />
+      <img
+        src={imageUrl}
+        alt={product.name}
+        className="product-img"
+      />
 
       <h3>{product.name}</h3>
 
       <p>🍽️ {product.category || "Food"}</p>
 
-      {/* ⭐ FIXED RATING DISPLAY */}
+      {/* ⭐ DISPLAY */}
       <p>⭐ {product.rating ?? "4.5"}</p>
 
       {/* 💰 PRICE */}
       <div className="price-section">
+
         {isOffer ? (
           <>
-            <p style={{ textDecoration: "line-through", color: "gray" }}>
+            <p
+              style={{
+                textDecoration: "line-through",
+                color: "gray"
+              }}
+            >
               ₹{product.price}
             </p>
 
-            <p style={{ color: "green", fontWeight: "bold" }}>
+            <p
+              style={{
+                color: "green",
+                fontWeight: "bold"
+              }}
+            >
               ₹{offerPrice}
             </p>
           </>
         ) : (
           <p>₹{product.price}</p>
         )}
+
       </div>
 
       {/* ⭐ RATING */}
       <div className="star-rating">
+
         {[1, 2, 3, 4, 5].map(star => (
+
           <span
             key={star}
             onClick={() => handleRating(star)}
@@ -374,10 +700,16 @@ function ProductCard({ product }) {
           >
             ★
           </span>
+
         ))}
+
       </div>
 
-      <button className="cart-btn" onClick={handleAdd}>
+      {/* 🛒 BUTTON */}
+      <button
+        className="cart-btn"
+        onClick={handleAdd}
+      >
         Add to Cart 🛒
       </button>
 

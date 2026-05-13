@@ -122,10 +122,17 @@ function Navbar() {
 
   const user = JSON.parse(localStorage.getItem("user"));
 
+  // const updateCartCount = () => {
+  //   // 🔥 Directly get cart length
+  //   const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  //   setCartCount(cart.length);
+  // };
+
   const updateCartCount = () => {
-    // 🔥 Directly get cart length
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    setCartCount(cart.length);
+  const cartItems =
+    JSON.parse(localStorage.getItem("cart")) || [];
+
+  setCartCount(cartItems.length);
   };
 
   const logout = () => {
