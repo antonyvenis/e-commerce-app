@@ -3234,108 +3234,10 @@ input {
   max-width: 460px;
   height: 58px;
 
-  display: flex;
-  align-items: center;
-
-  margin: 25px auto;
-
-  background: rgba(255,255,255,0.95);
-
-  border-radius: 50px;
-
-  overflow: hidden;
-
-  border: 3px solid #ff7a00;
-
-  box-shadow:
-    0 6px 20px rgba(0,0,0,0.25);
-
-  backdrop-filter: blur(8px);
-}
-
-.search-box input{
-  flex: 1;
-
-  height: 100%;
-
-  border: none;
-  outline: none;
-
-  padding: 0 22px;
-
-  font-size: 17px;
-  font-weight: 500;
-
-  background: transparent;
-
-  color: #222;
-}
-
-.search-box input::placeholder{
-  color: #777;
-}
-
-.search-btn{
-  width: 130px;
-  height: 100%;
-
-  border: none;
-  outline: none;
-
-  background: linear-gradient(
-    135deg,
-    #ff7a00,
-    #ff9500
-  );
-
-  color: white;
-
-  font-size: 18px;
-  font-weight: bold;
-
-  cursor: pointer;
-
-  transition: all 0.3s ease;
-}
-
-.search-btn:hover{
-  filter: brightness(1.05);
-  transform: scale(1.02);
-}
-
-.search-btn:active{
-  transform: scale(0.98);
-}
-
-/* 📱 MOBILE */
-@media(max-width: 600px){
-
-  .search-box{
-    max-width: 95%;
-    height: 52px;
-  }
-
-  .search-box input{
-    font-size: 14px;
-    padding: 0 14px;
-  }
-
-  .search-btn{
-    width: 105px;
-    font-size: 15px;
-  }
-
-}
-
-.search-box{
-  width: 100%;
-  max-width: 450px;
-  height: 56px;
-
   margin: 25px auto;
 
   display: flex;
-  align-items: center;
+  align-items: stretch;
 
   background: #fff;
 
@@ -3349,38 +3251,39 @@ input {
     0 4px 15px rgba(0,0,0,0.25);
 }
 
-/* INPUT */
+/* 🔍 INPUT */
 .search-box input{
   flex: 1;
-
-  height: 100%;
 
   border: none;
   outline: none;
 
-  padding: 0 20px;
+  padding: 0 22px;
 
   font-size: 16px;
   font-weight: 500;
 
   background: transparent;
 
-  display: flex;
-  align-items: center;
+  line-height: normal;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  min-height: 100%;
 }
 
-/* PLACEHOLDER */
+/* 🔍 PLACEHOLDER */
 .search-box input::placeholder{
   color: #888;
 }
 
-/* BUTTON */
+/* 🔥 BUTTON */
 .search-btn{
-  width: 120px;
-  height: 100%;
-
   border: none;
   outline: none;
+
+  min-width: 130px;
 
   background: linear-gradient(
     135deg,
@@ -3396,18 +3299,12 @@ input {
   cursor: pointer;
 
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 
-  transition: 0.3s;
-}
+  padding: 0 25px;
 
-.search-btn:hover{
-  opacity: 0.95;
-}
-
-.search-btn:active{
-  transform: scale(0.98);
+  flex-shrink: 0;
 }
 
 /* 📱 MOBILE */
@@ -3415,7 +3312,7 @@ input {
 
   .search-box{
     max-width: 95%;
-    height: 50px;
+    height: 52px;
   }
 
   .search-box input{
@@ -3424,7 +3321,7 @@ input {
   }
 
   .search-btn{
-    width: 100px;
+    min-width: 100px;
     font-size: 14px;
   }
 
