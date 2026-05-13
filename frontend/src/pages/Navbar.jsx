@@ -128,12 +128,20 @@ function Navbar() {
   //   setCartCount(cart.length);
   // };
 
-  const updateCartCount = () => {
-  const cartItems =
-    JSON.parse(localStorage.getItem("cart")) || [];
+  // const updateCartCount = () => {
+  // const cartItems =
+  //   JSON.parse(localStorage.getItem("cart")) || [];
 
-  setCartCount(cartItems.length);
-  };
+  // setCartCount(cartItems.length);
+  // };
+
+  const updateCartCount = () => {
+
+  const count =
+    Number(localStorage.getItem("cartCount")) || 0;
+
+  setCartCount(count);
+};
 
   const logout = () => {
     navigate("/logout");
