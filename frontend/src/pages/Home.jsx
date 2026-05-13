@@ -332,7 +332,30 @@ function Home() {
           </div> */}
 
           {/* 🔍 SEARCH BOX */}
- <div className="search-box">
+ {/* <div className="search-box">
+
+  <input
+    type="text"
+    placeholder="Search for food... 🔍"
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+    onKeyDown={(e) => {
+      if (e.key === "Enter") {
+        navigate("/menu");
+      }
+    }}
+  />
+
+  <button
+    className="search-btn"
+    onClick={() => navigate("/menu")}
+  >
+    Search
+  </button>
+
+ </div> */}
+
+  <div className="search-box">
 
   <input
     type="text"
@@ -354,6 +377,7 @@ function Home() {
   </button>
 
  </div>
+
 
           <button
             className="order-btn"
