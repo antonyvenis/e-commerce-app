@@ -3313,3 +3313,7 @@ input {
   cursor: pointer;
   flex-shrink: 0;
 }
+
+body.dark .product-name {
+  color: white;
+}

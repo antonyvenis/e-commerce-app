@@ -185,12 +185,6 @@ CSRF_TRUSTED_ORIGINS = [
 
 CORS_ALLOW_CREDENTIALS = True
 
-# cloudinary.config(
-#     cloud_name = "dlrdich6b",
-#     api_key = "557433242649128",
-#     api_secret = "Xh49r0aZErVNkvqClzUwZqZ_9mQ"
-# )
-
 cloudinary.config(
     cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
     api_key=os.getenv("CLOUDINARY_API_KEY"),
