@@ -1447,27 +1447,57 @@ from django.contrib.auth import get_user_model
 
 
 
+# # ================================
+# # 📧 SEND OTP
+# # ================================
+# def send_email_otp(email, otp):
+#     try:
+#         message = Mail(
+#             from_email='antonyvenis1212@gmail.com',
+#             to_emails=email,
+#             subject='Your OTP Code',
+#             html_content=f"""
+#             <h1>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡ Register🎉</h1>
+#             <p>Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is:</p>
+#             <h1>{otp}</h1>
+#             <p>Do not share this OTP with anyone ❌</p>
+#             """
+#         )
+#         sg = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
+#         sg.send(message)
+#     except Exception as e:
+#         print("EMAIL ERROR 👉", str(e))
+
 # ================================
-# 📧 SEND OTP
+# 📧 SEND OTP (BREVO SMTP)
 # ================================
+from django.core.mail import EmailMessage
+
 def send_email_otp(email, otp):
     try:
-        message = Mail(
-            from_email='antonyvenis1212@gmail.com',
-            to_emails=email,
-            subject='Your OTP Code',
-            html_content=f"""
+        subject = "Your OTP Code"
+
+        html_content = f"""
             <h1>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡ Register🎉</h1>
             <p>Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is:</p>
             <h1>{otp}</h1>
             <p>Do not share this OTP with anyone ❌</p>
-            """
+        """
+
+        msg = EmailMessage(
+            subject,
+            html_content,
+            "antonyvenis1212@gmail.com",   # Brevo verified sender email
+            [email]
         )
-        sg = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
-        sg.send(message)
+
+        msg.content_subtype = "html"  # IMPORTANT for HTML email
+        msg.send(fail_silently=False)
+
+        print("OTP EMAIL SENT ✅")
+
     except Exception as e:
         print("EMAIL ERROR 👉", str(e))
-
 
 @api_view(['POST'])
 def send_otp(request):
@@ -1520,27 +1550,62 @@ def send_otp(request):
     return Response({"message": "OTP sent 📧"})
 
 
+# # ================================
+# # 📧 WELCOME EMAIL
+# # ================================
+# def send_welcome_email(email, username):
+#     try:
+#         message = Mail(
+#             from_email='antonyvenis1212@gmail.com',
+#             to_emails=email,
+#             subject='Welcome 🎉',
+#             html_content=f"""
+#                 <h1>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡</h1>
+#                 <h2>Welcome {username} 🎉</h2>
+#                 <p>Your account has been created successfully 🚀</p>
+#                 <p>Start exploring now 😍</p>
+#                 <p>Thank You ❤️</p>
+#                 <a href="https://e-commerce-app-food.vercel.app/" target="_blank">Visit Again 🚀</a>
+#             """
+#         )
+#         sg = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
+#         response = sg.send(message)
+#         print("WELCOME EMAIL STATUS 👉", response.status_code)
+#     except Exception as e:
+#         print("WELCOME EMAIL ERROR 👉", str(e))
+
 # ================================
-# 📧 WELCOME EMAIL
+# 📧 WELCOME EMAIL (BREVO SMTP)
 # ================================
+from django.core.mail import EmailMessage
+
 def send_welcome_email(email, username):
     try:
-        message = Mail(
-            from_email='antonyvenis1212@gmail.com',
-            to_emails=email,
-            subject='Welcome 🎉',
-            html_content=f"""
-                <h1>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡</h1>
-                <h2>Welcome {username} 🎉</h2>
-                <p>Your account has been created successfully 🚀</p>
-                <p>Start exploring now 😍</p>
-                <p>Thank You ❤️</p>
-                <a href="https://e-commerce-app-food.vercel.app/" target="_blank">Visit Again 🚀</a>
-            """
+        subject = "Welcome 🎉"
+
+        html_content = f"""
+            <h1>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡</h1>
+            <h2>Welcome {username} 🎉</h2>
+            <p>Your account has been created successfully 🚀</p>
+            <p>Start exploring now 😍</p>
+            <p>Thank You ❤️</p>
+            <a href="https://e-commerce-app-food.vercel.app/" target="_blank">
+                Visit Again 🚀
+            </a>
+        """
+
+        msg = EmailMessage(
+            subject,
+            html_content,
+            "antonyvenis1212@gmail.com",   # FROM EMAIL (Brevo verified email)
+            [email]
         )
-        sg = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
-        response = sg.send(message)
-        print("WELCOME EMAIL STATUS 👉", response.status_code)
+
+        msg.content_subtype = "html"  # IMPORTANT (HTML email)
+        msg.send(fail_silently=False)
+
+        print("WELCOME EMAIL SENT ✅")
+
     except Exception as e:
         print("WELCOME EMAIL ERROR 👉", str(e))
 
@@ -1654,28 +1719,59 @@ def verify_otp(request):
     return Response({"message": "OTP verified ✅"})
 
 
+# # ================================
+# # 🔁 FORGOT PASSWORD SEND OTP
+# # ================================
+# def send_forgot_email_otp(email, otp):
+#     try:
+#         message = Mail(
+#             from_email='antonyvenis1212@gmail.com',
+#             to_emails=email,
+#             subject='Reset Password OTP 🔐',
+#             html_content=f"""
+#                 <h2>Password Reset 🔐</h2>
+#                 <p>Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is:</p>
+#                 <h1>{otp}</h1>
+#                 <p>Do not share this OTP with anyone ❌</p>
+#             """
+#         )
+#         sg = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
+#         response = sg.send(message)
+#         print("FORGOT OTP STATUS 👉", response.status_code)
+#     except Exception as e:
+#         print("FORGOT OTP ERROR 👉", str(e))
+
 # ================================
-# 🔁 FORGOT PASSWORD SEND OTP
+# 🔁 FORGOT PASSWORD SEND OTP (BREVO SMTP)
 # ================================
+from django.core.mail import EmailMessage
+
 def send_forgot_email_otp(email, otp):
     try:
-        message = Mail(
-            from_email='antonyvenis1212@gmail.com',
-            to_emails=email,
-            subject='Reset Password OTP 🔐',
-            html_content=f"""
-                <h2>Password Reset 🔐</h2>
-                <p>Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is:</p>
-                <h1>{otp}</h1>
-                <p>Do not share this OTP with anyone ❌</p>
-            """
+        subject = "Reset Password OTP 🔐"
+
+        html_content = f"""
+            <h2>Password Reset 🔐</h2>
+            <p>Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is:</p>
+            <h1>{otp}</h1>
+            <p>Do not share this OTP with anyone ❌</p>
+        """
+
+        msg = EmailMessage(
+            subject,
+            html_content,
+            "antonyvenis1212@gmail.com",   # Brevo verified sender
+            [email]
         )
-        sg = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
-        response = sg.send(message)
-        print("FORGOT OTP STATUS 👉", response.status_code)
+
+        msg.content_subtype = "html"
+        msg.send(fail_silently=False)
+
+        print("FORGOT OTP SENT ✅")
+
     except Exception as e:
         print("FORGOT OTP ERROR 👉", str(e))
-
+        
 
 @api_view(['POST'])
 def forgot_password_send_otp(request):
