@@ -1471,8 +1471,6 @@ from django.contrib.auth import get_user_model
 # ================================
 # 📧 SEND OTP (BREVO SMTP)
 # ================================
-from django.core.mail import EmailMessage
-
 def send_email_otp(email, otp):
     try:
         subject = "Your OTP Code"
@@ -1577,8 +1575,6 @@ def send_otp(request):
 # ================================
 # 📧 WELCOME EMAIL (BREVO SMTP)
 # ================================
-from django.core.mail import EmailMessage
-
 def send_welcome_email(email, username):
     try:
         subject = "Welcome 🎉"
@@ -1744,8 +1740,6 @@ def verify_otp(request):
 # ================================
 # 🔁 FORGOT PASSWORD SEND OTP (BREVO SMTP)
 # ================================
-from django.core.mail import EmailMessage
-
 def send_forgot_email_otp(email, otp):
     try:
         subject = "Reset Password OTP 🔐"

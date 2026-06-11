@@ -14,6 +14,7 @@ import os
 from pathlib import Path
 import cloudinary
 from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-$-+eshy1pt-ooasa%e_ln9*rnzbt2nji0w6s7_%)n^)a%q%z7_'
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -31,7 +32,9 @@ DEBUG = False
 # ALLOWED_HOSTS = ['*']
 
 ALLOWED_HOSTS = [
-    "e-commerce-app-8jg4.onrender.com"
+    "e-commerce-app-8jg4.onrender.com",
+    "localhost",
+    "127.0.0.1"
 ]
 
 
@@ -82,35 +85,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'backend.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'food_db',
-#         'USER': 'postgres',
-#         'PASSWORD': 'Venisking@419',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
-
-# DATABASE_URL = os.environ.get("DATABASE_URL")
-
-# if DATABASE_URL:
-#     DATABASES = {
-#         "default": dj_database_url.parse(DATABASE_URL)
-#     }
-# else:
-#     DATABASES = {
-#         "default": {
-#             "ENGINE": "django.db.backends.sqlite3",
-#             "NAME": str(BASE_DIR / "db.sqlite3"),  # 🔥 முக்கியம்
-#         }
-#     }
 
 
 DATABASE_URL = os.environ.get("DATABASE_URL")
@@ -173,8 +147,6 @@ CORS_ALLOWED_ORIGINS = [
     "https://e-commerce-app-food.vercel.app",
 ]
 
-DEFAULT_FROM_EMAIL = "antonyvenis1212@gmail.com"
-
 # SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
 
 
@@ -188,11 +160,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 #Session settings
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_COOKIE_AGE = 300  # 5 minutes
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 7  # 7 days
+# SESSION_COOKIE_AGE = 300  # 5 minutes
 # SESSION_COOKIE_AGE = 0  # Session expires immediately when the browser is closed
 SESSION_SAVE_EVERY_REQUEST = True
-
-CORS_ALLOW_CREDENTIALS = True
 
 CSRF_TRUSTED_ORIGINS = [
     "https://e-commerce-app-food.vercel.app"
@@ -205,9 +176,6 @@ cloudinary.config(
     api_key=os.getenv("CLOUDINARY_API_KEY"),
     api_secret=os.getenv("CLOUDINARY_API_SECRET")
 )
-
-
-load_dotenv()
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
