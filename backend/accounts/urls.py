@@ -210,5 +210,5 @@ urlpatterns = [
     path('invoice/<int:order_id>/', generate_invoice, name='invoice'),  # ✅
     path("products/", get_products),
     path("load-products/", load_products),
-    path("add-products/", add_products_bulk),
+    path("add-products-bulk/", add_products_bulk),
 ]
