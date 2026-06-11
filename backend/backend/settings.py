@@ -175,7 +175,7 @@ CORS_ALLOWED_ORIGINS = [
 
 DEFAULT_FROM_EMAIL = "antonyvenis1212@gmail.com"
 
-SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
+# SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
 
 
 ADMIN_SITE_HEADER = "🔥 Antony Admin Panel"
