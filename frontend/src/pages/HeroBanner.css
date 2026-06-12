@@ -1,5 +1,5 @@
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0A0A0F;font-family:'Inter',sans-serif;} 
+body{font-family:'Inter',sans-serif;} 
  
 .hero{
   background:#0A0A0F;
@@ -95,7 +95,7 @@ body{background:#0A0A0F;font-family:'Inter',sans-serif;}
 .stat-num{
   font-family:'Syne',sans-serif;
   font-size:24px;font-weight:700;
-  color:#fff;
+  color: green;
 }
 .stat-label{font-size:11px;color:rgba(255,255,255,0.3);letter-spacing:0.06em;text-transform:uppercase;}
  

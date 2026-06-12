@@ -5,8 +5,6 @@ import HeroBanner from "./HeroBanner";
 function About() {
   return (
     <>
-    <HeroBanner />
-
     <div className="about premium-bg">
 
       <motion.h1
@@ -45,6 +43,8 @@ function About() {
       <div> {<Contact />} </div>
 
     </div>
+
+    <HeroBanner />
     </>
   );
 }
