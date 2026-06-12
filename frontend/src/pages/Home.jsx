@@ -171,6 +171,7 @@ import About from "./About";
 import { motion } from "framer-motion";
 import axios from "axios";
 import Footer from "./Footer";
+import HeroBanner from "./HeroBanner";
 
 function Home() {
   const navigate = useNavigate();
@@ -458,6 +459,7 @@ function Home() {
       <div><p>Visit Again ❤️👇🏻</p></div>
 
       <About />
+      <HeroBanner />
       <Footer />
 
     </motion.div>

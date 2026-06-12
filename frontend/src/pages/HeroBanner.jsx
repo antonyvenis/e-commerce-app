@@ -78,7 +78,7 @@ function HeroBanner() {
 
         {/* RIGHT */}
         <div className="right">
-          <div className="card main-card">
+          <div className="herobanner-card main-card">
             <span className="popular-badge">⭐ Popular</span>
 
             <span className="food-emoji">🍗</span>
@@ -105,7 +105,7 @@ function HeroBanner() {
             </div>
 
             <div className="card-footer">
-              <span className="price">₹249</span>
+              <span className="hero-price">₹249</span>
 
               <button className="add-btn">
                 + Add to cart
@@ -134,7 +134,7 @@ function HeroBanner() {
               </div>
             </div>
 
-            <div className="order-card">
+            <div className="hero-order-card">
               <span className="order-icon">🛵</span>
 
               <div className="order-title">
