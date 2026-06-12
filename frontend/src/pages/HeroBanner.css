@@ -1,5 +1,5 @@
-/* *{margin:0;padding:0;box-sizing:border-box} */
-body{font-family:'Inter',sans-serif;} 
+/* *{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;}  
  
 .hero-banner{
   background:#0A0A0F;
@@ -147,10 +147,10 @@ body{font-family:'Inter',sans-serif;}
   transition:background 0.2s,border-color 0.2s;
   font-family:'Inter',sans-serif;
 }
-.btn-secondary:hover{background:rgba(255,255,255,0.09);border-color:rgba(255,255,255,0.2);}
+.btn-secondary:hover{background:rgba(255,255,255,0.09);border-color:rgba(255,255,255,0.2);} */
  
 /* RIGHT SIDE CARDS */
-.right{
+/* .right{
   flex-shrink:0;
   display:flex;
   flex-direction:column;
@@ -246,7 +246,7 @@ body{font-family:'Inter',sans-serif;}
 }
 @keyframes prog{0%{width:45%}100%{width:78%}}
  
-/* BOTTOM BAR */
+
 .bottom-bar{
   position:absolute;
   bottom:0;left:0;right:0;
@@ -265,4 +265,4 @@ body{font-family:'Inter',sans-serif;}
 @media(max-width:760px){
   .right{display:none;}
   .hero-banner{padding:40px 28px 72px;}
-}
+} */
