@@ -186,7 +186,7 @@ body{font-family:'Inter',sans-serif;}
   color:rgba(255,255,255,0.38);
 }
  
-.card-footer{display:flex;align-items:center;justify-content:space-between;}
+/* .card-footer{display:flex;align-items:center;justify-content:space-between;} */
 .hero-price{font-size:18px;font-weight:700;color:#FFB800;font-family:'Syne',sans-serif;}
 .add-btn{
   background:linear-gradient(135deg,#FF4500,#FF6B35);
@@ -264,5 +264,5 @@ body{font-family:'Inter',sans-serif;}
  
 @media(max-width:760px){
   .right{display:none;}
-  .hero{padding:40px 28px 72px;}
+  .hero-banner{padding:40px 28px 72px;}
 }
