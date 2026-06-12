@@ -65,7 +65,7 @@ function Navbar() {
 
         <h2>
           <Link to="/herobanner" id="Link-text">
-            ⚡<span className="App-Name">𝓛𝓮𝓰𝓮𝓷𝓭</span><sup>💫</sup>⚡
+            ⚡<span className="App-Name">𝓛𝓮𝓰𝓮𝓷𝓭</span>⚡
           </Link>
         </h2>
 
