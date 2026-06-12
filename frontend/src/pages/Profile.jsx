@@ -221,6 +221,8 @@ function Profile() {
             <Link to="/about" id="Link-text">Aboutℹ️</Link>
           </button>
 
+          <button><Link to="/herobanner" id="Link-text">⚡👑⚡</Link></button>
+
           {/* 📊 Stats */}
           <div className="stats">
             <div>

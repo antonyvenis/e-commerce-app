@@ -9,6 +9,7 @@ function HeroBanner() {
       <div className="grid-lines"></div>
 
       <div className="content">
+        {/* LEFT */}
         <div className="left">
           <div className="eyebrow">
             <span className="eyebrow-dot"></span>
@@ -36,29 +37,137 @@ function HeroBanner() {
 
             <div className="stat">
               <span className="stat-num">30 min</span>
-              <span className="stat-label">Delivery</span>
+              <span className="stat-label">Avg Delivery</span>
             </div>
+
+            <div className="stat">
+              <span className="stat-num">4.9★</span>
+              <span className="stat-label">App Rating</span>
+            </div>
+          </div>
+
+          <div className="stack-row">
+            <span className="stack-tag hot">React</span>
+            <span className="stack-tag hot">Django</span>
+            <span className="stack-tag">JWT Auth</span>
+            <span className="stack-tag">PostgreSQL</span>
+            <span className="stack-tag">Tailwind CSS</span>
+            <span className="stack-tag">Vercel</span>
           </div>
 
           <div className="cta-row">
             <a
-              href="https://e-commerce-app-food.vercel.app/profile"
+              href="https://e-commerce-app-food.vercel.app/"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="btn-primary"
             >
-              Live Demo
+              ▶ Live Demo
             </a>
 
             <a
               href="https://github.com/antonyvenis"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="btn-secondary"
             >
-              GitHub
+              ⌥ View on GitHub
             </a>
           </div>
+        </div>
+
+        {/* RIGHT */}
+        <div className="right">
+          <div className="card main-card">
+            <span className="popular-badge">⭐ Popular</span>
+
+            <span className="food-emoji">🍗</span>
+
+            <div className="food-name">
+              Crispy Fried Chicken
+            </div>
+
+            <div className="food-rest">
+              ChennaiKFC · 2.1 km away
+            </div>
+
+            <div className="rating-row">
+              <span className="stars">★★★★★</span>
+              <span className="rating-num">
+                4.8 (320 ratings)
+              </span>
+            </div>
+
+            <div className="tags">
+              <span className="tag">Spicy</span>
+              <span className="tag">Bestseller</span>
+              <span className="tag">Non-veg</span>
+            </div>
+
+            <div className="card-footer">
+              <span className="price">₹249</span>
+
+              <button className="add-btn">
+                + Add to cart
+              </button>
+            </div>
+          </div>
+
+          <div className="row-cards">
+            <div className="mini-card">
+              <span className="mini-emoji">🍕</span>
+              <div className="mini-name">
+                Pepperoni Pizza
+              </div>
+              <div className="mini-price">
+                ₹349
+              </div>
+            </div>
+
+            <div className="mini-card">
+              <span className="mini-emoji">🍔</span>
+              <div className="mini-name">
+                Smash Burger
+              </div>
+              <div className="mini-price">
+                ₹199
+              </div>
+            </div>
+
+            <div className="order-card">
+              <span className="order-icon">🛵</span>
+
+              <div className="order-title">
+                Order on the way!
+              </div>
+
+              <div className="order-sub">
+                ETA: 12 min
+              </div>
+
+              <div className="progress-bar">
+                <div className="progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Bar */}
+      <div className="bottom-bar">
+        <div className="bottom-item">
+          <span className="bottom-dot"></span>
+          Built with React + Django
+        </div>
+
+        <div className="bottom-item">
+          <span className="bottom-dot"></span>
+          Deployed on Vercel + Render
+        </div>
+
+        <div className="bottom-item">
+          <span className="bottom-dot"></span>
+          by Antony Venis T
         </div>
       </div>
     </div>
@@ -66,4 +175,3 @@ function HeroBanner() {
 }
 
 export default HeroBanner;
-

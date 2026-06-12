@@ -4,9 +4,10 @@ import HeroBanner from "./HeroBanner";
 
 function About() {
   return (
-    <div className="about premium-bg">
+    <>
+    <HeroBanner />
 
-      <HeroBanner />
+    <div className="about premium-bg">
 
       <motion.h1
         initial={{ opacity: 0, y: -50 }}
@@ -44,6 +45,7 @@ function About() {
       <div> {<Contact />} </div>
 
     </div>
+    </>
   );
 }
 
