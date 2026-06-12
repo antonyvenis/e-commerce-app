@@ -95,9 +95,9 @@ body{font-family:'Inter',sans-serif;}
 .stat-num{
   font-family:'Syne',sans-serif;
   font-size:24px;font-weight:700;
-  color: green;
+  color: #FFB800;
 }
-.stat-label{font-size:11px;color:rgba(255,255,255,0.3);letter-spacing:0.06em;text-transform:uppercase;}
+.stat-label{font-size:11px;color:green;letter-spacing:0.06em;text-transform:uppercase;}
  
 .stack-row{
   display:flex;align-items:center;gap:8px;
