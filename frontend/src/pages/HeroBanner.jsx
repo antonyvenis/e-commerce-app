@@ -26,7 +26,7 @@ function HeroBanner() {
             Fast delivery. Real flavours. One platform.
           </p>
 
-          <div className="stats">
+          <div className="herobanner-stats">
             <div className="stat">
               <span className="stat-num">50+</span>
               <span className="stat-label">Restaurants</span>
