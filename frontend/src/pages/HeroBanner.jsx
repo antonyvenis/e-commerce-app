@@ -2,7 +2,7 @@ import "./HeroBanner.css";
 
 function HeroBanner() {
   return (
-    <div className="hero">
+    <div className="hero-banner">
       <div className="bg-glow glow1"></div>
       <div className="bg-glow glow2"></div>
       <div className="bg-glow glow3"></div>
