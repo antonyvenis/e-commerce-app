@@ -1,4 +1,4 @@
-*{margin:0;padding:0;box-sizing:border-box}
+/* *{margin:0;padding:0;box-sizing:border-box} */
 body{font-family:'Inter',sans-serif;} 
  
 .hero-banner{
@@ -186,9 +186,9 @@ body{font-family:'Inter',sans-serif;}
   color:rgba(255,255,255,0.38);
 }
  
-/* .card-footer{display:flex;align-items:center;justify-content:space-between;} */
+.card-footer{display:flex;align-items:center;justify-content:space-between;}
 .hero-price{font-size:18px;font-weight:700;color:#FFB800;font-family:'Syne',sans-serif;}
-.add-btn{
+.herobanner-add-btn{
   background:linear-gradient(135deg,#FF4500,#FF6B35);
   color:#fff;border:none;
   font-size:11px;font-weight:600;
