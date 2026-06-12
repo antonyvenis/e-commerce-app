@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 
 function HeroBanner() {
   return (
-    <div className="hero-banner">
+    <div className="hero-banner-page-top">
+    <div className="hero-banner-page">
       <div className="bg-glow glow1"></div>
       <div className="bg-glow glow2"></div>
       <div className="bg-glow glow3"></div>
@@ -169,6 +170,7 @@ function HeroBanner() {
           by Antony Venis T
         </div>
       </div>
+    </div>
     </div>
   );
 }
