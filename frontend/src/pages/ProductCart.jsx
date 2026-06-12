@@ -597,3 +597,4 @@ const handleBuyNow = async () => {
 }
 
 export default memo(ProductCard);
+
