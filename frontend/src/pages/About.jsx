@@ -1,9 +1,12 @@
 import { motion } from "framer-motion";
 import Contact from "./Contact";
+import HeroBanner from "./HeroBanner";
 
 function About() {
   return (
     <div className="about premium-bg">
+
+      <HeroBanner />
 
       <motion.h1
         initial={{ opacity: 0, y: -50 }}

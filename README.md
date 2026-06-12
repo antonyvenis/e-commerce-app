@@ -16,25 +16,363 @@
 
 ## 🖼️ Hero Banner
 
-<p align="center">
-  <a href="https://e-commerce-app-food.vercel.app/profile">
-    <img src="./assets/hero.png" alt="⚡Legend💫 — Multi-vendor Food Delivery App" width="90%"/>
-  </a>
-</p>
+<style>
+.hero-banner-body * {
+  margin: 0; padding: 0; box-sizing: border-box;
+}
+.hero-banner-body {
+  background: #0A0A0F;
+  font-family: 'Inter', sans-serif;
+}
+.hero-banner-body .hero {
+  background: #0A0A0F;
+  min-height: 560px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding: 56px 56px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.hero-banner-body .bg-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  pointer-events: none;
+}
+.hero-banner-body .glow1 { background: rgba(255, 69, 0, 0.2); width: 500px; height: 500px; top: -120px; left: -80px; }
+.hero-banner-body .glow2 { background: rgba(255, 184, 0, 0.1); width: 380px; height: 380px; bottom: -80px; right: 60px; }
+.hero-banner-body .glow3 { background: rgba(255, 69, 0, 0.07); width: 240px; height: 240px; top: 50%; right: 28%; transform: translateY(-50%); }
+.hero-banner-body .grid-lines {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 52px 52px;
+  pointer-events: none;
+}
+.hero-banner-body .content {
+  position: relative; z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 40px;
+}
+.hero-banner-body .left { flex: 1; max-width: 540px; }
+.hero-banner-body .eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255, 69, 0, 0.12);
+  border: 1px solid rgba(255, 69, 0, 0.28);
+  border-radius: 100px;
+  padding: 6px 16px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #FF6B35;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 22px;
+}
+.hero-banner-body .eyebrow-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #FF4500;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1) } 50% { opacity: 0.4; transform: scale(0.75) } }
+.hero-banner-body .brand {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(40px, 5.5vw, 64px);
+  font-weight: 800;
+  line-height: 1.05;
+  margin-bottom: 18px;
+  background: linear-gradient(135deg, #FFFFFF 0%, #FFD166 35%, #FF4500 65%, #FF6B35 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 220% auto;
+  animation: shimmer 4.5s linear infinite;
+}
+@keyframes shimmer { 0% { background-position: 0% center } 100% { background-position: 220% center } }
+.hero-banner-body .tagline {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.7;
+  margin-bottom: 32px;
+  max-width: 400px;
+}
+.hero-banner-body .tagline span { color: rgba(255, 184, 0, 0.9); font-weight: 600; }
+.hero-banner-body .stats {
+  display: flex; gap: 32px; margin-bottom: 36px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.hero-banner-body .stat { display: flex; flex-direction: column; gap: 3px; }
+.hero-banner-body .stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 24px; font-weight: 700;
+  color: #fff;
+}
+.hero-banner-body .stat-label { font-size: 11px; color: rgba(255, 255, 255, 0.3); letter-spacing: 0.06em; text-transform: uppercase; }
+.hero-banner-body .stack-row {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 28px; flex-wrap: wrap;
+}
+.hero-banner-body .stack-tag {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 11px; font-weight: 500;
+  padding: 4px 10px; border-radius: 100px;
+}
+.hero-banner-body .stack-tag.hot {
+  background: rgba(255, 69, 0, 0.1);
+  border-color: rgba(255, 69, 0, 0.2);
+  color: #FF6B35;
+}
+.hero-banner-body .cta-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.hero-banner-body .btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: linear-gradient(135deg, #FF4500, #FF6B35);
+  color: #fff !important;
+  border: none;
+  padding: 13px 26px;
+  border-radius: 10px;
+  font-size: 14px; font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 24px rgba(255, 69, 0, 0.38);
+  font-family: 'Inter', sans-serif;
+}
+.hero-banner-body .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(255, 69, 0, 0.52); }
+.hero-banner-body .btn-secondary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.7) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 13px 22px;
+  border-radius: 10px;
+  font-size: 14px; font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s;
+  font-family: 'Inter', sans-serif;
+}
+.hero-banner-body .btn-secondary:hover { background: rgba(255, 255, 255, 0.09); border-color: rgba(255, 255, 255, 0.2); }
+.hero-banner-body .right {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: flex-end;
+}
+.hero-banner-body .card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 18px;
+  padding: 18px;
+  backdrop-filter: blur(16px);
+  position: relative;
+}
+.hero-banner-body .main-card { width: 250px; }
+.hero-banner-body .food-emoji { font-size: 38px; margin-bottom: 12px; display: block; line-height: 1; }
+.hero-banner-body .food-name { font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 3px; }
+.hero-banner-body .food-rest { font-size: 11px; color: rgba(255, 255, 255, 0.3); margin-bottom: 10px; }
+.hero-banner-body .rating-row { display: flex; align-items: center; gap: 5px; margin-bottom: 10px; }
+.hero-banner-body .stars { color: #FFB800; font-size: 12px; letter-spacing: 1px; }
+.hero-banner-body .rating-num { font-size: 11px; color: rgba(255, 255, 255, 0.35); }
+.hero-banner-body .tags { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 14px; }
+.hero-banner-body .tag {
+  font-size: 10px; font-weight: 500;
+  padding: 3px 9px; border-radius: 100px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.38);
+}
+.hero-banner-body .card-footer { display: flex; align-items: center; justify-content: space-between; }
+.hero-banner-body .price { font-size: 18px; font-weight: 700; color: #FFB800; font-family: 'Syne', sans-serif; }
+.hero-banner-body .add-btn {
+  background: linear-gradient(135deg, #FF4500, #FF6B35);
+  color: #fff; border: none;
+  font-size: 11px; font-weight: 600;
+  padding: 6px 12px; border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+}
+.hero-banner-body .popular-badge {
+  position: absolute; top: 14px; right: 14px;
+  background: rgba(255, 184, 0, 0.15);
+  border: 1px solid rgba(255, 184, 0, 0.25);
+  color: #FFB800;
+  font-size: 10px; font-weight: 600;
+  padding: 3px 9px; border-radius: 100px;
+  letter-spacing: 0.04em;
+}
+.hero-banner-body .row-cards { display: flex; gap: 12px; }
+.hero-banner-body .mini-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 14px;
+  padding: 14px;
+  width: 116px;
+}
+.hero-banner-body .mini-emoji { font-size: 26px; margin-bottom: 8px; display: block; }
+.hero-banner-body .mini-name { font-size: 11px; font-weight: 600; color: rgba(255, 255, 255, 0.8); margin-bottom: 4px; }
+.hero-banner-body .mini-price { font-size: 13px; font-weight: 700; color: #FFB800; font-family: 'Syne', sans-serif; }
+.hero-banner-body .order-card {
+  background: rgba(255, 184, 0, 0.05);
+  border: 1px solid rgba(255, 184, 0, 0.12);
+  border-radius: 14px;
+  padding: 14px 16px;
+  width: 116px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.hero-banner-body .order-icon { font-size: 22px; }
+.hero-banner-body .order-title { font-size: 11px; font-weight: 600; color: rgba(255, 255, 255, 0.75); }
+.hero-banner-body .order-sub { font-size: 10px; color: rgba(255, 255, 255, 0.28); }
+.hero-banner-body .progress-bar {
+  height: 3px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 2px;
+}
+.hero-banner-body .progress-fill {
+  height: 100%; width: 65%;
+  background: linear-gradient(90deg, #FF4500, #FFB800);
+  border-radius: 10px;
+  animation: prog 3s ease-in-out infinite alternate;
+}
+@keyframes prog { 0% { width: 45% } 100% { width: 78% } }
+.hero-banner-body .bottom-bar {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(255, 255, 255, 0.03);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 12px 56px;
+  display: flex; align-items: center; gap: 32px;
+  z-index: 3;
+}
+.hero-banner-body .bottom-item {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; color: rgba(255, 255, 255, 0.3);
+}
+.hero-banner-body .bottom-dot { width: 5px; height: 5px; border-radius: 50%; background: #FF4500; }
+@media (max-width: 760px) {
+  .hero-banner-body .right { display: none; }
+  .hero-banner-body .hero { padding: 40px 28px 72px; }
+}
+</style>
 
-<p align="center">
-  <a href="https://e-commerce-app-food.vercel.app/profile">
-    <img src="https://img.shields.io/badge/🌐 Live Demo-Click Here-FF4500?style=for-the-badge" alt="Live Demo"/>
-  </a>
-  &nbsp;
-  <img src="https://img.shields.io/badge/React-Vite-61DAFB?style=for-the-badge&logo=react" alt="React"/>
-  &nbsp;
-  <img src="https://img.shields.io/badge/Backend-Django-092E20?style=for-the-badge&logo=django" alt="Django"/>
-  &nbsp;
-  <img src="https://img.shields.io/badge/DB-PostgreSQL-316192?style=for-the-badge&logo=postgresql" alt="PostgreSQL"/>
-</p>
+<div class="hero-banner-body">
+  <div class="hero">
+    <div class="bg-glow glow1"></div>
+    <div class="bg-glow glow2"></div>
+    <div class="bg-glow glow3"></div>
+    <div class="grid-lines"></div>
 
-> 🍗 Order from the **best restaurants** around you — Fast delivery. Real flavours. One platform.
+    <div class="content">
+      <!-- LEFT -->
+      <div class="left">
+        <div class="eyebrow">
+          <span class="eyebrow-dot"></span>
+          Multi-vendor food delivery platform
+        </div>
+        <div class="brand">⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡</div>
+        <p class="tagline">
+          Order from the <span>best restaurants</span> around you.<br>
+          Fast delivery. Real flavours. One platform.
+        </p>
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-num">50+</span>
+            <span class="stat-label">Restaurants</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num">200+</span>
+            <span class="stat-label">Menu items</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num">30 min</span>
+            <span class="stat-label">Avg delivery</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num">4.9★</span>
+            <span class="stat-label">App rating</span>
+          </div>
+        </div>
+        <div class="stack-row">
+          <span class="stack-tag hot">React</span>
+          <span class="stack-tag hot">Django</span>
+          <span class="stack-tag">JWT Auth</span>
+          <span class="stack-tag">PostgreSQL</span>
+          <span class="stack-tag">Tailwind CSS</span>
+          <span class="stack-tag">Vercel</span>
+        </div>
+        <div class="cta-row">
+          <a href="https://e-commerce-app-food.vercel.app/profile" class="btn-primary">
+            ▶ &nbsp;Live Demo
+          </a>
+          <a href="https://github.com/antonyvenis" class="btn-secondary">
+            ⌥ &nbsp;View on GitHub
+          </a>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="right">
+        <div class="card main-card">
+          <span class="popular-badge">⭐ Popular</span>
+          <span class="food-emoji">🍗</span>
+          <div class="food-name">Crispy Fried Chicken</div>
+          <div class="food-rest">ChennaiKFC · 2.1 km away</div>
+          <div class="rating-row">
+            <span class="stars">★★★★★</span>
+            <span class="rating-num">4.8 (320 ratings)</span>
+          </div>
+          <div class="tags">
+            <span class="tag">Spicy</span>
+            <span class="tag">Bestseller</span>
+            <span class="tag">Non-veg</span>
+          </div>
+          <div class="card-footer">
+            <span class="price">₹249</span>
+            <button class="add-btn">+ Add to cart</button>
+          </div>
+        </div>
+        <div class="row-cards">
+          <div class="mini-card">
+            <span class="mini-emoji">🍕</span>
+            <div class="mini-name">Pepperoni Pizza</div>
+            <div class="mini-price">₹349</div>
+          </div>
+          <div class="mini-card">
+            <span class="mini-emoji">🍔</span>
+            <div class="mini-name">Smash Burger</div>
+            <div class="mini-price">₹199</div>
+          </div>
+          <div class="order-card">
+            <span class="order-icon">🛵</span>
+            <div class="order-title">Order on the way!</div>
+            <div class="order-sub">ETA: 12 min</div>
+            <div class="progress-bar">
+              <div class="progress-fill"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM BAR -->
+    <div class="bottom-bar">
+      <div class="bottom-item"><span class="bottom-dot"></span>Built with React + Django</div>
+      <div class="bottom-item"><span class="bottom-dot"></span>Deployed on Vercel + Render</div>
+      <div class="bottom-item"><span class="bottom-dot"></span>by Antony Venis T</div>
+    </div>
+  </div>
+</div>
 
 
 ---

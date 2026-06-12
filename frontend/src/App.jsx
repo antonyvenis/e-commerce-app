@@ -26,6 +26,7 @@ import AdminUpload from "./pages/AdminUpload";
 /* 🔥 NEW IMPORT */
 import ProductDetails from "./pages/ProductDetails";
 import Register from "./pages/Register";
+import HeroBanner from "./pages/HeroBanner";
 
 function App() {
   return (
@@ -66,6 +67,7 @@ function App() {
         <Route path="/otp" element={<OTP />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/upload" element={<AdminUpload />} />
+        <Route path="/herobanner" element={<HeroBanner />} />
       </Routes>
     </BrowserRouter>
   );
