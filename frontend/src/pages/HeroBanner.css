@@ -264,3 +264,22 @@
   .hero-banner-page{padding:40px 28px 72px;}
 } 
 
+/* Fix 1: Add box-sizing to prevent padding from causing overflow */
+.hero-banner-page {
+  background: #0A0A0F;
+  min-height: 560px;
+  width: 100%;
+  box-sizing: border-box;        /* ADD THIS */
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding: 56px 56px;
+}
+
+/* Fix 2: Wrapper also needs box-sizing */
+.hero-banner-page-top {
+  width: 100%;
+  box-sizing: border-box;        /* ADD THIS */
+  overflow: hidden;              /* ADD THIS */
+}
