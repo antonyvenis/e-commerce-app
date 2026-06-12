@@ -89,39 +89,76 @@ sequenceDiagram
     Backend-->>User: 200 OK (New Access Token)
 ```
 
+### 🔄 Order & Payment Lifecycle Flow
+```mermaid
+graph TD
+    A[🛒 Browse Products] --> B{Add to Cart?}
+    B -- Yes --> C[Update CartContext State]
+    B -- No --> A
+    C --> D[Go to Cart & Review]
+    D --> E{User Authenticated?}
+    E -- No --> F[Redirect to Login/Register]
+    F --> G[Verify OTP Code]
+    G --> E
+    E -- Yes --> H[Proceed to Checkout]
+    H --> I[Input Delivery Address & Contact]
+    I --> J[Submit Order: POST /api/order/]
+    J --> K[Backend Creates Order & Items in Pending State]
+    K --> L[Initiate Mock Payment Gateway]
+    L --> M{Payment Successful?}
+    M -- Yes --> N[Backend Updates Status to Preparing & Generates Invoice]
+    N --> O[Redirect to Success Page]
+    O --> P[Track Live Status Updates on Orders Page]
+    M -- No --> Q[Display Error & Retain Cart Items]
+    Q --> I
+```
+
 ---
 
 ## 📁 Folder Structure
 
 ```text
 legend-food-app/
-├─ .github/
-│   └─ workflows/
-│       └─ ci.yml             # GitHub Actions continuous integration pipeline
-├─ backend/
-│   ├─ manage.py              # Django CLI utility
-│   ├─ core/                  # Project configuration root (settings, urls, wsgi)
-│   ├─ apps/                  # Modular backend feature applications
-│   │   ├─ users/             # Authentication, registrations, and user profiles
-│   │   ├─ vendors/           # Multi-vendor restaurant management directories
-│   │   ├─ foods/             # Menu structures, category controls, and rating logic
-│   │   ├─ orders/            # Order states, invoice structures, and historical tracking
-│   │   └─ payments/          # Payment integrations and transaction ledgers
-│   ├─ Dockerfile             # Container configuration for backend services
-│   └─ requirements.txt       # Python dependencies manifest
-└─ frontend/
-    ├─ index.html             # Application entry document
-    ├─ src/
-    │   ├─ App.jsx            # Main view router and layout provider
-    │   ├─ main.jsx           # Client engine initialization point
-    │   ├─ routes/            # Dynamic route structures
-    │   ├─ components/        # Reusable user interface modules
-    │   └─ services/
-    │       └─ api.js         # Centralized Axios setup for API calls
-    ├─ tailwind.config.js     # Tailwind design utility mappings
-    ├─ vite.config.js         # Vite configuration settings
-    └─ package.json           # Frontend dependencies and executable scripts
+├─ backend/                      # Django REST backend application
+│  ├─ manage.py                  # Django CLI management utility
+│  ├─ db.sqlite3                 # Local SQLite database (development environment)
+│  ├─ requirements.txt           # Python backend dependencies
+│  ├─ runtime.txt                # Python runtime specification (for deployment)
+│  ├─ Procfile                   # Process file for web runner (Gunicorn)
+│  ├─ staticfiles/               # Collected static files directory
+│  ├─ backend/                   # Core Django configurations settings
+│  │  ├─ settings.py             # Global configurations & app registrations
+│  │  ├─ urls.py                 # Core routing configurations
+│  │  └─ wsgi.py / asgi.py       # WSGI/ASGI entrypoints
+│  └─ accounts/                  # Primary backend feature application
+│     ├─ models.py               # DB schemas (CustomUser, OTP, Like, CartItem, Order, OrderItem, Product)
+│     ├─ views.py                # Main request handlers & business logic
+│     ├─ urls.py                 # Route maps for endpoints under /api/
+│     ├─ serializers.py          # Data validation & serialization layers
+│     ├─ utils.py                # OTP helpers & invoice generation tools
+│     ├─ products.json           # Database seeding products data
+│     ├─ load_products.py        # Seed automation script
+│     └─ uploadProducts.js       # Node automation script
+└─ frontend/                     # React + Vite frontend application
+   ├─ index.html                 # HTML main entrypoint
+   ├─ package.json               # Frontend dependencies & npm script configurations
+   ├─ vercel.json                # Single page app routing configs for Vercel
+   └─ src/                       # Source directory
+      ├─ main.jsx                # Render mount entrypoint
+      ├─ App.jsx                 # Routes management & global states
+      ├─ App.css / index.css     # Global styles & layout properties
+      └─ pages/                  # Unified component views & state context
+         ├─ Home.jsx             # Dashboard & item display page
+         ├─ Menu.jsx / Food.jsx  # Restaurant lists and food display views
+         ├─ Cart.jsx             # Shopping cart panel
+         ├─ CartContext.jsx      # Global cart context state provider
+         ├─ Payment.jsx          # Stripe / Razorpay simulated checkout screen
+         ├─ Orders.jsx           # Order tracking list & dynamic statuses
+         ├─ Profile.jsx          # Profile details & update forms
+         ├─ Login.jsx / Register.jsx # Authentication views
+         └─ OTP.jsx              # OTP code confirmation page
 ```
+
 
 ---
 
