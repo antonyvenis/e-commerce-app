@@ -458,6 +458,7 @@ function Home() {
 
       <div><p>Visit Again ❤️👇🏻</p></div>
 
+      <HeroBanner />
       <About />
       <Footer />
 

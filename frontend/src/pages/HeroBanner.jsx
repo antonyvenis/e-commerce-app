@@ -1,4 +1,5 @@
 import "./HeroBanner.css";
+import { Link } from "react-router-dom";
 
 function HeroBanner() {
   return (
@@ -107,7 +108,7 @@ function HeroBanner() {
             <div className="card-footer">
               <span className="hero-price">₹249</span>
 
-              <button className="add-btn"><link to="/menu">+ Add to cart</link></button>
+              <button className="add-btn"><Link to="/menu">+ Add to cart</Link></button>
             </div>
           </div>
 
