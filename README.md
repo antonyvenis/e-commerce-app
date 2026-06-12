@@ -17,7 +17,7 @@
 ## 🖼️ Hero Banner
 
 <p align="center">
-  <img src="./assets/contact.png" alt="⚡Legend💫 Food Delivery App Banner" width="85%"/>
+  <img src="/assets/images/hero.png" alt="⚡Legend💫 Food Delivery App Banner" width="85%"/>
 </p>
 
 
