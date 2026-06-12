@@ -1,5 +1,7 @@
 # 🛍️ Modern E-Commerce Application
 
+⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡
+
 Welcome to the **React + Vite E-Commerce Application**. This repository contains a fully-featured client storefront coupled with an administrative panel and secure payment processing capabilities.
 
 ---
