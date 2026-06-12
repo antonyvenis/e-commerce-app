@@ -107,9 +107,7 @@ function HeroBanner() {
             <div className="card-footer">
               <span className="hero-price">₹249</span>
 
-              <button className="add-btn">
-                + Add to cart
-              </button>
+              <button className="add-btn"><link to="/menu">+ Add to cart</link></button>
             </div>
           </div>
 

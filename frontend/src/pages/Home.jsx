@@ -457,9 +457,8 @@ function Home() {
       </div> 
 
       <div><p>Visit Again ❤️👇🏻</p></div>
-
-      <About />
       <HeroBanner />
+      <About />
       <Footer />
 
     </motion.div>
