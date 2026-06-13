@@ -183,9 +183,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 EMAIL_HOST = 'smtp-relay.brevo.com'
 
-# EMAIL_PORT = 587
+EMAIL_PORT = 587
 
-# EMAIL_USE_TLS = True
+EMAIL_USE_TLS = True
 
 EMAIL_HOST_USER = 'antonyvenis1212@gmail.com'
 
@@ -193,6 +193,3 @@ EMAIL_HOST_PASSWORD = os.environ.get("BREVO_SMTP_KEY")
 
 DEFAULT_FROM_EMAIL = 'antonyvenis1212@gmail.com'
 
-EMAIL_PORT = 465          # 587 → 465
-EMAIL_USE_TLS = False     # TLS → False
-EMAIL_USE_SSL = True      # இது add panna
