@@ -1499,32 +1499,68 @@ from sib_api_v3_sdk.rest import ApiException
 #     except Exception as e:
 #         print("EMAIL ERROR 👉", str(e))
 
+# def send_email_otp(email, otp):
+#     try:
+#         configuration = sib_api_v3_sdk.Configuration()
+#         configuration.api_key['api-key'] = os.getenv("BREVO_API_KEY")
+        
+#         api_instance = sib_api_v3_sdk.TransactionalEmailsApi(
+#             sib_api_v3_sdk.ApiClient(configuration)
+#         )
+        
+#         send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
+#             to=[{"email": email}],
+#             sender={"email": "antonyvenis1212@gmail.com", "name": "Legend"},
+#             subject="Your OTP Code",
+#             html_content=f"""
+#                 <h1>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡ Register🎉</h1>
+#                 <p>Your OTP is:</p>
+#                 <h1>{otp}</h1>
+#                 <p>Do not share ❌</p>
+#             """
+#         )
+        
+#         api_instance.send_transac_email(send_smtp_email)
+#         print("OTP EMAIL SENT ✅")
+        
+#     except ApiException as e:
+#         print("BREVO API ERROR 👉", str(e))
+
 def send_email_otp(email, otp):
     try:
-        configuration = sib_api_v3_sdk.Configuration()
-        configuration.api_key['api-key'] = os.getenv("BREVO_API_KEY")
+        url = "https://api.brevo.com/v3/smtp/email"
         
-        api_instance = sib_api_v3_sdk.TransactionalEmailsApi(
-            sib_api_v3_sdk.ApiClient(configuration)
-        )
+        headers = {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "api-key": os.getenv("BREVO_API_KEY")
+        }
         
-        send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
-            to=[{"email": email}],
-            sender={"email": "antonyvenis1212@gmail.com", "name": "Legend"},
-            subject="Your OTP Code",
-            html_content=f"""
+        payload = {
+            "sender": {
+                "name": "Legend",
+                "email": "antonyvenis1212@gmail.com"
+            },
+            "to": [{"email": email}],
+            "subject": "Your OTP Code",
+            "htmlContent": f"""
                 <h1>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡ Register🎉</h1>
-                <p>Your OTP is:</p>
+                <p>Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is:</p>
                 <h1>{otp}</h1>
-                <p>Do not share ❌</p>
+                <p>Do not share this OTP with anyone ❌</p>
             """
-        )
+        }
         
-        api_instance.send_transac_email(send_smtp_email)
-        print("OTP EMAIL SENT ✅")
+        response = requests.post(url, json=payload, headers=headers)
+        print("BREVO RESPONSE 👉", response.status_code, response.text)
         
-    except ApiException as e:
-        print("BREVO API ERROR 👉", str(e))
+        if response.status_code == 201:
+            print("OTP EMAIL SENT ✅")
+        else:
+            print("BREVO ERROR 👉", response.text)
+            
+    except Exception as e:
+        print("EMAIL ERROR 👉", str(e))
 
 @api_view(['POST'])
 def send_otp(request):
