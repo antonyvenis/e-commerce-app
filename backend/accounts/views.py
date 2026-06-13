@@ -1424,8 +1424,8 @@ from django.conf import settings
 import os
 import re
 import traceback
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
+# from sendgrid import SendGridAPIClient
+# from sendgrid.helpers.mail import Mail
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -1435,7 +1435,7 @@ from .models import CustomUser, Like, CartItem, Order, OrderItem, OTP
 from datetime import timedelta
 from django.utils import timezone
 from .models import Product
-from django.core.mail import EmailMessage
+# from django.core.mail import EmailMessage
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
@@ -1639,34 +1639,60 @@ def send_otp(request):
 
 # ================================
 # 📧 WELCOME EMAIL (BREVO SMTP)
-# ================================
+# # ================================
+# def send_welcome_email(email, username):
+#     try:
+#         subject = "Welcome 🎉"
+
+#         html_content = f"""
+#             <h1>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡</h1>
+#             <h2>Welcome {username} 🎉</h2>
+#             <p>Your account has been created successfully 🚀</p>
+#             <p>Start exploring now 😍</p>
+#             <p>Thank You ❤️</p>
+#             <a href="https://e-commerce-app-food.vercel.app/" target="_blank">
+#                 Visit Again 🚀
+#             </a>
+#         """
+
+#         msg = EmailMessage(
+#             subject,
+#             html_content,
+#             "antonyvenis1212@gmail.com",   # FROM EMAIL (Brevo verified email)
+#             [email]
+#         )
+
+#         msg.content_subtype = "html"  # IMPORTANT (HTML email)
+#         msg.send(fail_silently=False)
+
+#         print("WELCOME EMAIL SENT ✅")
+
+#     except Exception as e:
+#         print("WELCOME EMAIL ERROR 👉", str(e))
+
 def send_welcome_email(email, username):
     try:
-        subject = "Welcome 🎉"
-
-        html_content = f"""
-            <h1>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡</h1>
-            <h2>Welcome {username} 🎉</h2>
-            <p>Your account has been created successfully 🚀</p>
-            <p>Start exploring now 😍</p>
-            <p>Thank You ❤️</p>
-            <a href="https://e-commerce-app-food.vercel.app/" target="_blank">
-                Visit Again 🚀
-            </a>
-        """
-
-        msg = EmailMessage(
-            subject,
-            html_content,
-            "antonyvenis1212@gmail.com",   # FROM EMAIL (Brevo verified email)
-            [email]
-        )
-
-        msg.content_subtype = "html"  # IMPORTANT (HTML email)
-        msg.send(fail_silently=False)
-
-        print("WELCOME EMAIL SENT ✅")
-
+        url = "https://api.brevo.com/v3/smtp/email"
+        headers = {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "api-key": os.getenv("BREVO_API_KEY")
+        }
+        payload = {
+            "sender": {"name": "Legend", "email": "antonyvenis1212@gmail.com"},
+            "to": [{"email": email}],
+            "subject": "Welcome 🎉",
+            "htmlContent": f"""
+                <h1>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡</h1>
+                <h2>Welcome {username} 🎉</h2>
+                <p>Your account has been created successfully 🚀</p>
+                <p>Start exploring now 😍</p>
+                <p>Thank You ❤️</p>
+                <a href="https://e-commerce-app-food.vercel.app/">Visit Again 🚀</a>
+            """
+        }
+        response = requests.post(url, json=payload, headers=headers)
+        print("WELCOME EMAIL 👉", response.status_code, response.text)
     except Exception as e:
         print("WELCOME EMAIL ERROR 👉", str(e))
 
@@ -1804,30 +1830,55 @@ def verify_otp(request):
 
 # ================================
 # 🔁 FORGOT PASSWORD SEND OTP (BREVO SMTP)
-# ================================
+# # ================================
+# def send_forgot_email_otp(email, otp):
+#     try:
+#         subject = "Reset Password OTP 🔐"
+
+#         html_content = f"""
+#             <h2>Password Reset 🔐</h2>
+#             <p>Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is:</p>
+#             <h1>{otp}</h1>
+#             <p>Do not share this OTP with anyone ❌</p>
+#         """
+
+#         msg = EmailMessage(
+#             subject,
+#             html_content,
+#             "antonyvenis1212@gmail.com",   # Brevo verified sender
+#             [email]
+#         )
+
+#         msg.content_subtype = "html"
+#         msg.send(fail_silently=False)
+
+#         print("FORGOT OTP SENT ✅")
+
+#     except Exception as e:
+#         print("FORGOT OTP ERROR 👉", str(e))
+
+
 def send_forgot_email_otp(email, otp):
     try:
-        subject = "Reset Password OTP 🔐"
-
-        html_content = f"""
-            <h2>Password Reset 🔐</h2>
-            <p>Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is:</p>
-            <h1>{otp}</h1>
-            <p>Do not share this OTP with anyone ❌</p>
-        """
-
-        msg = EmailMessage(
-            subject,
-            html_content,
-            "antonyvenis1212@gmail.com",   # Brevo verified sender
-            [email]
-        )
-
-        msg.content_subtype = "html"
-        msg.send(fail_silently=False)
-
-        print("FORGOT OTP SENT ✅")
-
+        url = "https://api.brevo.com/v3/smtp/email"
+        headers = {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "api-key": os.getenv("BREVO_API_KEY")
+        }
+        payload = {
+            "sender": {"name": "Legend", "email": "antonyvenis1212@gmail.com"},
+            "to": [{"email": email}],
+            "subject": "Reset Password OTP 🔐",
+            "htmlContent": f"""
+                <h2>Password Reset 🔐</h2>
+                <p>Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is:</p>
+                <h1>{otp}</h1>
+                <p>Do not share this OTP with anyone ❌</p>
+            """
+        }
+        response = requests.post(url, json=payload, headers=headers)
+        print("FORGOT OTP 👉", response.status_code, response.text)
     except Exception as e:
         print("FORGOT OTP ERROR 👉", str(e))
         
