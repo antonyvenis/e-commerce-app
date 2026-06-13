@@ -189,7 +189,7 @@ EMAIL_USE_TLS = True
 
 EMAIL_HOST_USER = 'antonyvenis1212@gmail.com'
 
-EMAIL_HOST_PASSWORD = os.environ.get("BREVO_SMTP_KEY")
+EMAIL_HOST_PASSWORD = os.environ.get("BREVO_API_KEY")
 
 DEFAULT_FROM_EMAIL = 'antonyvenis1212@gmail.com'
 
