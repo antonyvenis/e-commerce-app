@@ -1444,6 +1444,8 @@ from reportlab.lib.units import inch
 from django.http import HttpResponse
 import datetime
 from django.contrib.auth import get_user_model
+import sib_api_v3_sdk
+from sib_api_v3_sdk.rest import ApiException
 
 
 
@@ -1470,32 +1472,59 @@ from django.contrib.auth import get_user_model
 
 # ================================
 # 📧 SEND OTP (BREVO SMTP)
-# ================================
+# # ================================
+# def send_email_otp(email, otp):
+#     try:
+#         subject = "Your OTP Code"
+
+#         html_content = f"""
+#             <h1>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡ Register🎉</h1>
+#             <p>Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is:</p>
+#             <h1>{otp}</h1>
+#             <p>Do not share this OTP with anyone ❌</p>
+#         """
+
+#         msg = EmailMessage(
+#             subject,
+#             html_content,
+#             "antonyvenis1212@gmail.com",   # Brevo verified sender email
+#             [email]
+#         )
+
+#         msg.content_subtype = "html"  # IMPORTANT for HTML email
+#         msg.send(fail_silently=False)
+
+#         print("OTP EMAIL SENT ✅")
+
+#     except Exception as e:
+#         print("EMAIL ERROR 👉", str(e))
+
 def send_email_otp(email, otp):
     try:
-        subject = "Your OTP Code"
-
-        html_content = f"""
-            <h1>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡ Register🎉</h1>
-            <p>Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is:</p>
-            <h1>{otp}</h1>
-            <p>Do not share this OTP with anyone ❌</p>
-        """
-
-        msg = EmailMessage(
-            subject,
-            html_content,
-            "antonyvenis1212@gmail.com",   # Brevo verified sender email
-            [email]
+        configuration = sib_api_v3_sdk.Configuration()
+        configuration.api_key['api-key'] = os.getenv("BREVO_API_KEY")
+        
+        api_instance = sib_api_v3_sdk.TransactionalEmailsApi(
+            sib_api_v3_sdk.ApiClient(configuration)
         )
-
-        msg.content_subtype = "html"  # IMPORTANT for HTML email
-        msg.send(fail_silently=False)
-
+        
+        send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
+            to=[{"email": email}],
+            sender={"email": "antonyvenis1212@gmail.com", "name": "Legend"},
+            subject="Your OTP Code",
+            html_content=f"""
+                <h1>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡ Register🎉</h1>
+                <p>Your OTP is:</p>
+                <h1>{otp}</h1>
+                <p>Do not share ❌</p>
+            """
+        )
+        
+        api_instance.send_transac_email(send_smtp_email)
         print("OTP EMAIL SENT ✅")
-
-    except Exception as e:
-        print("EMAIL ERROR 👉", str(e))
+        
+    except ApiException as e:
+        print("BREVO API ERROR 👉", str(e))
 
 @api_view(['POST'])
 def send_otp(request):
@@ -2335,7 +2364,7 @@ def generate_invoice(request, order_id):
 
     # ===== HEADER =====
     header_data = [[
-        Paragraph("<b><font size=24 color='#ff6600'>🍔 Legend</font></b>", styles['Normal']),
+        Paragraph("<b><font size=24 color='#ff6600'>🍔 𝓛𝓮𝓰𝓮𝓷𝓭</font></b>", styles['Normal']),
         Paragraph(
             f"<b>INVOICE</b><br/>"
             f"<font size=9 color='grey'>Invoice #: INV-{order_id:04d}<br/>"
@@ -2439,8 +2468,8 @@ def generate_invoice(request, order_id):
     # ===== FOOTER =====
     elements.append(Spacer(1, 8))
     elements.append(Paragraph(
-        "<font size=9 color='grey'>Thank you for ordering from Legend! 🍔<br/>"
-        "For support: support@legend.com | +91 98765 43210</font>",
+        "<font size=9 color='grey'>Thank you for ordering from 𝓛𝓮𝓰𝓮𝓷𝓭! 🍔<br/>"
+        "For support: support@legend.com | +91 97517 29345</font>",
         styles['Normal']
     ))
 

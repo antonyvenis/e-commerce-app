@@ -193,3 +193,6 @@ EMAIL_HOST_PASSWORD = os.environ.get("BREVO_SMTP_KEY")
 
 DEFAULT_FROM_EMAIL = 'antonyvenis1212@gmail.com'
 
+EMAIL_PORT = 465          # 587 → 465
+EMAIL_USE_TLS = False     # TLS → False
+EMAIL_USE_SSL = True      # இது add panna
