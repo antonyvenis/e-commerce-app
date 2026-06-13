@@ -1444,8 +1444,6 @@ from reportlab.lib.units import inch
 from django.http import HttpResponse
 import datetime
 from django.contrib.auth import get_user_model
-import sib_api_v3_sdk
-from sib_api_v3_sdk.rest import ApiException
 
 
 
