@@ -431,26 +431,26 @@ All core endpoints are exposed under the `/api` prefix path.
         <b>🏠 Home Screen</b>
       </td>
       <td align="center" width="33%">
-        <img src="./assets/restaurants.png" alt="Restaurant List" width="100%"/><br/>
-        <b>🏪 Restaurant Directory</b>
-      </td>
-      <td align="center" width="33%">
         <img src="./assets/menu.png" alt="Menu Listing" width="100%"/><br/>
         <b>🍔 Food Menus</b>
+      </td>
+      <td align="center" width="33%">
+        <img src="frontend\src\assets\images\whislist_image.png" alt="Admin Dashboard" width="100%"/><br/>
+        <b>❤️ Whislist Page</b>
       </td>
     </tr>
     <tr>
       <td align="center" width="33%">
-        <img src="./assets/cart.png" alt="Cart view" width="100%"/><br/>
-        <b>🛒 Cart & Checkout</b>
+        <img src="frontend\src\assets\images\cart_image.png" alt="Cart view" width="100%"/><br/>
+        <b>🛒 Cart Page</b>
       </td>
       <td align="center" width="33%">
-        <img src="./assets/order-tracking.png" alt="Order Tracking" width="100%"/><br/>
+        <img src="frontend\src\assets\images\checkout_image.png" alt="Restaurant List" width="100%"/><br/>
+        <b>💳 Checkout Page</b>
+      </td>
+      <td align="center" width="33%">
+        <img src="" alt="Order Tracking" width="100%"/><br/>
         <b>📦 Live Order Tracker</b>
-      </td>
-      <td align="center" width="33%">
-        <img src="./assets/admin.png" alt="Admin Dashboard" width="100%"/><br/>
-        <b>📊 Admin Panel</b>
       </td>
     </tr>
   </table>
