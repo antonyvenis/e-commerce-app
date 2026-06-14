@@ -1435,7 +1435,7 @@ from .models import CustomUser, Like, CartItem, Order, OrderItem, OTP
 from datetime import timedelta
 from django.utils import timezone
 from .models import Product
-# from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
@@ -1444,6 +1444,7 @@ from reportlab.lib.units import inch
 from django.http import HttpResponse
 import datetime
 from django.contrib.auth import get_user_model
+from django.core.mail import send_mail
 
 
 
@@ -1560,50 +1561,107 @@ from django.contrib.auth import get_user_model
 #     except Exception as e:
 #         print("EMAIL ERROR 👉", str(e))
 
+# def send_email_otp(email, otp):
+#     try:
+#         url = "https://api.brevo.com/v3/smtp/email"
+
+#         headers = {
+#             "accept": "application/json",
+#             "content-type": "application/json",
+#             "api-key": os.getenv("BREVO_API_KEY")
+#         }
+
+#         # DEBUG LOGS 👇
+#         print("BREVO_API_KEY 👉", os.getenv("BREVO_API_KEY"))
+#         print("HEADERS 👉", headers)
+
+#         payload = {
+#             "sender": {
+#                 "name": "Legend",
+#                 "email": "antonyvenis1212@gmail.com"
+#             },
+#             "to": [{"email": email}],
+#             "subject": "Your OTP Code",
+#             "htmlContent": f"""
+#                 <h1>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡ Register🎉</h1>
+#                 <p>Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is:</p>
+#                 <h1>{otp}</h1>
+#                 <p>Do not share this OTP with anyone ❌</p>
+#             """
+#         }
+
+#         response = requests.post(
+#             url,
+#             json=payload,
+#             headers=headers
+#         )
+
+#         print("BREVO RESPONSE 👉", response.status_code)
+#         print("BREVO BODY 👉", response.text)
+
+#         if response.status_code == 201:
+#             print("OTP EMAIL SENT ✅")
+#             return True
+#         else:
+#             print("BREVO ERROR 👉", response.text)
+#             return False
+
+#     except Exception as e:
+#         print("EMAIL ERROR 👉", str(e))
+#         return False
+
+from django.core.mail import EmailMultiAlternatives
+from django.conf import settings
+
+
 def send_email_otp(email, otp):
     try:
-        url = "https://api.brevo.com/v3/smtp/email"
+        subject = "⚡ Legend Register OTP"
 
-        headers = {
-            "accept": "application/json",
-            "content-type": "application/json",
-            "api-key": os.getenv("BREVO_API_KEY")
-        }
+        text_content = f"""
+Your OTP is: {otp}
 
-        # DEBUG LOGS 👇
-        print("BREVO_API_KEY 👉", os.getenv("BREVO_API_KEY"))
-        print("HEADERS 👉", headers)
+Do not share this OTP with anyone.
+"""
 
-        payload = {
-            "sender": {
-                "name": "Legend",
-                "email": "antonyvenis1212@gmail.com"
-            },
-            "to": [{"email": email}],
-            "subject": "Your OTP Code",
-            "htmlContent": f"""
-                <h1>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡ Register🎉</h1>
-                <p>Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is:</p>
-                <h1>{otp}</h1>
-                <p>Do not share this OTP with anyone ❌</p>
-            """
-        }
+        html_content = f"""
+        <div style="font-family: Arial, sans-serif; text-align:center; padding:20px;">
+            <h1>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡ Register 🎉</h1>
 
-        response = requests.post(
-            url,
-            json=payload,
-            headers=headers
+            <p>Your OTP is:</p>
+
+            <div style="
+                font-size:32px;
+                font-weight:bold;
+                letter-spacing:5px;
+                color:#ff6600;
+                margin:20px 0;
+            ">
+                {otp}
+            </div>
+
+            <p>Do not share this OTP with anyone ❌</p>
+
+            <hr>
+
+            <small>
+                This OTP is valid for a limited time.
+            </small>
+        </div>
+        """
+
+        msg = EmailMultiAlternatives(
+            subject,
+            text_content,
+            settings.DEFAULT_FROM_EMAIL,
+            [email]
         )
 
-        print("BREVO RESPONSE 👉", response.status_code)
-        print("BREVO BODY 👉", response.text)
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
 
-        if response.status_code == 201:
-            print("OTP EMAIL SENT ✅")
-            return True
-        else:
-            print("BREVO ERROR 👉", response.text)
-            return False
+        print("OTP EMAIL SENT ✅")
+        return True
 
     except Exception as e:
         print("EMAIL ERROR 👉", str(e))
