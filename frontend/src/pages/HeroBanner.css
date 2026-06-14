@@ -892,3 +892,38 @@
     margin-top: 20px;
   }
 }
+
+@media (max-width: 768px) {
+  .content {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .left {
+    order: 1;
+  }
+
+  .right {
+    order: 2;
+    width: 100% !important;
+    margin-top: 30px;
+  }
+
+  .bottom-bar {
+    order: 3;
+    width: 100%;
+    margin-top: 30px;
+  }
+
+  .cta-row {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    text-align: center;
+  }
+}
