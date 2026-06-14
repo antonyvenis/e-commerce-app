@@ -123,3 +123,244 @@
     margin-bottom: 8px;
   }
 }
+
+/* src/styles/Liked.css */
+
+.liked-container {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.liked-title {
+  font-size: 28px;
+  margin-bottom: 30px;
+  color: #333;
+  text-align: center;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 50px 20px;
+}
+
+.empty-state h3 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #666;
+}
+
+.empty-state button {
+  background: #ff6b00;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 20px;
+  transition: background 0.3s;
+}
+
+.empty-state button:hover {
+  background: #e55a00;
+}
+
+/* 🔥 GRID LAYOUT */
+.liked-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+  padding: 10px;
+}
+
+/* 🔥 CARD - FIXED HEIGHT */
+.liked-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  height: 420px; /* ✅ FIXED HEIGHT FOR ALL CARDS */
+  transition: box-shadow 0.3s;
+}
+
+.liked-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 🔥 IMAGE - CONSISTENT SIZE */
+.liked-card img {
+  width: 100%;
+  height: 180px; /* ✅ FIXED IMAGE HEIGHT */
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  background: #e0e0e0; /* Placeholder color for missing images */
+}
+
+/* 🔥 OFFER BADGE */
+.liked-card .offer-badge {
+  position: absolute;
+  top: 22px;
+  left: 22px;
+  background: red;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 🔥 PRODUCT NAME */
+.liked-card h4 {
+  font-size: 15px;
+  margin: 8px 0 6px 0;
+  color: #333;
+  min-height: 32px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* 🔥 PRICE SECTION */
+.price-section {
+  margin: 6px 0 10px 0;
+  flex-grow: 1;
+}
+
+.price-section p {
+  margin: 3px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.price-section p:first-child {
+  text-decoration: line-through;
+  color: #999;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.price-section p:last-child {
+  color: #ff6b00;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+/* 🔥 BUTTONS - ALWAYS AT BOTTOM */
+.btn-group {
+  display: flex;
+  gap: 8px;
+  margin-top: auto; /* ✅ PUSH TO BOTTOM */
+  width: 100%;
+}
+
+.btn-group button {
+  flex: 1;
+  padding: 10px 8px;
+  border: none;
+  border-radius: 6px;
+  background: #ff6b00;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.3s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn-group button:hover {
+  background: #e55a00;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(255, 107, 0, 0.3);
+}
+
+.btn-group button:active {
+  transform: translateY(0);
+}
+
+.btn-group button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* 📱 TABLET RESPONSIVE */
+@media (max-width: 1024px) {
+  .liked-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 15px;
+  }
+
+  .liked-card {
+    height: 400px;
+  }
+
+  .liked-card img {
+    height: 160px;
+  }
+
+  .btn-group button {
+    font-size: 12px;
+  }
+}
+
+/* 📱 MOBILE RESPONSIVE */
+@media (max-width: 640px) {
+  .liked-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+    padding: 5px;
+  }
+
+  .liked-container {
+    padding: 15px;
+  }
+
+  .liked-title {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+
+  .liked-card {
+    height: 380px;
+    padding: 10px;
+  }
+
+  .liked-card img {
+    height: 140px;
+    margin-bottom: 8px;
+  }
+
+  .liked-card h4 {
+    font-size: 13px;
+    min-height: 28px;
+  }
+
+  .price-section {
+    margin: 4px 0 8px 0;
+  }
+
+  .price-section p {
+    font-size: 14px;
+  }
+
+  .btn-group {
+    gap: 6px;
+  }
+
+  .btn-group button {
+    padding: 8px 6px;
+    font-size: 11px;
+  }
+}
