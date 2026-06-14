@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 function Navbar() {
   const navigate = useNavigate();
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
+
+  // 🔥 Hide Navbar in Login/Register/OTP pages
+  const hiddenPages = ["/login", "/register", "/otp"];
+
+  if (hiddenPages.includes(location.pathname)) {
+    return null;
+  }
 
   const user = JSON.parse(localStorage.getItem("user"));
 
