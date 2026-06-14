@@ -423,7 +423,7 @@ All core endpoints are exposed under the `/api` prefix path.
   <table border="0">
     <tr>
       <td align="center" width="33%">
-        <img src="./assets/home.png" alt="Home Screen" width="100%"/><br/>
+        <img src="./assets/images/home_image.png" alt="Home Screen" width="100%"/><br/>
         <b>🏠 Home Screen</b>
       </td>
       <td align="center" width="33%">
