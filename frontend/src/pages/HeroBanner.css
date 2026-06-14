@@ -688,3 +688,55 @@
     font-size: 0.95rem;
   }
 }
+
+/* CTA Buttons */
+.cta-row {
+  display: flex;
+  gap: 16px;
+  margin-top: 25px;
+}
+
+.btn-primary,
+.btn-secondary {
+  flex: 1;
+  text-align: center;
+  padding: 14px 20px;
+  border-radius: 14px;
+  text-decoration: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mobile View */
+@media (max-width: 768px) {
+  .cta-row {
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+    font-size: 15px;
+    padding: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .left {
+    overflow: visible;
+  }
+
+  .hero-banner-page {
+    padding-bottom: 50px;
+  }
+
+  .bottom-bar {
+    margin-top: 30px;
+  }
+}
