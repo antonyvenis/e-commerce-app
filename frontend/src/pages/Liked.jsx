@@ -313,47 +313,56 @@ function Liked() {
                   {/* 💰 PRICE */}
                   <div className="price-section">
 
-                    {isOffer ? (
+{isOffer ? (
+    <>
+      <p
+        style={{
+          textDecoration: "line-through",
+          color: "gray",
+          marginBottom: "5px",
+          minHeight: "24px"
+        }}
+      >
+        ₹{item.price}
+      </p>
 
-                      <>
+      <p
+        style={{
+          color: "green",
+          fontWeight: "bold",
+          fontSize: "22px",
+          minHeight: "32px"
+        }}
+      >
+        ₹{offerPrice}
+      </p>
+    </>
+  ) : (
+    <>
+      {/* Invisible old price space */}
+      <p
+        style={{
+          visibility: "hidden",
+          marginBottom: "5px",
+          minHeight: "24px"
+        }}
+      >
+        ₹0
+      </p>
 
-                        <p
-                          style={{
-                            textDecoration:
-                              "line-through",
-                            color: "gray",
-                            marginBottom: "5px"
-                          }}
-                        >
-                          ₹{item.price}
-                        </p>
+      <p
+        style={{
+          fontWeight: "bold",
+          fontSize: "22px",
+          minHeight: "32px"
+        }}
+      >
+        ₹{item.price || 100}
+      </p>
+    </>
+  )}
 
-                        <p
-                          style={{
-                            color: "green",
-                            fontWeight: "bold",
-                            fontSize: "22px"
-                          }}
-                        >
-                          ₹{offerPrice}
-                        </p>
-
-                      </>
-
-                    ) : (
-
-                      <p
-                        style={{
-                          fontWeight: "bold",
-                          fontSize: "22px"
-                        }}
-                      >
-                        ₹{item.price || 100}
-                      </p>
-
-                    )}
-
-                  </div>
+</div>
 
                   {/* 🔘 BUTTONS */}
                   <div className="btn-group">

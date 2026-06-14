@@ -3327,3 +3327,21 @@ input {
   0%   { background-position: 0% center }
   100% { background-position: 220% center }
 }
+
+.price-section{
+  height:70px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.btn-group{
+  margin-top:auto;
+  display:flex;
+  gap:10px;
+}
+
+.liked-card{
+  display:flex;
+  flex-direction:column;
+}
