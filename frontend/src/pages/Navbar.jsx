@@ -8,13 +8,6 @@ function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
 
-  // 🔥 Hide Navbar in Login/Register/OTP pages
-  const hiddenPages = ["/login", "/register", "/otp", "/forgot-password"];
-
-  if (hiddenPages.includes(location.pathname)) {
-    return null;
-  }
-
   const user = JSON.parse(localStorage.getItem("user"));
 
   // const updateCartCount = () => {
@@ -65,6 +58,13 @@ function Navbar() {
       window.removeEventListener("storage", updateCartCount);
     };
   }, []);
+
+  // 🔥 Hide Navbar in Login/Register/OTP pages
+  const hiddenPages = ["/login", "/register", "/otp", "/forgot-password"];
+
+  if (hiddenPages.includes(location.pathname)) {
+    return null;
+  }
 
   return (
     <>
