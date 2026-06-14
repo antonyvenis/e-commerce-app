@@ -1661,13 +1661,13 @@ def send_otp(request):
 
     success = send_email_otp(email, otp)
 
-if not success:
-    return Response(
-        {"error": "Email sending failed ❌"},
-        status=500
-    )
+    if not success:
+        return Response(
+            {"error": "Email sending failed ❌"},
+            status=500
+        )
 
-return Response({"message": "OTP sent 📧"})
+    return Response({"message": "OTP sent 📧"})
 
 
 # # ================================
