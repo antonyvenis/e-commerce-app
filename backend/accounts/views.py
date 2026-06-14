@@ -1519,7 +1519,7 @@ def send_email_otp(email, otp):
 
         payload = {
             "sender": {
-                "name": "⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡",
+                "name": "Legend",
                 "email": "antonyvenis1212@gmail.com"
             },
             "to": [
@@ -1707,12 +1707,14 @@ def send_welcome_email(email, username):
             "to": [{"email": email}],
             "subject": "Welcome 🎉",
             "htmlContent": f"""
+            <div style="font-family: Arial, sans-serif; text-align:center; padding:20px;">
                 <h1>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡</h1>
                 <h2>Welcome {username} 🎉</h2>
                 <p>Your account has been created successfully 🚀</p>
                 <p>Start exploring now 😍</p>
                 <p>Thank You ❤️</p>
                 <a href="https://e-commerce-app-food.vercel.app/">Visit Again 🚀</a>
+            <div>
             """
         }
         response = requests.post(url, json=payload, headers=headers)
@@ -1895,10 +1897,12 @@ def send_forgot_email_otp(email, otp):
             "to": [{"email": email}],
             "subject": "Reset Password OTP 🔐",
             "htmlContent": f"""
+            <div style="font-family: Arial, sans-serif; text-align:center; padding:20px;">
                 <h2>Password Reset 🔐</h2>
                 <p>Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is:</p>
                 <h1>{otp}</h1>
                 <p>Do not share this OTP with anyone ❌</p>
+            <div>
             """
         }
         response = requests.post(url, json=payload, headers=headers)
