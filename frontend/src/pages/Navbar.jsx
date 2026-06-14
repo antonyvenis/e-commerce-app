@@ -3,12 +3,13 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 
 function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
 
   // 🔥 Hide Navbar in Login/Register/OTP pages
-  const hiddenPages = ["/login", "/register", "/otp"];
+  const hiddenPages = ["/login", "/register", "/otp", "/forgot-password"];
 
   if (hiddenPages.includes(location.pathname)) {
     return null;
