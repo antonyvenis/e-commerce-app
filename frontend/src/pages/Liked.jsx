@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
-import "./Liked.css";
 
 const API = "https://e-commerce-app-8jg4.onrender.com";
 
