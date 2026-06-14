@@ -1,0 +1,56 @@
+<svg width="500" height="140" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 140">
+  <defs>
+    <style>
+      @keyframes shimmerAnim {
+        0% {
+          stop-color: #FFFFFF;
+        }
+        35% {
+          stop-color: #FFD166;
+        }
+        65% {
+          stop-color: #FF4500;
+        }
+        100% {
+          stop-color: #FF6B35;
+        }
+      }
+      
+      .legend-text {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 56px;
+        font-weight: bold;
+        text-anchor: middle;
+        fill: url(#gradientFill);
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+      }
+    </style>
+    
+    <linearGradient id="gradientFill" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%">
+        <animate attributeName="stop-color" 
+                 values="#FFFFFF; #FFD166; #FF4500; #FF6B35; #FFFFFF" 
+                 dur="6s" 
+                 repeatCount="indefinite"/>
+      </stop>
+      <stop offset="50%">
+        <animate attributeName="stop-color" 
+                 values="#FFD166; #FF4500; #FF6B35; #FFFFFF; #FFD166" 
+                 dur="6s" 
+                 repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%">
+        <animate attributeName="stop-color" 
+                 values="#FF4500; #FF6B35; #FFFFFF; #FFD166; #FF4500" 
+                 dur="6s" 
+                 repeatCount="indefinite"/>
+      </stop>
+    </linearGradient>
+  </defs>
+  
+  <!-- Main Title Text -->
+  <text x="250" y="85" class="legend-text">⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡</text>
+  
+  <!-- Subtle bottom accent line -->
+  <line x1="100" y1="110" x2="400" y2="110" stroke="url(#gradientFill)" stroke-width="2" opacity="0.6"/>
+</svg>

@@ -1,10 +1,13 @@
-# <p align="center">⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡</p>
+<!-- # <p align="center">⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡</p> -->
+<p align="center">
+  <img src="frontend\src\pages\legend-little.svg" alt="⚡Legend💫⚡" width="500"/>
+</p>
 <p align="center">
   <b>A Production-Grade, Multi-Vendor Food Delivery Web Application</b>
 </p>
 
 <div align="center">
-  <a href="https://e-commerce-app-food.vercel.app/profile"><img src="https://img.shields.io/badge/🌐%20Live%20Demo-Visit%20App-brightgreen?style=for-the-badge" alt="Live Demo"></a>
+  <a href="https://e-commerce-app-food.vercel.app/register"><img src="https://img.shields.io/badge/🌐%20Live%20Demo-Visit%20App-brightgreen?style=for-the-badge" alt="Live Demo"></a>
   <a href="https://github.com/antonyvenis/food-delivery-app"><img src="https://img.shields.io/github/stars/antonyvenis/food-delivery-app?style=for-the-badge&logo=github&color=ffcb2b" alt="GitHub stars"></a>
   <a href="https://github.com/antonyvenis/food-delivery-app/network/members"><img src="https://img.shields.io/github/forks/antonyvenis/food-delivery-app?style=for-the-badge&logo=github&color=ffcb2b" alt="GitHub forks"></a>
   <a href="https://github.com/antonyvenis/food-delivery-app/blob/main/LICENSE"><img src="https://img.shields.io/github/license/antonyvenis/food-delivery-app?style=for-the-badge&color=ffcb2b" alt="License"></a>
@@ -424,7 +427,7 @@ All core endpoints are exposed under the `/api` prefix path.
   <table border="0">
     <tr>
       <td align="center" width="33%">
-        <img src="./assets/images/home_image.png" alt="Home Screen" width="100%"/><br/>
+        <img src="frontend\src\assets\images\home_image.png" alt="Home Screen" width="100%"/><br/>
         <b>🏠 Home Screen</b>
       </td>
       <td align="center" width="33%">
@@ -525,5 +528,5 @@ Distributed under the **MIT License**. See [`LICENSE`](./LICENSE) file details f
 ---
 
 <div align="center">
-  <sub>Made with ❤️ by <a href="https://github.com/antonyvenis">Antony Venis T</a> &nbsp;•&nbsp; <a href="https://e-commerce-app-food.vercel.app/profile">Live Demo</a> &nbsp;•&nbsp; <a href="https://antony-venis-t-portfolio.vercel.app">Portfolio</a></sub>
+  <sub>Made with ❤️ by <a href="https://github.com/antonyvenis">Antony Venis T</a> &nbsp;•&nbsp; <a href="https://e-commerce-app-food.vercel.app/register">Live Demo</a> &nbsp;•&nbsp; <a href="https://antony-venis-t-portfolio.vercel.app">Portfolio</a></sub>
 </div>
