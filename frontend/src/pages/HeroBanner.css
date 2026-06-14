@@ -283,3 +283,922 @@
   box-sizing: border-box;        /* ADD THIS */
   overflow: hidden;              /* ADD THIS */
 }
+
+/* ============================================
+   HERO BANNER - MOBILE FIRST RESPONSIVE CSS
+   ============================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ROOT CONTAINER */
+.hero-banner-page-top {
+  width: 100%;
+  background: #1a1a1a;
+  overflow: hidden;
+}
+
+.hero-banner-page {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a0f0a 0%, #2a1515 50%, #1a0f0a 100%);
+  overflow: hidden;
+  padding: 0;
+}
+
+/* BACKGROUND GLOWS */
+.bg-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.glow1 {
+  width: 300px;
+  height: 300px;
+  background: #ff6b35;
+  top: -100px;
+  left: -100px;
+}
+
+.glow2 {
+  width: 250px;
+  height: 250px;
+  background: #00d084;
+  top: 50%;
+  right: -50px;
+}
+
+.glow3 {
+  width: 200px;
+  height: 200px;
+  background: #ffd700;
+  bottom: 100px;
+  left: 10%;
+}
+
+/* GRID LINES */
+.grid-lines {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image:
+    linear-gradient(0deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+}
+
+/* MAIN CONTENT WRAPPER */
+.content {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  padding: 3rem 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  align-items: center;
+}
+
+/* LEFT SECTION */
+.left {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #ff6b35;
+  font-weight: 600;
+  border: 1px solid rgba(255, 107, 53, 0.3);
+  padding: 0.75rem 1rem;
+  border-radius: 50px;
+  width: fit-content;
+  background: rgba(255, 107, 53, 0.05);
+}
+
+.eyebrow-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff6b35;
+  display: block;
+}
+
+/* BRAND NAME WITH GRADIENT */
+.brand {
+  font-size: 3.5rem;
+  font-weight: 900;
+  background: linear-gradient(45deg, #ffd700, #ff6b35, #ffd700, #ff6b35);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s ease-in-out infinite;
+  text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+  letter-spacing: -2px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* TAGLINE */
+.tagline {
+  font-size: 1.125rem;
+  color: #ccc;
+  line-height: 1.6;
+  max-width: 500px;
+}
+
+.tagline span {
+  color: #ffd700;
+  font-weight: 600;
+}
+
+/* STATS GRID */
+.herobanner-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin: 1rem 0;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat-num {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #ffd700;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: #00d084;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+/* STACK TAGS */
+.stack-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+.stack-tag {
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50px;
+  font-size: 0.75rem;
+  color: #999;
+  background: rgba(255, 255, 255, 0.05);
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.stack-tag.hot {
+  border-color: #ff6b35;
+  color: #ff6b35;
+  background: rgba(255, 107, 53, 0.1);
+}
+
+.stack-tag:hover {
+  background: rgba(255, 107, 53, 0.2);
+  border-color: #ff6b35;
+}
+
+/* CTA BUTTONS */
+.cta-row {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #ff6b35, #ff8555);
+  color: white;
+  flex: 1;
+  box-shadow: 0 8px 24px rgba(255, 107, 53, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(255, 107, 53, 0.4);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  flex: 1;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* RIGHT SECTION - CARDS */
+.right {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* MAIN CARD */
+.herobanner-card {
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(255, 215, 0, 0.05));
+  border: 1px solid rgba(255, 107, 53, 0.3);
+  border-radius: 16px;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.herobanner-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), transparent);
+  pointer-events: none;
+}
+
+.popular-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(255, 215, 0, 0.2);
+  color: #ffd700;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 1px solid rgba(255, 215, 0, 0.4);
+}
+
+.food-emoji {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.food-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.food-rest {
+  font-size: 0.875rem;
+  color: #999;
+  margin-bottom: 1rem;
+}
+
+.rating-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.stars {
+  color: #ffd700;
+  font-size: 1rem;
+}
+
+.rating-num {
+  color: #ccc;
+  font-size: 0.875rem;
+}
+
+.tags {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background: rgba(0, 208, 132, 0.2);
+  color: #00d084;
+  padding: 0.375rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 1rem;
+}
+
+.hero-price {
+  font-size: 1.75rem;
+  font-weight: 900;
+  color: #ffd700;
+}
+
+.herobanner-add-btn {
+  background: linear-gradient(135deg, #ff6b35, #ff8555);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex: 1;
+  min-height: 44px;
+}
+
+.herobanner-add-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(255, 107, 53, 0.4);
+}
+
+#Link-text {
+  color: white;
+  text-decoration: none;
+  display: block;
+}
+
+/* MINI CARDS ROW */
+.row-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.mini-card {
+  background: rgba(255, 107, 53, 0.05);
+  border: 1px solid rgba(255, 107, 53, 0.2);
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.mini-card:hover {
+  background: rgba(255, 107, 53, 0.1);
+  border-color: rgba(255, 107, 53, 0.4);
+  transform: translateY(-4px);
+}
+
+.mini-emoji {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.mini-name {
+  font-size: 0.875rem;
+  color: #fff;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.mini-price {
+  font-size: 1.25rem;
+  color: #ffd700;
+  font-weight: 900;
+}
+
+/* ORDER CARD */
+.hero-order-card {
+  background: linear-gradient(135deg, rgba(0, 208, 132, 0.1), rgba(255, 215, 0, 0.05));
+  border: 1px solid rgba(0, 208, 132, 0.3);
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  grid-column: 1 / -1;
+}
+
+.order-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.order-title {
+  font-size: 0.875rem;
+  color: #fff;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.order-sub {
+  font-size: 0.75rem;
+  color: #00d084;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.progress-bar {
+  background: rgba(0, 208, 132, 0.2);
+  height: 4px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  width: 65%;
+  height: 100%;
+  background: linear-gradient(90deg, #00d084, #ffd700);
+  animation: progress-animate 2s ease-in-out infinite;
+}
+
+@keyframes progress-animate {
+  0%, 100% {
+    width: 65%;
+  }
+  50% {
+    width: 85%;
+  }
+}
+
+/* BOTTOM BAR */
+.bottom-bar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.bottom-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #999;
+  font-size: 0.875rem;
+}
+
+.bottom-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ff6b35;
+  display: block;
+}
+
+/* ============================================
+   TABLET RESPONSIVE (768px and up)
+   ============================================ */
+@media (max-width: 1024px) {
+  .content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2rem 1.5rem;
+  }
+
+  .brand {
+    font-size: 2.5rem;
+  }
+
+  .herobanner-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .row-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cta-row {
+    width: 100%;
+  }
+}
+
+/* ============================================
+   MOBILE RESPONSIVE (640px and below)
+   ============================================ */
+@media (max-width: 768px) {
+  .hero-banner-page {
+    min-height: auto;
+    padding-bottom: 2rem;
+  }
+
+  .content {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 1.5rem 1rem;
+  }
+
+  /* LEFT SECTION - MOBILE */
+  .left {
+    gap: 1rem;
+  }
+
+  .eyebrow {
+    font-size: 0.75rem;
+    padding: 0.625rem 0.875rem;
+  }
+
+  .brand {
+    font-size: 2.25rem;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .tagline {
+    font-size: 1rem;
+    line-height: 1.5;
+    max-width: 100%;
+  }
+
+  .herobanner-stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+
+  .stat-num {
+    font-size: 1.75rem;
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+  }
+
+  .stack-row {
+    gap: 0.5rem;
+    margin: 1rem 0;
+  }
+
+  .stack-tag {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.7rem;
+  }
+
+  .cta-row {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.95rem;
+    min-height: 48px;
+  }
+
+  /* RIGHT SECTION - MOBILE */
+  .right {
+    gap: 1rem;
+  }
+
+  .herobanner-card {
+    padding: 1.25rem;
+  }
+
+  .food-emoji {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .food-name {
+    font-size: 1.125rem;
+  }
+
+  .food-rest {
+    font-size: 0.8rem;
+  }
+
+  .card-footer {
+    margin-top: 1rem;
+    padding-top: 1rem;
+  }
+
+  .hero-price {
+    font-size: 1.5rem;
+  }
+
+  .herobanner-add-btn {
+    padding: 0.65rem 1rem;
+    font-size: 0.9rem;
+    min-height: 44px;
+  }
+
+  .row-cards {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .mini-emoji {
+    font-size: 2rem;
+  }
+
+  .mini-name {
+    font-size: 0.8rem;
+  }
+
+  .mini-price {
+    font-size: 1.1rem;
+  }
+
+  .hero-order-card {
+    padding: 0.875rem;
+  }
+
+  .order-icon {
+    font-size: 1.75rem;
+  }
+
+  .order-title {
+    font-size: 0.8rem;
+  }
+
+  .order-sub {
+    font-size: 0.7rem;
+  }
+
+  .bottom-bar {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem 1rem;
+    text-align: center;
+  }
+
+  .bottom-item {
+    justify-content: center;
+    font-size: 0.8rem;
+  }
+}
+
+/* ============================================
+   SMALL MOBILE (480px and below)
+   ============================================ */
+@media (max-width: 480px) {
+  .content {
+    padding: 1rem 0.75rem;
+    gap: 1.25rem;
+  }
+
+  .eyebrow {
+    font-size: 0.65rem;
+    padding: 0.5rem 0.75rem;
+    letter-spacing: 1px;
+  }
+
+  .brand {
+    font-size: 1.875rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .tagline {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .herobanner-stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin: 0.75rem 0;
+  }
+
+  .stat-num {
+    font-size: 1.5rem;
+  }
+
+  .stat-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.5px;
+  }
+
+  .stack-row {
+    gap: 0.4rem;
+    margin: 0.75rem 0;
+  }
+
+  .stack-tag {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.65rem;
+  }
+
+  .cta-row {
+    gap: 0.5rem;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    padding: 0.8rem 1.25rem;
+    font-size: 0.9rem;
+    border-radius: 8px;
+  }
+
+  .herobanner-card {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+
+  .popular-badge {
+    font-size: 0.65rem;
+    padding: 0.4rem 0.75rem;
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+
+  .food-emoji {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .food-name {
+    font-size: 1rem;
+  }
+
+  .food-rest {
+    font-size: 0.75rem;
+  }
+
+  .rating-row {
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .stars {
+    font-size: 0.9rem;
+  }
+
+  .rating-num {
+    font-size: 0.8rem;
+  }
+
+  .tags {
+    gap: 0.4rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .tag {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.65rem;
+  }
+
+  .card-footer {
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+  }
+
+  .hero-price {
+    font-size: 1.25rem;
+  }
+
+  .herobanner-add-btn {
+    padding: 0.6rem 0.875rem;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    min-height: 40px;
+  }
+
+  .row-cards {
+    gap: 0.6rem;
+  }
+
+  .mini-card {
+    padding: 0.75rem;
+    border-radius: 10px;
+  }
+
+  .mini-emoji {
+    font-size: 1.75rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .mini-name {
+    font-size: 0.75rem;
+  }
+
+  .mini-price {
+    font-size: 1rem;
+  }
+
+  .hero-order-card {
+    padding: 0.75rem;
+    border-radius: 10px;
+  }
+
+  .order-icon {
+    font-size: 1.5rem;
+  }
+
+  .order-title {
+    font-size: 0.75rem;
+  }
+
+  .order-sub {
+    font-size: 0.65rem;
+  }
+
+  .progress-bar {
+    height: 3px;
+  }
+
+  .bottom-bar {
+    gap: 0.75rem;
+    padding: 1rem 0.75rem;
+  }
+
+  .bottom-item {
+    font-size: 0.75rem;
+  }
+
+  .bottom-dot {
+    width: 4px;
+    height: 4px;
+  }
+}
+
+/* ============================================
+   EXTRA SMALL (320px)
+   ============================================ */
+@media (max-width: 360px) {
+  .content {
+    padding: 0.875rem 0.625rem;
+    gap: 1rem;
+  }
+
+  .brand {
+    font-size: 1.625rem;
+  }
+
+  .tagline {
+    font-size: 0.85rem;
+  }
+
+  .herobanner-stats {
+    gap: 0.6rem;
+  }
+
+  .stat-num {
+    font-size: 1.375rem;
+  }
+
+  .herobanner-card {
+    padding: 0.875rem;
+  }
+
+  .food-emoji {
+    font-size: 1.75rem;
+  }
+
+  .food-name {
+    font-size: 0.95rem;
+  }
+}
