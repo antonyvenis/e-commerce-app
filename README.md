@@ -431,7 +431,7 @@ All core endpoints are exposed under the `/api` prefix path.
         <b>🏠 Home Screen</b>
       </td>
       <td align="center" width="33%">
-        <img src="./assets/menu.png" alt="Menu Listing" width="100%"/><br/>
+        <img src="frontend\src\assets\images\menu_images.png" alt="Menu Listing" width="100%"/><br/>
         <b>🍔 Food Menus</b>
       </td>
       <td align="center" width="33%">
@@ -449,7 +449,7 @@ All core endpoints are exposed under the `/api` prefix path.
         <b>💳 Checkout Page</b>
       </td>
       <td align="center" width="33%">
-        <img src="" alt="Order Tracking" width="100%"/><br/>
+        <img src="frontend\src\assets\images\orders_image.png" alt="Order Tracking" width="100%"/><br/>
         <b>📦 Live Order Tracker</b>
       </td>
     </tr>
