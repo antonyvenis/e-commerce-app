@@ -1524,16 +1524,56 @@ from django.contrib.auth import get_user_model
 #     except ApiException as e:
 #         print("BREVO API ERROR 👉", str(e))
 
+# def send_email_otp(email, otp):
+#     try:
+#         url = "https://api.brevo.com/v3/smtp/email"
+        
+#         headers = {
+#             "accept": "application/json",
+#             "content-type": "application/json",
+#             "api-key": os.getenv("BREVO_API_KEY")
+#         }
+        
+#         payload = {
+#             "sender": {
+#                 "name": "Legend",
+#                 "email": "antonyvenis1212@gmail.com"
+#             },
+#             "to": [{"email": email}],
+#             "subject": "Your OTP Code",
+#             "htmlContent": f"""
+#                 <h1>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡ Register🎉</h1>
+#                 <p>Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is:</p>
+#                 <h1>{otp}</h1>
+#                 <p>Do not share this OTP with anyone ❌</p>
+#             """
+#         }
+        
+#         response = requests.post(url, json=payload, headers=headers)
+#         print("BREVO RESPONSE 👉", response.status_code, response.text)
+        
+#         if response.status_code == 201:
+#             print("OTP EMAIL SENT ✅")
+#         else:
+#             print("BREVO ERROR 👉", response.text)
+            
+#     except Exception as e:
+#         print("EMAIL ERROR 👉", str(e))
+
 def send_email_otp(email, otp):
     try:
         url = "https://api.brevo.com/v3/smtp/email"
-        
+
         headers = {
             "accept": "application/json",
             "content-type": "application/json",
             "api-key": os.getenv("BREVO_API_KEY")
         }
-        
+
+        # DEBUG LOGS 👇
+        print("BREVO_API_KEY 👉", os.getenv("BREVO_API_KEY"))
+        print("HEADERS 👉", headers)
+
         payload = {
             "sender": {
                 "name": "Legend",
@@ -1548,17 +1588,26 @@ def send_email_otp(email, otp):
                 <p>Do not share this OTP with anyone ❌</p>
             """
         }
-        
-        response = requests.post(url, json=payload, headers=headers)
-        print("BREVO RESPONSE 👉", response.status_code, response.text)
-        
+
+        response = requests.post(
+            url,
+            json=payload,
+            headers=headers
+        )
+
+        print("BREVO RESPONSE 👉", response.status_code)
+        print("BREVO BODY 👉", response.text)
+
         if response.status_code == 201:
             print("OTP EMAIL SENT ✅")
+            return True
         else:
             print("BREVO ERROR 👉", response.text)
-            
+            return False
+
     except Exception as e:
         print("EMAIL ERROR 👉", str(e))
+        return False
 
 @api_view(['POST'])
 def send_otp(request):
@@ -1607,8 +1656,18 @@ def send_otp(request):
         }
     )
 
-    send_email_otp(email, otp)
-    return Response({"message": "OTP sent 📧"})
+    # send_email_otp(email, otp)
+    # return Response({"message": "OTP sent 📧"})
+
+    success = send_email_otp(email, otp)
+
+if not success:
+    return Response(
+        {"error": "Email sending failed ❌"},
+        status=500
+    )
+
+return Response({"message": "OTP sent 📧"})
 
 
 # # ================================
