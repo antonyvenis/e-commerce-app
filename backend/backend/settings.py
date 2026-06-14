@@ -182,28 +182,14 @@ cloudinary.config(
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # EMAIL_HOST = 'smtp-relay.brevo.com'
-
 # EMAIL_PORT = 587
-
 # EMAIL_USE_TLS = True
 
-# EMAIL_HOST_USER = 'antonyvenis1212@gmail.com'
+# # Brevo SMTP login
+# EMAIL_HOST_USER = 'aabc96001@smtp-brevo.com'
 
-# EMAIL_HOST_PASSWORD = os.environ.get("BREVO_API_KEY")
+# # SMTP Key (xsmtpsib-...)
+# EMAIL_HOST_PASSWORD = os.getenv("BREVO_SMTP_KEY")
 
 # DEFAULT_FROM_EMAIL = 'antonyvenis1212@gmail.com'
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
-EMAIL_HOST = 'smtp-relay.brevo.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-
-# Brevo SMTP login
-EMAIL_HOST_USER = 'aabc96001@smtp-brevo.com'
-
-# SMTP Key (xsmtpsib-...)
-EMAIL_HOST_PASSWORD = os.getenv("BREVO_SMTP_KEY")
-
-DEFAULT_FROM_EMAIL = 'antonyvenis1212@gmail.com'
 

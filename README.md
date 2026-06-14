@@ -21,7 +21,7 @@
 
 <p align="center">
   <!-- <img src="" alt="⚡Legend💫 Food Delivery App Banner" width="85%"/> -->
-  <img src="frontend\src\assets\images\hero.png" alt="Hero Banner" width="85%"/>
+  <img src="eg" alt="Hero Banner" width="85%"/>
 </p>
 
 
