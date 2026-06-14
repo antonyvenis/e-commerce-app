@@ -142,6 +142,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = False
 
 CORS_ALLOWED_ORIGINS = [
     "https://e-commerce-app-food.vercel.app",
@@ -169,7 +170,6 @@ CSRF_TRUSTED_ORIGINS = [
     "https://e-commerce-app-food.vercel.app"
 ]
 
-CORS_ALLOW_CREDENTIALS = True
 
 cloudinary.config(
     cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
