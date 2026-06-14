@@ -1447,169 +1447,9 @@ from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 
 
-
 # # ================================
 # # 📧 SEND OTP
 # # ================================
-# def send_email_otp(email, otp):
-#     try:
-#         message = Mail(
-#             from_email='antonyvenis1212@gmail.com',
-#             to_emails=email,
-#             subject='Your OTP Code',
-#             html_content=f"""
-#             <h1>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡ Register🎉</h1>
-#             <p>Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is:</p>
-#             <h1>{otp}</h1>
-#             <p>Do not share this OTP with anyone ❌</p>
-#             """
-#         )
-#         sg = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
-#         sg.send(message)
-#     except Exception as e:
-#         print("EMAIL ERROR 👉", str(e))
-
-# ================================
-# 📧 SEND OTP (BREVO SMTP)
-# # ================================
-# def send_email_otp(email, otp):
-#     try:
-#         subject = "Your OTP Code"
-
-#         html_content = f"""
-#             <h1>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡ Register🎉</h1>
-#             <p>Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is:</p>
-#             <h1>{otp}</h1>
-#             <p>Do not share this OTP with anyone ❌</p>
-#         """
-
-#         msg = EmailMessage(
-#             subject,
-#             html_content,
-#             "antonyvenis1212@gmail.com",   # Brevo verified sender email
-#             [email]
-#         )
-
-#         msg.content_subtype = "html"  # IMPORTANT for HTML email
-#         msg.send(fail_silently=False)
-
-#         print("OTP EMAIL SENT ✅")
-
-#     except Exception as e:
-#         print("EMAIL ERROR 👉", str(e))
-
-# def send_email_otp(email, otp):
-#     try:
-#         configuration = sib_api_v3_sdk.Configuration()
-#         configuration.api_key['api-key'] = os.getenv("BREVO_API_KEY")
-        
-#         api_instance = sib_api_v3_sdk.TransactionalEmailsApi(
-#             sib_api_v3_sdk.ApiClient(configuration)
-#         )
-        
-#         send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
-#             to=[{"email": email}],
-#             sender={"email": "antonyvenis1212@gmail.com", "name": "Legend"},
-#             subject="Your OTP Code",
-#             html_content=f"""
-#                 <h1>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡ Register🎉</h1>
-#                 <p>Your OTP is:</p>
-#                 <h1>{otp}</h1>
-#                 <p>Do not share ❌</p>
-#             """
-#         )
-        
-#         api_instance.send_transac_email(send_smtp_email)
-#         print("OTP EMAIL SENT ✅")
-        
-#     except ApiException as e:
-#         print("BREVO API ERROR 👉", str(e))
-
-# def send_email_otp(email, otp):
-#     try:
-#         url = "https://api.brevo.com/v3/smtp/email"
-        
-#         headers = {
-#             "accept": "application/json",
-#             "content-type": "application/json",
-#             "api-key": os.getenv("BREVO_API_KEY")
-#         }
-        
-#         payload = {
-#             "sender": {
-#                 "name": "Legend",
-#                 "email": "antonyvenis1212@gmail.com"
-#             },
-#             "to": [{"email": email}],
-#             "subject": "Your OTP Code",
-#             "htmlContent": f"""
-#                 <h1>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡ Register🎉</h1>
-#                 <p>Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is:</p>
-#                 <h1>{otp}</h1>
-#                 <p>Do not share this OTP with anyone ❌</p>
-#             """
-#         }
-        
-#         response = requests.post(url, json=payload, headers=headers)
-#         print("BREVO RESPONSE 👉", response.status_code, response.text)
-        
-#         if response.status_code == 201:
-#             print("OTP EMAIL SENT ✅")
-#         else:
-#             print("BREVO ERROR 👉", response.text)
-            
-#     except Exception as e:
-#         print("EMAIL ERROR 👉", str(e))
-
-# def send_email_otp(email, otp):
-#     try:
-#         url = "https://api.brevo.com/v3/smtp/email"
-
-#         headers = {
-#             "accept": "application/json",
-#             "content-type": "application/json",
-#             "api-key": os.getenv("BREVO_API_KEY")
-#         }
-
-#         # DEBUG LOGS 👇
-#         print("BREVO_API_KEY 👉", os.getenv("BREVO_API_KEY"))
-#         print("HEADERS 👉", headers)
-
-#         payload = {
-#             "sender": {
-#                 "name": "Legend",
-#                 "email": "antonyvenis1212@gmail.com"
-#             },
-#             "to": [{"email": email}],
-#             "subject": "Your OTP Code",
-#             "htmlContent": f"""
-#                 <h1>⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡ Register🎉</h1>
-#                 <p>Your ⚡𝓛𝓮𝓰𝓮𝓷𝓭⚡ OTP is:</p>
-#                 <h1>{otp}</h1>
-#                 <p>Do not share this OTP with anyone ❌</p>
-#             """
-#         }
-
-#         response = requests.post(
-#             url,
-#             json=payload,
-#             headers=headers
-#         )
-
-#         print("BREVO RESPONSE 👉", response.status_code)
-#         print("BREVO BODY 👉", response.text)
-
-#         if response.status_code == 201:
-#             print("OTP EMAIL SENT ✅")
-#             return True
-#         else:
-#             print("BREVO ERROR 👉", response.text)
-#             return False
-
-#     except Exception as e:
-#         print("EMAIL ERROR 👉", str(e))
-#         return False
-
 # from django.core.mail import EmailMultiAlternatives
 # from django.conf import settings
 
@@ -1667,10 +1507,6 @@ from django.core.mail import send_mail
 #         print("EMAIL ERROR 👉", str(e))
 #         return False
 
-import os
-import requests
-
-
 def send_email_otp(email, otp):
     try:
         url = "https://api.brevo.com/v3/smtp/email"
@@ -1683,7 +1519,7 @@ def send_email_otp(email, otp):
 
         payload = {
             "sender": {
-                "name": "Legend",
+                "name": "⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡",
                 "email": "antonyvenis1212@gmail.com"
             },
             "to": [
@@ -1691,7 +1527,7 @@ def send_email_otp(email, otp):
                     "email": email
                 }
             ],
-            "subject": "⚡ Legend Register OTP",
+            "subject": "⚡Legend⚡ Register OTP",
 
             "htmlContent": f"""
             <div style="font-family: Arial, sans-serif; text-align:center; padding:20px;">
