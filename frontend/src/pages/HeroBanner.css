@@ -865,3 +865,30 @@
     white-space: normal !important;
   }
 }
+
+@media (max-width: 768px) {
+  .bottom-bar {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 20px;
+  }
+
+  /* Buttons section */
+  .bottom-bar .buttons {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  /* Right side sentence/content */
+  .bottom-bar .content,
+  .bottom-bar .info,
+  .bottom-bar .text {
+    width: 100% !important;
+    order: 2; /* buttons க்கு கீழே வரும் */
+    text-align: center !important;
+    margin-top: 20px;
+  }
+}
