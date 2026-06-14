@@ -940,95 +940,63 @@
 }
 
 /* ============================================
-   MOBILE RESPONSIVE - BUTTONS & TEXT FIX
+   MOBILE RESPONSIVE (768px and below)
    ============================================ */
 @media (max-width: 768px) {
-  .left {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  /* Reorder: brand first, then buttons, then tagline */
-  .brand {
-    order: 1;
-    font-size: 2.25rem;
-    line-height: 1;
-    margin-bottom: 0.5rem;
-  }
-
-  .herobanner-stats {
-    order: 2;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin: 1rem 0;
-  }
-
-  .stack-row {
-    order: 3;
-    gap: 0.5rem;
-    margin: 1rem 0;
-  }
-
-  /* BUTTONS - SIDE BY SIDE */
-  .cta-row {
-    order: 4;
-    display: flex;
-    flex-direction: row;  /* Side by side */
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
-    margin: 1.5rem 0 1rem 0;
-    padding: 0;
-  }
-
-  .btn-primary,
-  .btn-secondary {
-    flex: 1;
-    max-width: 150px;
-    padding: 12px 16px;
-    font-size: 14px;
-    border-radius: 14px;
-    text-align: center;
-    min-height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* TAGLINE - BELOW BUTTONS */
-  .tagline {
-    order: 5;
-    font-size: 1rem;
-    line-height: 1.5;
-    max-width: 100%;
-    text-align: center;
-    color: #999;
-    margin-top: 2rem;
-  }
-
-  .eyebrow {
-    order: 0;
-    font-size: 0.75rem;
-    padding: 0.625rem 0.875rem;
-  }
-
   .hero-banner-page {
     min-height: auto;
     padding-bottom: 2rem;
   }
 
   .content {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 1.5rem;
     padding: 1.5rem 1rem;
+    align-items: center;
+  }
+
+  /* LEFT SECTION - MOBILE */
+  .left {
+    width: 100%;
+    max-width: 100%;
+    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .eyebrow {
+    font-size: 0.75rem;
+    padding: 0.625rem 0.875rem;
+  }
+
+  .brand {
+    font-size: 2.25rem;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+
+  /* TAGLINE - FULL WIDTH BELOW BUTTONS */
+  .tagline {
+    font-size: 1rem;
+    line-height: 1.5;
+    width: 100%;
+    max-width: 100%;
+    text-align: center;
+    margin-top: 1.5rem;
+    padding: 0 1rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .herobanner-stats {
+    display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
     margin: 1rem 0;
+    width: 100%;
   }
 
   .stat-num {
@@ -1039,8 +1007,48 @@
     font-size: 0.7rem;
   }
 
+  .stack-row {
+    gap: 0.5rem;
+    margin: 1rem 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .stack-tag {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.7rem;
+  }
+
+  /* CTA BUTTONS - SIDE BY SIDE */
+  .cta-row {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-top: 1.5rem;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    flex: 1;
+    max-width: 160px;
+    padding: 12px 16px;
+    font-size: 14px;
+    border-radius: 14px;
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+  }
+
+  /* RIGHT SECTION - HIDE ON MOBILE */
   .right {
-    gap: 1rem;
+    display: none;
   }
 
   .herobanner-card {
@@ -1109,16 +1117,30 @@
   }
 
   .bottom-bar {
+    display: flex;
     flex-direction: column;
     gap: 1rem;
     padding: 1.5rem 1rem;
     text-align: center;
+    width: 100%;
     margin-top: 30px;
+    align-items: center;
   }
 
   .bottom-item {
     justify-content: center;
     font-size: 0.8rem;
+    width: 100%;
+    text-align: center;
+  }
+
+  .bottom-bar,
+  .bottom-item {
+    transform: none !important;
+    left: auto !important;
+    right: auto !important;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
@@ -1131,44 +1153,29 @@
     gap: 1.25rem;
   }
 
-  .cta-row {
-    order: 4;
-    flex-direction: row;
-    gap: 8px;
-    margin: 1rem 0;
-  }
-
-  .btn-primary,
-  .btn-secondary {
-    flex: 1;
-    max-width: 140px;
-    padding: 10px 12px;
-    font-size: 13px;
-    min-height: 44px;
-  }
-
-  .tagline {
-    order: 5;
-    font-size: 0.9rem;
-    line-height: 1.4;
-    margin-top: 1.5rem;
-  }
-
-  .brand {
-    order: 1;
-    font-size: 1.875rem;
-    margin-bottom: 0.5rem;
-  }
-
   .eyebrow {
-    order: 0;
     font-size: 0.65rem;
     padding: 0.5rem 0.75rem;
     letter-spacing: 1px;
   }
 
+  .brand {
+    font-size: 1.875rem;
+    margin-bottom: 0.5rem;
+  }
+
+  /* TAGLINE - FULL WIDTH, VISIBLE BELOW */
+  .tagline {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    width: 100%;
+    max-width: 100%;
+    padding: 0 0.75rem;
+    text-align: center;
+    margin-top: 1rem;
+  }
+
   .herobanner-stats {
-    order: 2;
     grid-template-columns: 1fr 1fr;
     gap: 0.75rem;
     margin: 0.75rem 0;
@@ -1184,7 +1191,6 @@
   }
 
   .stack-row {
-    order: 3;
     gap: 0.4rem;
     margin: 0.75rem 0;
   }
@@ -1192,6 +1198,146 @@
   .stack-tag {
     padding: 0.3rem 0.6rem;
     font-size: 0.65rem;
+  }
+
+  /* BUTTONS SIDE BY SIDE */
+  .cta-row {
+    flex-direction: row;
+    gap: 8px;
+    margin-top: 1rem;
+    width: 100%;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    flex: 1;
+    max-width: 150px;
+    padding: 10px 12px;
+    font-size: 13px;
+    border-radius: 8px;
+    min-height: 44px;
+  }
+
+  .herobanner-card {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+
+  .popular-badge {
+    font-size: 0.65rem;
+    padding: 0.4rem 0.75rem;
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+
+  .food-emoji {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .food-name {
+    font-size: 1rem;
+  }
+
+  .food-rest {
+    font-size: 0.75rem;
+  }
+
+  .rating-row {
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .stars {
+    font-size: 0.9rem;
+  }
+
+  .rating-num {
+    font-size: 0.8rem;
+  }
+
+  .tags {
+    gap: 0.4rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .tag {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.65rem;
+  }
+
+  .card-footer {
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+  }
+
+  .hero-price {
+    font-size: 1.25rem;
+  }
+
+  .herobanner-add-btn {
+    padding: 0.6rem 0.875rem;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    min-height: 40px;
+  }
+
+  .row-cards {
+    gap: 0.6rem;
+  }
+
+  .mini-card {
+    padding: 0.75rem;
+    border-radius: 10px;
+  }
+
+  .mini-emoji {
+    font-size: 1.75rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .mini-name {
+    font-size: 0.75rem;
+  }
+
+  .mini-price {
+    font-size: 1rem;
+  }
+
+  .hero-order-card {
+    padding: 0.75rem;
+    border-radius: 10px;
+  }
+
+  .order-icon {
+    font-size: 1.5rem;
+  }
+
+  .order-title {
+    font-size: 0.75rem;
+  }
+
+  .order-sub {
+    font-size: 0.65rem;
+  }
+
+  .progress-bar {
+    height: 3px;
+  }
+
+  .bottom-bar {
+    gap: 0.75rem;
+    padding: 1rem 0.75rem;
+  }
+
+  .bottom-item {
+    font-size: 0.75rem;
+  }
+
+  .bottom-dot {
+    width: 4px;
+    height: 4px;
   }
 }
 
@@ -1204,27 +1350,44 @@
     gap: 1rem;
   }
 
+  .brand {
+    font-size: 1.625rem;
+  }
+
+  .tagline {
+    font-size: 0.8rem;
+    width: 100%;
+    padding: 0 0.5rem;
+  }
+
+  .herobanner-stats {
+    gap: 0.6rem;
+  }
+
+  .stat-num {
+    font-size: 1.375rem;
+  }
+
   .cta-row {
-    order: 4;
     gap: 6px;
-    margin: 0.75rem 0;
   }
 
   .btn-primary,
   .btn-secondary {
-    max-width: 130px;
+    max-width: 140px;
     padding: 9px 10px;
     font-size: 12px;
   }
 
-  .tagline {
-    order: 5;
-    font-size: 0.8rem;
-    margin-top: 1rem;
+  .herobanner-card {
+    padding: 0.875rem;
   }
 
-  .brand {
-    order: 1;
-    font-size: 1.625rem;
+  .food-emoji {
+    font-size: 1.75rem;
+  }
+
+  .food-name {
+    font-size: 0.95rem;
   }
 }
