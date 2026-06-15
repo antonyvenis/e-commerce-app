@@ -156,19 +156,19 @@ function HeroBanner() {
       {/* Bottom Bar */}
       <div className="bottom-bar">
         <div className="bottom-item">
-          <span className="bottom-dot"></span>
-          Built with React + Django
-        </div>
+  <span className="bottom-dot"></span>
+  <span>Built with React + Django</span>
+</div>
 
-        <div className="bottom-item">
-          <span className="bottom-dot"></span>
-          Deployed on Vercel + Render
-        </div>
+<div className="bottom-item">
+  <span className="bottom-dot"></span>
+  <span>Deployed on Vercel + Render</span>
+</div>
 
-        <div className="bottom-item">
-          <span className="bottom-dot"></span>
-          by Antony Venis T
-        </div>
+<div className="bottom-item">
+  <span className="bottom-dot"></span>
+  <span>by Antony Venis T</span>
+</div>
       </div>
     </div>
     </div>
