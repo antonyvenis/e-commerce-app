@@ -3327,3 +3327,10 @@ input {
   0%   { background-position: 0% center }
   100% { background-position: 220% center }
 }
+
+@media (max-width: 768px) {
+  .premium-footer {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+  }
+}

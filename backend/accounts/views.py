@@ -917,8 +917,140 @@ def test_email(request):
     )
     return Response({"message": "Email sent"})
 
+# # ================================
+# # 🧾 GENERATE INVOICE PDF ✅ SINGLE CORRECT
+# # ================================
+# def generate_invoice(request, order_id):
+#     order = Order.objects.get(id=order_id)
+
+#     response = HttpResponse(content_type='application/pdf')
+#     response['Content-Disposition'] = f'attachment; filename="invoice_{order_id}.pdf"'
+
+#     doc = SimpleDocTemplate(
+#         response, pagesize=A4,
+#         rightMargin=40, leftMargin=40,
+#         topMargin=40, bottomMargin=40
+#     )
+
+#     elements = []
+#     styles = getSampleStyleSheet()
+
+#     # ===== HEADER =====
+#     header_data = [[
+#         Paragraph("<b><font size=24 color='#ff6600'>🍔 Legend</font></b>", styles['Normal']),
+#         Paragraph(
+#             f"<b>INVOICE</b><br/>"
+#             f"<font size=9 color='grey'>Invoice #: INV-{order_id:04d}<br/>"
+#             f"Date: {datetime.date.today().strftime('%d %b %Y')}</font>",
+#             styles['Normal']
+#         )
+#     ]]
+#     header_table = Table(header_data, colWidths=[3.5*inch, 3.5*inch])
+#     header_table.setStyle(TableStyle([
+#         ('ALIGN', (0,0), (0,0), 'LEFT'),
+#         ('ALIGN', (1,0), (1,0), 'RIGHT'),
+#         ('VALIGN', (0,0), (-1,-1), 'TOP'),
+#     ]))
+#     elements.append(header_table)
+#     elements.append(HRFlowable(width="100%", thickness=2, color=colors.orange))
+#     elements.append(Spacer(1, 12))
+
+#     # ===== CUSTOMER INFO =====
+#     info_data = [[
+#         Paragraph(
+#             f"<b>Bill To:</b><br/>"
+#             f"{order.user.username}<br/>"
+#             f"{order.user.email}<br/>"
+#             f"📍 {order.address}",
+#             styles['Normal']
+#         ),
+#         Paragraph(
+#             f"<b>Payment:</b><br/>"
+#             f"Method: {order.payment_method}<br/>"
+#             f"Status: <font color='green'><b>{order.status}</b></font><br/>"
+#             f"Order Date: {order.created_at.strftime('%d %b %Y %I:%M %p')}",
+#             styles['Normal']
+#         )
+#     ]]
+#     info_table = Table(info_data, colWidths=[3.5*inch, 3.5*inch])
+#     info_table.setStyle(TableStyle([
+#         ('BACKGROUND', (0,0), (-1,-1), colors.HexColor('#fff8f0')),
+#         ('BOX', (0,0), (-1,-1), 1, colors.orange),
+#         ('PADDING', (0,0), (-1,-1), 10),
+#         ('VALIGN', (0,0), (-1,-1), 'TOP'),
+#     ]))
+#     elements.append(info_table)
+#     elements.append(Spacer(1, 16))
+
+#     # ===== ITEMS TABLE =====
+#     table_data = [['#', 'Item Name', 'Qty', 'Unit Price', 'Total']]
+#     subtotal = 0
+
+#     for i, item in enumerate(order.items.all(), 1):
+#         item_total = item.quantity * float(item.price)   # ✅ FIXED
+#         subtotal += item_total
+#         table_data.append([
+#             str(i),
+#             item.item_name,                              # ✅ FIXED
+#             str(item.quantity),
+#             f"₹{float(item.price):.2f}",                # ✅ FIXED
+#             f"₹{item_total:.2f}"
+#         ])
+
+#     items_table = Table(table_data, colWidths=[0.4*inch, 3*inch, 0.7*inch, 1.2*inch, 1.2*inch])
+#     items_table.setStyle(TableStyle([
+#         ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#ff6600')),
+#         ('TEXTCOLOR', (0,0), (-1,0), colors.white),
+#         ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
+#         ('FONTSIZE', (0,0), (-1,0), 11),
+#         ('ALIGN', (0,0), (-1,0), 'CENTER'),
+#         ('FONTSIZE', (0,1), (-1,-1), 10),
+#         ('ALIGN', (2,1), (-1,-1), 'CENTER'),
+#         ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.white, colors.HexColor('#fff8f0')]),
+#         ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor('#ffccaa')),
+#         ('PADDING', (0,0), (-1,-1), 8),
+#     ]))
+#     elements.append(items_table)
+#     elements.append(Spacer(1, 12))
+
+#     # ===== TOTALS =====
+#     tax_rate = 0.05
+#     tax_amount = subtotal * tax_rate
+#     delivery = 0 if subtotal > 199 else 40
+#     grand_total = subtotal + tax_amount + delivery
+
+#     totals_data = [
+#         ['', 'Subtotal:', f'₹{subtotal:.2f}'],
+#         ['', 'GST (5%):', f'₹{tax_amount:.2f}'],
+#         ['', 'Delivery:', 'FREE 🎉' if delivery == 0 else f'₹{delivery:.2f}'],
+#         ['', 'GRAND TOTAL:', f'₹{grand_total:.2f}'],
+#     ]
+#     totals_table = Table(totals_data, colWidths=[3.5*inch, 2*inch, 1*inch])
+#     totals_table.setStyle(TableStyle([
+#         ('ALIGN', (1,0), (-1,-1), 'RIGHT'),
+#         ('FONTNAME', (1,3), (-1,3), 'Helvetica-Bold'),
+#         ('FONTSIZE', (1,3), (-1,3), 13),
+#         ('TEXTCOLOR', (1,3), (-1,3), colors.HexColor('#ff6600')),
+#         ('LINEABOVE', (1,3), (-1,3), 1.5, colors.orange),
+#         ('PADDING', (0,0), (-1,-1), 6),
+#     ]))
+#     elements.append(totals_table)
+#     elements.append(Spacer(1, 20))
+#     elements.append(HRFlowable(width="100%", thickness=1, color=colors.orange))
+
+#     # ===== FOOTER =====
+#     elements.append(Spacer(1, 8))
+#     elements.append(Paragraph(
+#         "<font size=9 color='grey'>Thank you for ordering from 𝓛𝓮𝓰𝓮𝓷𝓭! 🍔<br/>"
+#         "For support: support@legend.com | +91 97517 29345</font>",
+#         styles['Normal']
+#     ))
+
+#     doc.build(elements)
+#     return response
+
 # ================================
-# 🧾 GENERATE INVOICE PDF ✅ SINGLE CORRECT
+# 🧾 GENERATE INVOICE PDF
 # ================================
 def generate_invoice(request, order_id):
     order = Order.objects.get(id=order_id)
@@ -937,11 +1069,15 @@ def generate_invoice(request, order_id):
 
     # ===== HEADER =====
     header_data = [[
-        Paragraph("<b><font size=24 color='#ff6600'>🍔 𝓛𝓮𝓰𝓮𝓷𝓭</font></b>", styles['Normal']),
         Paragraph(
-            f"<b>INVOICE</b><br/>"
-            f"<font size=9 color='grey'>Invoice #: INV-{order_id:04d}<br/>"
-            f"Date: {datetime.date.today().strftime('%d %b %Y')}</font>",
+            "<b><font size=26 color='#ff6600'>LEGEND</font></b><br/>"
+            "<font size=9 color='#888888'>Premium Food Delivery</font>",
+            styles['Normal']
+        ),
+        Paragraph(
+            "<b><font size=18 color='#333333'>INVOICE</font></b><br/><br/>"
+            f"<font size=9 color='grey'>Invoice No: <b>INV-{order_id:04d}</b><br/>"
+            f"Date: <b>{datetime.date.today().strftime('%d %b %Y')}</b></font>",
             styles['Normal']
         )
     ]]
@@ -950,68 +1086,83 @@ def generate_invoice(request, order_id):
         ('ALIGN', (0,0), (0,0), 'LEFT'),
         ('ALIGN', (1,0), (1,0), 'RIGHT'),
         ('VALIGN', (0,0), (-1,-1), 'TOP'),
+        ('BACKGROUND', (0,0), (-1,-1), colors.HexColor('#fff8f0')),
+        ('PADDING', (0,0), (-1,-1), 12),
+        ('ROUNDEDCORNERS', [6]),
     ]))
     elements.append(header_table)
-    elements.append(HRFlowable(width="100%", thickness=2, color=colors.orange))
-    elements.append(Spacer(1, 12))
+    elements.append(Spacer(1, 6))
+    elements.append(HRFlowable(width="100%", thickness=3, color=colors.HexColor('#ff6600')))
+    elements.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor('#ffccaa')))
+    elements.append(Spacer(1, 14))
 
     # ===== CUSTOMER INFO =====
     info_data = [[
         Paragraph(
-            f"<b>Bill To:</b><br/>"
-            f"{order.user.username}<br/>"
-            f"{order.user.email}<br/>"
-            f"📍 {order.address}",
+            "<b><font size=10 color='#ff6600'>BILL TO</font></b><br/>"
+            f"<font size=10><b>{order.user.username}</b></font><br/>"
+            f"<font size=9 color='#555555'>{order.user.email}</font><br/>"
+            f"<font size=9 color='#555555'>Loc: {order.address}</font>",
             styles['Normal']
         ),
         Paragraph(
-            f"<b>Payment:</b><br/>"
-            f"Method: {order.payment_method}<br/>"
-            f"Status: <font color='green'><b>{order.status}</b></font><br/>"
-            f"Order Date: {order.created_at.strftime('%d %b %Y %I:%M %p')}",
+            "<b><font size=10 color='#ff6600'>PAYMENT INFO</font></b><br/>"
+            f"<font size=9>Method: <b>{order.payment_method}</b></font><br/>"
+            f"<font size=9>Status: <font color='green'><b>{order.status}</b></font></font><br/>"
+            f"<font size=9>Date: {order.created_at.strftime('%d %b %Y %I:%M %p')}</font>",
             styles['Normal']
         )
     ]]
     info_table = Table(info_data, colWidths=[3.5*inch, 3.5*inch])
     info_table.setStyle(TableStyle([
-        ('BACKGROUND', (0,0), (-1,-1), colors.HexColor('#fff8f0')),
-        ('BOX', (0,0), (-1,-1), 1, colors.orange),
-        ('PADDING', (0,0), (-1,-1), 10),
+        ('BACKGROUND', (0,0), (0,0), colors.HexColor('#fff8f0')),
+        ('BACKGROUND', (1,0), (1,0), colors.HexColor('#fff3e8')),
+        ('BOX', (0,0), (-1,-1), 1.5, colors.HexColor('#ff6600')),
+        ('LINEAFTER', (0,0), (0,-1), 1, colors.HexColor('#ffccaa')),
+        ('PADDING', (0,0), (-1,-1), 12),
         ('VALIGN', (0,0), (-1,-1), 'TOP'),
     ]))
     elements.append(info_table)
-    elements.append(Spacer(1, 16))
+    elements.append(Spacer(1, 18))
 
     # ===== ITEMS TABLE =====
     table_data = [['#', 'Item Name', 'Qty', 'Unit Price', 'Total']]
     subtotal = 0
 
     for i, item in enumerate(order.items.all(), 1):
-        item_total = item.quantity * float(item.price)   # ✅ FIXED
+        item_total = item.quantity * float(item.price)
         subtotal += item_total
         table_data.append([
             str(i),
-            item.item_name,                              # ✅ FIXED
+            item.item_name,
             str(item.quantity),
-            f"₹{float(item.price):.2f}",                # ✅ FIXED
-            f"₹{item_total:.2f}"
+            f"Rs.{float(item.price):.2f}",
+            f"Rs.{item_total:.2f}"
         ])
 
     items_table = Table(table_data, colWidths=[0.4*inch, 3*inch, 0.7*inch, 1.2*inch, 1.2*inch])
     items_table.setStyle(TableStyle([
+        # Header row
         ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#ff6600')),
         ('TEXTCOLOR', (0,0), (-1,0), colors.white),
         ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
-        ('FONTSIZE', (0,0), (-1,0), 11),
+        ('FONTSIZE', (0,0), (-1,0), 10),
         ('ALIGN', (0,0), (-1,0), 'CENTER'),
-        ('FONTSIZE', (0,1), (-1,-1), 10),
+        ('TOPPADDING', (0,0), (-1,0), 10),
+        ('BOTTOMPADDING', (0,0), (-1,0), 10),
+        # Data rows
+        ('FONTSIZE', (0,1), (-1,-1), 9),
+        ('ALIGN', (0,1), (0,-1), 'CENTER'),
         ('ALIGN', (2,1), (-1,-1), 'CENTER'),
         ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.white, colors.HexColor('#fff8f0')]),
         ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor('#ffccaa')),
-        ('PADDING', (0,0), (-1,-1), 8),
+        ('PADDING', (0,1), (-1,-1), 9),
+        # Last row bold total
+        ('FONTNAME', (-1,1), (-1,-1), 'Helvetica-Bold'),
+        ('TEXTCOLOR', (-1,1), (-1,-1), colors.HexColor('#333333')),
     ]))
     elements.append(items_table)
-    elements.append(Spacer(1, 12))
+    elements.append(Spacer(1, 16))
 
     # ===== TOTALS =====
     tax_rate = 0.05
@@ -1020,31 +1171,55 @@ def generate_invoice(request, order_id):
     grand_total = subtotal + tax_amount + delivery
 
     totals_data = [
-        ['', 'Subtotal:', f'₹{subtotal:.2f}'],
-        ['', 'GST (5%):', f'₹{tax_amount:.2f}'],
-        ['', 'Delivery:', 'FREE 🎉' if delivery == 0 else f'₹{delivery:.2f}'],
-        ['', 'GRAND TOTAL:', f'₹{grand_total:.2f}'],
+        ['', 'Subtotal:', f'Rs.{subtotal:.2f}'],
+        ['', 'GST (5%):', f'Rs.{tax_amount:.2f}'],
+        ['', 'Delivery Charge:', 'FREE' if delivery == 0 else f'Rs.{delivery:.2f}'],
+        ['', 'GRAND TOTAL:', f'Rs.{grand_total:.2f}'],
     ]
-    totals_table = Table(totals_data, colWidths=[3.5*inch, 2*inch, 1*inch])
+    totals_table = Table(totals_data, colWidths=[3.2*inch, 2.3*inch, 1*inch])
     totals_table.setStyle(TableStyle([
         ('ALIGN', (1,0), (-1,-1), 'RIGHT'),
+        ('FONTSIZE', (0,0), (-1,2), 9),
+        ('TEXTCOLOR', (0,0), (-1,2), colors.HexColor('#555555')),
+        # FREE delivery - green color
+        ('TEXTCOLOR', (2,2), (2,2), colors.HexColor('#28a745')),
+        ('FONTNAME', (2,2), (2,2), 'Helvetica-Bold'),
+        # Grand total row
+        ('BACKGROUND', (1,3), (-1,3), colors.HexColor('#ff6600')),
+        ('TEXTCOLOR', (1,3), (-1,3), colors.white),
         ('FONTNAME', (1,3), (-1,3), 'Helvetica-Bold'),
-        ('FONTSIZE', (1,3), (-1,3), 13),
-        ('TEXTCOLOR', (1,3), (-1,3), colors.HexColor('#ff6600')),
-        ('LINEABOVE', (1,3), (-1,3), 1.5, colors.orange),
-        ('PADDING', (0,0), (-1,-1), 6),
+        ('FONTSIZE', (1,3), (-1,3), 12),
+        ('TOPPADDING', (1,3), (-1,3), 10),
+        ('BOTTOMPADDING', (1,3), (-1,3), 10),
+        ('PADDING', (0,0), (-1,2), 7),
+        ('LINEABOVE', (1,3), (-1,3), 2, colors.HexColor('#ff6600')),
     ]))
     elements.append(totals_table)
-    elements.append(Spacer(1, 20))
-    elements.append(HRFlowable(width="100%", thickness=1, color=colors.orange))
+    elements.append(Spacer(1, 24))
+    elements.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor('#ffccaa')))
+    elements.append(HRFlowable(width="100%", thickness=3, color=colors.HexColor('#ff6600')))
 
     # ===== FOOTER =====
-    elements.append(Spacer(1, 8))
-    elements.append(Paragraph(
-        "<font size=9 color='grey'>Thank you for ordering from 𝓛𝓮𝓰𝓮𝓷𝓭! 🍔<br/>"
-        "For support: support@legend.com | +91 97517 29345</font>",
-        styles['Normal']
-    ))
+    elements.append(Spacer(1, 10))
+    footer_data = [[
+        Paragraph(
+            "<font size=9 color='#555555'>Thank you for ordering from <b>Legend!</b><br/>"
+            "We hope you enjoy your meal.</font>",
+            styles['Normal']
+        ),
+        Paragraph(
+            "<font size=9 color='#555555'><b>Support:</b> support@legend.com<br/>"
+            "<b>Phone:</b> +91 97517 29345</font>",
+            styles['Normal']
+        )
+    ]]
+    footer_table = Table(footer_data, colWidths=[3.5*inch, 3.5*inch])
+    footer_table.setStyle(TableStyle([
+        ('ALIGN', (0,0), (0,0), 'LEFT'),
+        ('ALIGN', (1,0), (1,0), 'RIGHT'),
+        ('VALIGN', (0,0), (-1,-1), 'TOP'),
+    ]))
+    elements.append(footer_table)
 
     doc.build(elements)
     return response
