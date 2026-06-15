@@ -3352,8 +3352,8 @@ input {
 
 @media (max-width: 768px) {
   .bottom-bar {
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    /* align-items: center; */
     gap: 15px;
   }
 }
