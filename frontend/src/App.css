@@ -3334,3 +3334,18 @@ input {
     margin-left: calc(-50vw + 50%);
   }
 }
+
+@media (max-width: 768px) {
+  .bottom-bar {
+    padding: 20px 15px;
+    gap: 15px;
+  }
+
+  .bottom-item {
+    flex-wrap: wrap;
+    text-align: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+  }
+}
