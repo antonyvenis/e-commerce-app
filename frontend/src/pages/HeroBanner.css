@@ -858,3 +858,23 @@
     padding: 0;
   }
 }
+
+@media (max-width: 768px) {
+  .bottom-bar {
+    display: flex;
+    flex-direction: column !important;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .bottom-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    white-space: normal;
+    text-align: center;
+  }
+}
