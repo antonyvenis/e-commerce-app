@@ -3327,33 +3327,3 @@ input {
   0%   { background-position: 0% center }
   100% { background-position: 220% center }
 }
-
-@media (max-width: 768px) {
-  .premium-footer {
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
-  }
-}
-
-@media (max-width: 768px) {
-  .bottom-bar {
-    padding: 20px 15px;
-    gap: 15px;
-  }
-
-  .bottom-item {
-    flex-wrap: wrap;
-    text-align: center;
-    justify-content: center;
-    margin: 0;
-    padding: 0;
-  }
-}
-
-@media (max-width: 768px) {
-  .bottom-bar {
-    flex-direction: row;
-    /* align-items: center; */
-    gap: 15px;
-  }
-}
