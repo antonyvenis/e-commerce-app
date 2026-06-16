@@ -74,7 +74,9 @@ function Login() {
   return (
     <div className="login-container">
       <div className="login-box">
-        <h2>⚡<span className="App-Name">𝓛𝓮𝓰𝓮𝓷𝓭<sup>💫</sup></span>⚡ Login🌟</h2>
+        <h4>⚡<span className="App-Name">𝓛𝓮𝓰𝓮𝓷𝓭<sup>💫</sup></span>⚡</h4>
+
+        <h2>Login Page🌟</h2>
 
       <input
         placeholder="Username"
