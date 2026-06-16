@@ -76,7 +76,7 @@ function Login() {
       <div className="login-box">
         <h1>⚡<span className="App-Name">𝓛𝓮𝓰𝓮𝓷𝓭<sup>💫</sup></span>⚡</h1>
 
-        <h2>Login Page🌟</h2>
+        <h2 style={{color: "green"}}>Login Page🌟</h2>
 
       <input
         placeholder="Username"
