@@ -173,7 +173,7 @@ function Register() {
   <div className="register-container">
     <div className="register-box">
 
-      <h2>⚡<span className="App-Name">𝓛𝓮𝓰𝓮𝓷𝓭<sup>💫</sup></span>⚡ Register 🚀</h2>
+      <h2>⚡<span className="App-Name">𝓛𝓮𝓰𝓮𝓷𝓭<sup>💫</sup></span>⚡ Register🚀</h2>
 
       <input
         placeholder="Username"
