@@ -127,8 +127,9 @@ function ForgotPassword() {
   return (
     <div className="forgot-container">
       <div className="forgot-box">
+        <h1>⚡<span className="App-Name">𝓛𝓮𝓰𝓮𝓷𝓭<sup>💫</sup></span>⚡</h1>
 
-        <h2>Forgot Password 🔑</h2>
+        <h2 style={{color: "green"}}>Forgot Password 🔑</h2>
 
         <input
           placeholder="Username"
