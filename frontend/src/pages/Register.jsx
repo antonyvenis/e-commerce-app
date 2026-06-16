@@ -173,7 +173,9 @@ function Register() {
   <div className="register-container">
     <div className="register-box">
 
-      <h2>⚡<span className="App-Name">𝓛𝓮𝓰𝓮𝓷𝓭<sup>💫</sup></span>⚡ Register🚀</h2>
+      <h1>⚡<span className="App-Name">𝓛𝓮𝓰𝓮𝓷𝓭<sup>💫</sup></span>⚡</h1>
+
+      <h2 style={{color: "green"}}>Register🚀</h2>
 
       <input
         placeholder="Username"
