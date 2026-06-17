@@ -76,6 +76,20 @@ Key technical highlights include secure JWT-based authentication, interactive or
 * **Automated CI/CD:** GitHub Actions workflows for continuous linting, building, and deployments.
 * **Responsive Styling:** Mobile-first user interfaces designed with utility-first Tailwind CSS classes.
 
+
+## ✨ Project Features
+
+- Multi-Vendor Restaurant System
+- JWT Authentication
+- OTP Email Verification
+- Add to Cart
+- Wishlist
+- Order Management
+- User Profile Management
+- Responsive UI
+- Admin Dashboard
+- PostgreSQL Database (Neon)
+
 ## 📈 Project Highlights
 
 - ⚛️ React + Vite Frontend
@@ -88,19 +102,6 @@ Key technical highlights include secure JWT-based authentication, interactive or
 - 💳 Checkout Flow
 - 📦 Order Tracking
 - 🚀 Vercel + Render Deployment
-
-## ✨ Features
-
-- Multi-Vendor Restaurant System
-- JWT Authentication
-- OTP Email Verification
-- Add to Cart
-- Wishlist
-- Order Management
-- User Profile Management
-- Responsive UI
-- Admin Dashboard
-- PostgreSQL Database (Neon)
 
 ---
 
