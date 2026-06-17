@@ -1,6 +1,6 @@
 <!-- # <p align="center">⚡𝓛𝓮𝓰𝓮𝓷𝓭💫⚡</p> -->
 <p align="center">
-  <img src="frontend\src\pages\legend-little.svg" alt="⚡Legend💫⚡" width="500"/>
+  <img src="frontend/src/pages/legend-little.svg" alt="⚡Legend💫⚡" width="500"/>
 </p>
 <p align="center">
   <b>A Production-Grade, Multi-Vendor Food Delivery Web Application</b>
@@ -12,12 +12,12 @@
 <img src="https://img.shields.io/badge/🌐_Live_Demo-Visit_App-brightgreen?style=for-the-badge" alt="Live Demo">
 </a>
 
-<a href="https://github.com/antonyvenis/food-delivery-app">
-<img src="https://img.shields.io/github/stars/antonyvenis/food-delivery-app?style=for-the-badge&logo=github" alt="Stars">
+<a href="https://github.com/antonyvenis/e-commerce-app">
+<img src="https://img.shields.io/github/stars/antonyvenis/e-commerce-app?style=for-the-badge&logo=github&color=ffcb2b" alt="GitHub stars">
 </a>
 
-<a href="https://github.com/antonyvenis/food-delivery-app/network/members">
-<img src="https://img.shields.io/github/forks/antonyvenis/food-delivery-app?style=for-the-badge&logo=github" alt="Forks">
+<a href="https://github.com/antonyvenis/e-commerce-app/network/members">
+<img src="https://img.shields.io/github/forks/antonyvenis/e-commerce-app?style=for-the-badge&logo=github&color=ffcb2b" alt="GitHub forks">
 </a>
 
 <img src="https://img.shields.io/badge/Frontend-Vercel-black?style=for-the-badge&logo=vercel" alt="Vercel">
@@ -26,8 +26,8 @@
 
 <img src="https://img.shields.io/badge/Database-Neon-00E599?style=for-the-badge&logo=postgresql" alt="Neon">
 
-<a href="https://github.com/antonyvenis/food-delivery-app/blob/main/LICENSE">
-<img src="https://img.shields.io/github/license/antonyvenis/food-delivery-app?style=for-the-badge&color=ffcb2b" alt="License">
+<a href="https://github.com/antonyvenis/e-commerce-app/blob/main/LICENSE">
+<img src="https://img.shields.io/github/license/antonyvenis/e-commerce-app?style=for-the-badge&color=ffcb2b" alt="License">
 </a>
 
 </div>
@@ -38,7 +38,7 @@
 
 <p align="center">
   <!-- <img src="" alt="⚡Legend💫 Food Delivery App Banner" width="85%"/> -->
-  <img src="frontend\src\assets\images\hero_banner.png" alt="Hero Banner" width="85%"/>
+  <img src="frontend/src/assets/images/hero_banner.png" alt="Hero Banner" width="85%"/>
 </p>
 
 
@@ -471,7 +471,7 @@ All core endpoints are exposed under the `/api` prefix path.
   <table border="0">
     <tr>
       <td align="center" width="33%">
-        <img src="frontend\src\assets\images\home_image.png" alt="Home Screen" width="100%"/><br/>
+        <img src="frontend/src/assets/images/home_image.png" alt="Home Screen" width="100%"/><br/>
         <b>🏠 Home Screen</b>
       </td>
       <td align="center" width="33%">
