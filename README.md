@@ -76,32 +76,46 @@ Key technical highlights include secure JWT-based authentication, interactive or
 * **Automated CI/CD:** GitHub Actions workflows for continuous linting, building, and deployments.
 * **Responsive Styling:** Mobile-first user interfaces designed with utility-first Tailwind CSS classes.
 
-
 ## ✨ Project Features
 
-- Multi-Vendor Restaurant System
-- JWT Authentication
-- OTP Email Verification
-- Add to Cart
-- Wishlist
-- Order Management
-- User Profile Management
-- Responsive UI
-- Admin Dashboard
-- PostgreSQL Database (Neon)
+* 🍽️ Multi-Vendor Restaurant System
+* 🔐 Secure JWT Authentication
+* 📧 OTP Email Verification (Brevo)
+* ☁️ Cloudinary Image Upload & Storage
+* 🛒 Smart Cart Management
+* ❤️ Wishlist Functionality
+* 📦 Real-Time Order Management
+* 👤 User Profile Management
+* 🐘 PostgreSQL Database (Neon)
+* 🚀 Backend Hosted on Render
+* ▲ Frontend Hosted on Vercel
+* 📱 Fully Responsive Design
+* ⚡ Fast & Optimized Performance
+* 🛠️ Powerful Admin Dashboard
+* 🔍 Advanced Product Search
+* 🔄 RESTful API Integration
+* 🛡️ Secure Authentication & Authorization
+
+---
 
 ## 📈 Project Highlights
 
-- ⚛️ React + Vite Frontend
-- 🐍 Django REST Backend
-- 🐘 PostgreSQL (Neon)
-- 🔐 JWT Authentication
-- 📧 OTP Verification
-- ❤️ Wishlist System
-- 🛒 Cart Management
-- 💳 Checkout Flow
-- 📦 Order Tracking
-- 🚀 Vercel + Render Deployment
+* ⚛️ React + Vite Frontend
+* 🐍 Django REST Framework Backend
+* 🐘 PostgreSQL Database (Neon)
+* 🔐 JWT-Based Authentication
+* 📧 Email OTP Verification (Brevo)
+* ☁️ Cloudinary Media Storage
+* ❤️ Wishlist & Favorites System
+* 🛒 Dynamic Shopping Cart
+* 💳 Secure Checkout Flow
+* 📦 Order Tracking & History
+* 👤 User Profile Management
+* 🚀 Render Backend Deployment
+* ▲ Vercel Frontend Deployment
+* 📱 Mobile-First Responsive UI
+* 🔄 REST API Architecture
+
 
 ---
 
