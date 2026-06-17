@@ -440,16 +440,18 @@
   /* Bottom Bar */
 
   .bottom-bar {
-    position: relative !important;
-    bottom: auto !important;
-    left: auto !important;
-    transform: none !important;
+    position: static !important;
 
-    margin-top: 40px;
-    width: 100%;
+    width: 90%;
+    max-width: 420px;
+
+    margin: 30px auto 0;
 
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
     gap: 15px;
 
     padding: 20px;
@@ -462,13 +464,17 @@
   }
 
   .bottom-item {
+    width: 100%;
+
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+
     gap: 10px;
 
     text-align: center;
     font-size: 1rem;
+    line-height: 1.5;
   }
 
   .bottom-dot {
