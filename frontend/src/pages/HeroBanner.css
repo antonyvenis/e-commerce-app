@@ -908,7 +908,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 70px;
   gap: 20px;
   margin: 0;
   gap: 12px;
@@ -924,5 +923,64 @@
 
   .bottom-item span:last-child {
     font-size: 0.95rem;
+  }
+}
+
+
+/* ============================================
+   MOBILE
+   ============================================ */
+
+@media (max-width: 768px) {
+
+  .bottom-bar {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+
+    padding: 20px 15px;
+
+    text-align: center;
+  }
+
+  .bottom-item {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    width: 100%;
+
+    text-align: center;
+
+    white-space: normal;
+
+    margin: 0;
+    padding: 0;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .bottom-bar {
+    gap: 10px;
+    padding: 16px 12px;
+  }
+
+  .bottom-item {
+    font-size: 12px;
+  }
+
+  .bottom-dot {
+    width: 5px;
+    height: 5px;
   }
 }
