@@ -914,3 +914,15 @@
   gap: 12px;
 }
 }
+
+@media (max-width: 768px) {
+  .bottom-item {
+    justify-content: center;
+    text-align: center;
+    padding: 0 10px;
+  }
+
+  .bottom-item span:last-child {
+    font-size: 0.95rem;
+  }
+}

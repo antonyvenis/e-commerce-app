@@ -47,15 +47,15 @@ function HeroBanner() {
               <span className="stat-label">App Rating</span>
             </div>
           </div>
-
+          
           <div className="stack-row">
-            <span className="stack-tag hot">React</span>
-            <span className="stack-tag hot">Django</span>
-            <span className="stack-tag">JWT Auth</span>
-            <span className="stack-tag">PostgreSQL</span>
-            <span className="stack-tag">Tailwind CSS</span>
-            <span className="stack-tag">Vercel</span>
-          </div>
+  <span className="stack-tag hot">⚛️ React</span>
+  <span className="stack-tag hot">🐍 Django</span>
+  <span className="stack-tag">🔒 Auth</span>
+  <span className="stack-tag">🐘 Neon PostgreSQL</span>
+  <span className="stack-tag">🎨 Tailwind</span>
+  <span className="stack-tag">☁️ Vercel</span>
+</div>
 
           <div className="cta-row">
             <a
