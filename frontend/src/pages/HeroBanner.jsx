@@ -170,7 +170,7 @@ function HeroBanner() {
 
 <div className="bottom-item">
   <span className="bottom-dot"></span>
-  <span>👨‍💻 by Antony Venis T</span>
+  <span>👨‍💻 Crafted by Antony Venis T</span>
 </div>
       </div>
     </div>
