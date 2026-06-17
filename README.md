@@ -7,12 +7,29 @@
 </p>
 
 <div align="center">
-  <a href="https://e-commerce-app-food.vercel.app/login"><img src="https://img.shields.io/badge/🌐%20Live%20Demo-Visit%20App-brightgreen?style=for-the-badge" alt="Live Demo"></a>
-  <a href="https://github.com/antonyvenis/food-delivery-app"><img src="https://img.shields.io/github/stars/antonyvenis/food-delivery-app?style=for-the-badge&logo=github&color=ffcb2b" alt="GitHub stars"></a>
-  <a href="https://github.com/antonyvenis/food-delivery-app/network/members"><img src="https://img.shields.io/github/forks/antonyvenis/food-delivery-app?style=for-the-badge&logo=github&color=ffcb2b" alt="GitHub forks"></a>
-  <a href="https://github.com/antonyvenis/food-delivery-app/blob/main/LICENSE"><img src="https://img.shields.io/github/license/antonyvenis/food-delivery-app?style=for-the-badge&color=ffcb2b" alt="License"></a>
-  <a href="https://vercel.com"><img src="https://img.shields.io/badge/Frontend-Vercel-000000?style=for-the-badge&logo=vercel" alt="Vercel"></a>
-  <a href="https://render.com"><img src="https://img.shields.io/badge/Backend-Render-000000?style=for-the-badge&logo=render" alt="Render"></a>
+
+<a href="https://e-commerce-app-food.vercel.app/login">
+<img src="https://img.shields.io/badge/🌐_Live_Demo-Visit_App-brightgreen?style=for-the-badge" alt="Live Demo">
+</a>
+
+<a href="https://github.com/antonyvenis/food-delivery-app">
+<img src="https://img.shields.io/github/stars/antonyvenis/food-delivery-app?style=for-the-badge&logo=github" alt="Stars">
+</a>
+
+<a href="https://github.com/antonyvenis/food-delivery-app/network/members">
+<img src="https://img.shields.io/github/forks/antonyvenis/food-delivery-app?style=for-the-badge&logo=github" alt="Forks">
+</a>
+
+<img src="https://img.shields.io/badge/Frontend-Vercel-black?style=for-the-badge&logo=vercel" alt="Vercel">
+
+<img src="https://img.shields.io/badge/Backend-Render-46E3B7?style=for-the-badge&logo=render" alt="Render">
+
+<img src="https://img.shields.io/badge/Database-Neon-00E599?style=for-the-badge&logo=postgresql" alt="Neon">
+
+<a href="https://github.com/antonyvenis/food-delivery-app/blob/main/LICENSE">
+<img src="https://img.shields.io/github/license/antonyvenis/food-delivery-app?style=for-the-badge&color=ffcb2b" alt="License">
+</a>
+
 </div>
 
 ---
@@ -58,6 +75,32 @@ Key technical highlights include secure JWT-based authentication, interactive or
 * **Containerised Architecture:** Dockerised environments to maintain configuration parity between development, testing, and staging environments.
 * **Automated CI/CD:** GitHub Actions workflows for continuous linting, building, and deployments.
 * **Responsive Styling:** Mobile-first user interfaces designed with utility-first Tailwind CSS classes.
+
+## 📈 Project Highlights
+
+- ⚛️ React + Vite Frontend
+- 🐍 Django REST Backend
+- 🐘 PostgreSQL (Neon)
+- 🔐 JWT Authentication
+- 📧 OTP Verification
+- ❤️ Wishlist System
+- 🛒 Cart Management
+- 💳 Checkout Flow
+- 📦 Order Tracking
+- 🚀 Vercel + Render Deployment
+
+## ✨ Features
+
+- Multi-Vendor Restaurant System
+- JWT Authentication
+- OTP Email Verification
+- Add to Cart
+- Wishlist
+- Order Management
+- User Profile Management
+- Responsive UI
+- Admin Dashboard
+- PostgreSQL Database (Neon)
 
 ---
 
@@ -522,6 +565,12 @@ Contributions are welcomed to improve the features of **⚡𝓛𝓮𝓰𝓮𝓷�
 ---
 
 ## 📄 License
+
+This project is licensed under the MIT License.
+
+You are free to use, modify, distribute, and adapt this project for personal and commercial purposes, provided that the original copyright notice and license are included.
+
+For more details, see the [LICENSE](./LICENSE) file.
 
 Distributed under the **MIT License**. See [`LICENSE`](./LICENSE) file details for terms of use.
 
