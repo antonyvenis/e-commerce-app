@@ -547,3 +547,31 @@
     flex-shrink: 0;
   }
 }
+
+@media (max-width: 768px){
+
+  .content{
+    display:flex;
+    flex-direction:column;
+  }
+
+  .bottom-bar{
+    position:relative !important;
+    display:flex !important;
+    flex-direction:column !important;
+
+    width:90% !important;
+    max-width:350px !important;
+
+    margin:40px auto 0 auto !important;
+
+    left:auto !important;
+    right:auto !important;
+    top:auto !important;
+    bottom:auto !important;
+    transform:none !important;
+
+    z-index:10;
+  }
+
+}
