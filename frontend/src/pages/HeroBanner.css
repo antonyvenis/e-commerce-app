@@ -481,3 +481,69 @@
     flex-shrink: 0;
   }
 }
+
+/* ==================================
+   MOBILE FIX
+================================== */
+
+@media (max-width: 768px) {
+
+  .hero-banner-page {
+    padding: 120px 20px 50px;
+    min-height: auto;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .right {
+    display: none;
+  }
+
+  .bottom-bar {
+    position: relative !important;
+    left: unset !important;
+    right: unset !important;
+    top: unset !important;
+    bottom: unset !important;
+    transform: none !important;
+
+    width: 100%;
+    max-width: 350px;
+
+    margin: 35px auto 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 14px;
+
+    padding: 18px;
+
+    border-radius: 20px;
+
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .bottom-item {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    text-align: center;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .bottom-dot {
+    flex-shrink: 0;
+  }
+}
