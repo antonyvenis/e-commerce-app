@@ -910,5 +910,7 @@
   justify-content: center;
   margin-right: 70px;
   gap: 20px;
+  margin: 0;
+  gap: 12px;
 }
 }
