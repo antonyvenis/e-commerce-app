@@ -189,6 +189,7 @@ cloudinary.config(
 # EMAIL_HOST_USER = 'aabc96001@smtp-brevo.com'
 
 # # SMTP Key (xsmtpsib-...)
+
 # EMAIL_HOST_PASSWORD = os.getenv("BREVO_SMTP_KEY")
 
 # DEFAULT_FROM_EMAIL = 'antonyvenis1212@gmail.com'
