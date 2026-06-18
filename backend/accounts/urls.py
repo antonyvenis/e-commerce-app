@@ -185,6 +185,7 @@ from .views import (
     test_email,
     generate_invoice,
     create_admin,
+    health_check,
 )
 
 urlpatterns = [
@@ -213,4 +214,5 @@ urlpatterns = [
     path("load-products/", load_products),
     path("add-products-bulk/", add_products_bulk),
     path("create-admin/", create_admin),
+    path("health/", health_check)
 ]
