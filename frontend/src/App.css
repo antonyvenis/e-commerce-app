@@ -3327,3 +3327,24 @@ input {
   0%   { background-position: 0% center }
   100% { background-position: 220% center }
 }
+
+@media (max-width: 480px) {
+.cart-item {
+  overflow: visible;
+}
+.cart-img {
+  object-fit: contain;
+  border-radius: 12px;
+}
+}
+
+@media (max-width: 780px) {
+.cart-item {
+  overflow: visible;
+}
+.cart-img {
+  object-fit: contain;
+  border-radius: 12px;
+}
+}
+  
