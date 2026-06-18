@@ -1224,15 +1224,12 @@ def generate_invoice(request, order_id):
     doc.build(elements)
     return response
 
-from django.contrib.auth import get_user_model
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
 
 @api_view(["GET"])
 def create_admin(request):
     User = get_user_model()
 
-    if not User.objects.filter(username="antony").exists():
+    if not User.objects.filter(username="admin").exists():
         User.objects.create_superuser(
             username="antony",
             email="antonyvenis1212@gmail.com",
