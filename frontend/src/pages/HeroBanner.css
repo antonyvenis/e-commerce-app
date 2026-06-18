@@ -494,3 +494,27 @@
 .right{
   flex:1;
 }
+
+@media (max-width: 768px) {
+
+  .bottom-bar {
+    margin-top: 50px;
+    gap: 0;
+  }
+
+  .bottom-item {
+    flex-direction: row;
+    justify-content: center;
+    text-align: center;
+    padding: 18px 10px;
+  }
+
+  .bottom-item span:last-child {
+    font-size: 15px;
+  }
+
+}
+
+.bottom-item p{
+  margin:0;
+}
