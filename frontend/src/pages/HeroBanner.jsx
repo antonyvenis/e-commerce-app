@@ -160,17 +160,17 @@ function HeroBanner() {
       <div className="bottom-bar">
         <div className="bottom-item">
   <span className="bottom-dot"></span>
-  <span>⚛️Built with React + Django</span>
+  <p>⚛️Built with React + Django</p>
 </div>
 
 <div className="bottom-item">
   <span className="bottom-dot"></span>
-  <span>🚀 Deployed on Vercel + Render</span>
+  <p>🚀 Deployed on Vercel + Render</p>
 </div>
 
 <div className="bottom-item">
   <span className="bottom-dot"></span>
-  <span>👨‍💻 Crafted by Antony Venis T</span>
+  <p>👨‍💻 Crafted by Antony Venis T</p>
 </div>
       </div>
     </div>
