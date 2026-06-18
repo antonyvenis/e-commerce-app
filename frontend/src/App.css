@@ -3328,29 +3328,21 @@ input {
   100% { background-position: 220% center }
 }
 
-@media (max-width: 480px) {
-.cart-item {
-  overflow: visible;
-}
-.cart-img {
-  border-radius: 12px;
-  width: 80%;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 12px;
-}
-}
 
 @media (max-width: 780px) {
-.cart-item {
-  overflow: visible;
+  .cart-img {
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+    border-radius: 12px;
+    object-fit: cover; /* applies if .cart-img is the <img> tag itself */
+    display: block;
+  }
+
+  .cart-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* applies if .cart-img wraps an <img> inside */
+    display: block;
+  }
 }
-.cart-img {
-  border-radius: 12px;
-  width: 80%;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 12px;
-}
-}
-  
