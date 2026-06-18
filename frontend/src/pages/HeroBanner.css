@@ -311,267 +311,186 @@
   }
 }
 
-/* ============================================
-   MOBILE RESPONSIVE (768px and below)
-   ============================================ */
+/* ==========================================
+   📱 MOBILE RESPONSIVE (0px - 768px)
+========================================== */
+
 @media (max-width: 768px) {
 
-  .bottom-bar {
-    flex-direction: column;
-    gap: 15px;
-
-    margin-top: 40px;
-
-    text-align: center;
-  }
-
-  .bottom-item {
-    justify-content: center;
-    width: 100%;
-  }
-}
-
-/* =========================
-   MOBILE RESPONSIVE FIX
-========================= */
-
-@media screen and (max-width: 768px) {
-
   .hero-banner-page {
-    padding: 120px 20px 40px;
+    padding: 40px 20px;
     min-height: auto;
+    overflow-x: hidden;
   }
 
   .content {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 40px;
+    gap: 30px;
   }
 
-  .left,
-  .right {
-    width: 100%;
-    max-width: 100%;
-    text-align: center;
-  }
-
-  .brand {
-    font-size: 3rem;
-    line-height: 1.2;
-  }
-
-  .tagline {
-    font-size: 1.2rem;
-    line-height: 1.7;
-  }
-
-  /* Stats */
-
-  .herobanner-stats {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    margin-top: 30px;
-  }
-
-  .stat {
-    text-align: center;
-  }
-
-  .stat-num {
-    font-size: 2.2rem;
-    white-space: nowrap;
-  }
-
-  .stat-label {
-    font-size: 0.95rem;
-  }
-
-  /* Stack Tags */
-
-  .stack-row {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 30px;
-  }
-
-  .stack-tag {
-    font-size: 0.9rem;
-    padding: 8px 14px;
-  }
-
-  /* Buttons */
-
-  .cta-row {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    margin-top: 30px;
-  }
-
-  .btn-primary,
-  .btn-secondary {
-    width: 100%;
-    max-width: 320px;
-    text-align: center;
-  }
-
-  /* Right Cards */
-
-  .main-card {
-    width: 100%;
-  }
-
-  .row-cards {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  .mini-card,
-  .hero-order-card {
-    width: 100%;
-  }
-
-  /* Bottom Bar */
-
-  .bottom-bar {
-    position: static !important;
-
-    width: 90%;
-    max-width: 420px;
-
-    margin: 30px auto 0;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    gap: 15px;
-
-    padding: 20px;
-
-    border-radius: 20px;
-
-    backdrop-filter: blur(20px);
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-  }
-
-  .bottom-item {
-    width: 100%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 10px;
-
-    text-align: center;
-    font-size: 1rem;
-    line-height: 1.5;
-  }
-
-  .bottom-dot {
-    flex-shrink: 0;
-  }
-}
-
-/* ==================================
-   MOBILE FIX
-================================== */
-
-@media (max-width: 768px) {
-
-  .hero-banner-page {
-    padding: 120px 20px 50px;
-    min-height: auto;
-  }
-
-  .content {
-    display: flex;
-    flex-direction: column;
-  }
-
+  /* Hide right section */
   .right {
     display: none;
   }
 
-  .bottom-bar {
-    position: relative !important;
-    left: unset !important;
-    right: unset !important;
-    top: unset !important;
-    bottom: unset !important;
-    transform: none !important;
-
+  .left {
     width: 100%;
-    max-width: 350px;
+    text-align: center;
+    align-items: center;
+  }
 
-    margin: 35px auto 0;
+  .eyebrow {
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
+    justify-content: center;
+    font-size: 13px;
+    padding: 12px 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
 
+  .brand {
+    font-size: 52px;
+    margin-top: 25px;
+    line-height: 1.2;
+    word-break: break-word;
+  }
+
+  .tagline {
+    margin-top: 25px;
+    font-size: 18px;
+    line-height: 1.8;
+    max-width: 100%;
+  }
+
+  .tagline span {
+    display: inline;
+  }
+
+  /* Stats Grid */
+  .herobanner-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 40px;
+    gap: 20px;
+    width: 100%;
+  }
+
+  .stat {
+    padding: 20px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .stat-num {
+    display: block;
+    font-size: 42px;
+    font-weight: 800;
+  }
+
+  .stat-label {
+    display: block;
+    margin-top: 8px;
+    font-size: 14px;
+  }
+
+  /* Tech Stack */
+  .stack-row {
+    margin-top: 35px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .stack-tag {
+    font-size: 14px;
+    padding: 10px 16px;
+  }
+
+  /* Buttons */
+  .cta-row {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    width: 100%;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    flex: 1;
+    text-align: center;
+    padding: 18px 15px;
+    font-size: 17px;
+  }
+
+  /* Bottom Bar */
+  .bottom-bar {
+    margin-top: 50px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    gap: 14px;
-
-    padding: 18px;
-
-    border-radius: 20px;
-
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.08);
+    gap: 25px;
   }
 
   .bottom-item {
-    width: 100%;
-    display: flex;
     justify-content: center;
-    align-items: center;
-    gap: 10px;
-
     text-align: center;
-    font-size: 15px;
-    line-height: 1.6;
+    font-size: 18px;
   }
 
-  .bottom-dot {
-    flex-shrink: 0;
-  }
 }
 
-@media (max-width: 768px){
+@media (max-width: 480px) {
 
-  .content{
-    display:flex;
-    flex-direction:column;
+  .hero-banner-page {
+    padding: 30px 16px;
   }
 
-  .bottom-bar{
-    position:relative !important;
-    display:flex !important;
-    flex-direction:column !important;
-
-    width:90% !important;
-    max-width:350px !important;
-
-    margin:40px auto 0 auto !important;
-
-    left:auto !important;
-    right:auto !important;
-    top:auto !important;
-    bottom:auto !important;
-    transform:none !important;
-
-    z-index:10;
+  .brand {
+    font-size: 42px;
   }
 
+  .tagline {
+    font-size: 16px;
+  }
+
+  .stat-num {
+    font-size: 32px;
+  }
+
+  .stat-label {
+    font-size: 13px;
+  }
+
+  .stack-tag {
+    font-size: 13px;
+    padding: 8px 14px;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    font-size: 15px;
+    padding: 15px;
+  }
+
+  .bottom-item {
+    font-size: 15px;
+  }
+
+}
+
+.content{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.left{
+  flex:1;
+}
+
+.right{
+  flex:1;
 }
