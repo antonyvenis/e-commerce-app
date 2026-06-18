@@ -184,6 +184,7 @@ from .views import (
     verify_register_otp,
     test_email,
     generate_invoice,
+    create_admin,
 )
 
 urlpatterns = [
@@ -211,4 +212,5 @@ urlpatterns = [
     path("products/", get_products),
     path("load-products/", load_products),
     path("add-products-bulk/", add_products_bulk),
+    path("create-admin", create_admin),
 ]
