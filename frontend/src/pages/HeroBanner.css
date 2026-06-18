@@ -512,6 +512,10 @@
   .bottom-item span:last-child {
     font-size: 15px;
   }
+  .bottom-item {
+    visibility: hidden;
+    opacity: 0;
+  }
 
 }
 
