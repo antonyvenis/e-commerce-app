@@ -54,7 +54,7 @@ function HeroBanner() {
   <span className="stack-tag">🔒 JWT Auth</span>
   <span className="stack-tag">☁️ Cloudinary</span>
   <span className="stack-tag">📧 Brevo</span>
-  <span className="stack-tag">🐘 Neon PostgreSQL</span>
+  <span className="stack-tag">🐘 PostgreSQL</span>
   <span className="stack-tag">🎨 Tailwind</span>
   <span className="stack-tag">☁️ Vercel</span>
   <span className="stack-tag">🚀 Render</span>
