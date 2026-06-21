@@ -1,6 +1,150 @@
+# from django.contrib.auth.models import AbstractUser
+# from django.db import models
+# from django.utils import timezone
+# import uuid
+# from cloudinary.models import CloudinaryField
+
+
+# # ============================
+# # 👤 Custom User
+# # ============================
+# class CustomUser(AbstractUser):
+#     username = models.CharField(max_length=100, unique=True)
+#     email = models.EmailField(unique=True)
+#     phone = models.CharField(max_length=15, unique=True)
+#     image = models.TextField(blank=True, null=True)
+    
+
+#     def __str__(self):
+#         return self.username
+
+
+# # ============================
+# # 🔐 OTP MODEL
+# # ============================
+# class OTP(models.Model):
+#     email = models.EmailField()
+#     otp = models.CharField(max_length=6)
+#     is_verified = models.BooleanField(default=False)
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     otp_type = models.CharField(max_length=20, default="register")  # register / forgot
+
+#     # 🔥 NEW FIELDS (ANTI-SPAM)
+#     last_sent_at = models.DateTimeField(null=True, blank=True)
+#     send_count = models.IntegerField(default=0)
+
+#     def __str__(self):
+#         return self.email         
+
+# # ============================
+# # ❤️ Likes
+# # ============================
+# class Like(models.Model):
+#     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+#     item_name = models.CharField(max_length=200)
+#     image = models.URLField()
+#     price = models.FloatField(default=0) # 🔥 OPTIONAL (if you want to show price in likes)
+#     product_id = models.IntegerField(null=True, blank=True)
+
+#     def __str__(self):
+#         return f"{self.user.username} ❤️ {self.item_name}"
+
+
+# # ============================
+# # 🛒 Cart Items
+# # ============================
+# class CartItem(models.Model):
+#     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+#     item_name = models.CharField(max_length=200)
+#     price = models.FloatField()
+#     quantity = models.IntegerField(default=1)
+#     image = models.URLField()
+#     product_id = models.IntegerField(null=True, blank=True)
+
+#     def __str__(self):
+#         return f"{self.user.username} 🛒 {self.item_name}"
+
+
+# # ============================
+# # 📦 ORDER (Parent 🔥)
+# # ============================
+# class Order(models.Model):
+#     STATUS_CHOICES = [
+#         ('Pending', 'Pending'),
+#         ('Preparing', 'Preparing'),
+#         ('Out for Delivery', 'Out for Delivery'),
+#         ('Delivered', 'Delivered'),
+#     ]
+
+#     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+
+#     total_price = models.FloatField(default=0)
+
+#     # 🔥 ADD HERE 👇
+#     address = models.TextField(null=True, blank=True)
+#     payment_method = models.CharField(max_length=50, null=True, blank=True)
+#     phone = models.CharField(max_length=15, null=True, blank=True)
+#     name = models.CharField(max_length=100, null=True, blank=True)
+
+#     status = models.CharField(
+#         max_length=50,
+#         choices=STATUS_CHOICES,
+#         default='Pending'
+#     )
+
+#     created_at = models.DateTimeField(auto_now_add=True)
+
+#     def __str__(self):
+#         return f"{self.user.username} 📦 Order #{self.id}"
+
+
+# # ============================
+# # 📦 ORDER ITEMS (Child 🔥🔥🔥)
+# # ============================
+# class OrderItem(models.Model):
+#     order = models.ForeignKey(
+#         Order,
+#         on_delete=models.CASCADE,
+#         related_name="items"   # 🔥 VERY IMPORTANT (frontend use pannuvom)
+#     )
+
+#     item_name = models.CharField(max_length=200)
+#     price = models.FloatField()
+#     quantity = models.IntegerField()
+#     image = models.URLField()
+
+#     def __str__(self):
+#         return f"{self.item_name} x {self.quantity}"
+
+
+
+# def product_image_path(instance, filename):
+#     ext = filename.split('.')[-1]
+#     new_name = f"{uuid.uuid4()}.{ext}"
+#     return f"products/{new_name}"
+
+
+# # ============================
+# # 🍔 PRODUCT MODEL
+# # ============================
+# class Product(models.Model):
+#     name = models.CharField(max_length=200)
+#     # price = models.FloatField()
+#     price = models.DecimalField(max_digits=10, decimal_places=2)
+#     category = models.CharField(max_length=100)
+#     rating = models.FloatField(default=0)
+#     # image = models.ImageField(upload_to=product_image_path, null=True, blank=True)
+#     image = CloudinaryField('image', null=True, blank=True)
+#     stock = models.IntegerField(default=10)
+#     offer = models.IntegerField(default=0)  # % discount
+#     is_active = models.BooleanField(default=True)
+
+#     def __str__(self):
+#         return self.name
+
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.utils import timezone
 import uuid
 from cloudinary.models import CloudinaryField
 
@@ -9,11 +153,27 @@ from cloudinary.models import CloudinaryField
 # 👤 Custom User
 # ============================
 class CustomUser(AbstractUser):
-    username = models.CharField(max_length=100, unique=True)
-    email = models.EmailField(unique=True)
-    phone = models.CharField(max_length=15, unique=True)
-    image = models.TextField(blank=True, null=True)
-    
+    username = models.CharField(
+        max_length=100,
+        unique=True,
+        db_index=True
+    )
+
+    email = models.EmailField(
+        unique=True,
+        db_index=True
+    )
+
+    phone = models.CharField(
+        max_length=15,
+        unique=True,
+        db_index=True
+    )
+
+    image = models.TextField(
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
         return self.username
@@ -23,28 +183,69 @@ class CustomUser(AbstractUser):
 # 🔐 OTP MODEL
 # ============================
 class OTP(models.Model):
-    email = models.EmailField()
-    otp = models.CharField(max_length=6)
-    is_verified = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    otp_type = models.CharField(max_length=20, default="register")  # register / forgot
+    email = models.EmailField(db_index=True)
 
-    # 🔥 NEW FIELDS (ANTI-SPAM)
-    last_sent_at = models.DateTimeField(null=True, blank=True)
+    otp = models.CharField(max_length=6)
+
+    is_verified = models.BooleanField(default=False)
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        db_index=True
+    )
+
+    otp_type = models.CharField(
+        max_length=20,
+        default="register",
+        db_index=True
+    )
+
+    last_sent_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
     send_count = models.IntegerField(default=0)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['email']),
+            models.Index(fields=['otp_type']),
+            models.Index(fields=['email', 'otp_type']),
+        ]
+
     def __str__(self):
-        return self.email         
+        return self.email
+
 
 # ============================
 # ❤️ Likes
 # ============================
 class Like(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        db_index=True
+    )
+
     item_name = models.CharField(max_length=200)
+
     image = models.URLField()
-    price = models.FloatField(default=0) # 🔥 OPTIONAL (if you want to show price in likes)
-    product_id = models.IntegerField(null=True, blank=True)
+
+    price = models.FloatField(default=0)
+
+    product_id = models.IntegerField(
+        null=True,
+        blank=True,
+        db_index=True
+    )
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['user']),
+            models.Index(fields=['product_id']),
+            models.Index(fields=['user', 'product_id']),
+        ]
 
     def __str__(self):
         return f"{self.user.username} ❤️ {self.item_name}"
@@ -54,21 +255,42 @@ class Like(models.Model):
 # 🛒 Cart Items
 # ============================
 class CartItem(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        db_index=True
+    )
+
     item_name = models.CharField(max_length=200)
+
     price = models.FloatField()
+
     quantity = models.IntegerField(default=1)
+
     image = models.URLField()
-    product_id = models.IntegerField(null=True, blank=True)
+
+    product_id = models.IntegerField(
+        null=True,
+        blank=True,
+        db_index=True
+    )
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['user']),
+            models.Index(fields=['product_id']),
+            models.Index(fields=['user', 'product_id']),
+        ]
 
     def __str__(self):
         return f"{self.user.username} 🛒 {self.item_name}"
 
 
 # ============================
-# 📦 ORDER (Parent 🔥)
+# 📦 ORDER
 # ============================
 class Order(models.Model):
+
     STATUS_CHOICES = [
         ('Pending', 'Pending'),
         ('Preparing', 'Preparing'),
@@ -76,48 +298,87 @@ class Order(models.Model):
         ('Delivered', 'Delivered'),
     ]
 
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        db_index=True
+    )
 
     total_price = models.FloatField(default=0)
 
-    # 🔥 ADD HERE 👇
-    address = models.TextField(null=True, blank=True)
-    payment_method = models.CharField(max_length=50, null=True, blank=True)
-    phone = models.CharField(max_length=15, null=True, blank=True)
-    name = models.CharField(max_length=100, null=True, blank=True)
+    address = models.TextField(
+        null=True,
+        blank=True
+    )
+
+    payment_method = models.CharField(
+        max_length=50,
+        null=True,
+        blank=True
+    )
+
+    phone = models.CharField(
+        max_length=15,
+        null=True,
+        blank=True
+    )
+
+    name = models.CharField(
+        max_length=100,
+        null=True,
+        blank=True
+    )
 
     status = models.CharField(
         max_length=50,
         choices=STATUS_CHOICES,
-        default='Pending'
+        default='Pending',
+        db_index=True
     )
 
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        db_index=True
+    )
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['user']),
+            models.Index(fields=['status']),
+            models.Index(fields=['created_at']),
+        ]
 
     def __str__(self):
         return f"{self.user.username} 📦 Order #{self.id}"
 
 
 # ============================
-# 📦 ORDER ITEMS (Child 🔥🔥🔥)
+# 📦 ORDER ITEMS
 # ============================
 class OrderItem(models.Model):
+
     order = models.ForeignKey(
         Order,
         on_delete=models.CASCADE,
-        related_name="items"   # 🔥 VERY IMPORTANT (frontend use pannuvom)
+        related_name="items",
+        db_index=True
     )
 
     item_name = models.CharField(max_length=200)
+
     price = models.FloatField()
+
     quantity = models.IntegerField()
+
     image = models.URLField()
 
     def __str__(self):
         return f"{self.item_name} x {self.quantity}"
 
 
-
+# ============================
+# PRODUCT IMAGE PATH
+# ============================
 def product_image_path(instance, filename):
     ext = filename.split('.')[-1]
     new_name = f"{uuid.uuid4()}.{ext}"
@@ -128,18 +389,46 @@ def product_image_path(instance, filename):
 # 🍔 PRODUCT MODEL
 # ============================
 class Product(models.Model):
-    name = models.CharField(max_length=200)
-    # price = models.FloatField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    category = models.CharField(max_length=100)
+
+    name = models.CharField(
+        max_length=200,
+        db_index=True
+    )
+
+    price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2
+    )
+
+    category = models.CharField(
+        max_length=100,
+        db_index=True
+    )
+
     rating = models.FloatField(default=0)
-    # image = models.ImageField(upload_to=product_image_path, null=True, blank=True)
-    image = CloudinaryField('image', null=True, blank=True)
+
+    image = CloudinaryField(
+        'image',
+        null=True,
+        blank=True
+    )
+
     stock = models.IntegerField(default=10)
-    offer = models.IntegerField(default=0)  # % discount
-    is_active = models.BooleanField(default=True)
+
+    offer = models.IntegerField(default=0)
+
+    is_active = models.BooleanField(
+        default=True,
+        db_index=True
+    )
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['name']),
+            models.Index(fields=['category']),
+            models.Index(fields=['is_active']),
+            models.Index(fields=['category', 'is_active']),
+        ]
 
     def __str__(self):
         return self.name
-
-
