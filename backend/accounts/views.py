@@ -1307,11 +1307,11 @@ from django.core.cache import cache
 from django.core.paginator import Paginator
 from django.db.models import Prefetch
 from django.views.decorators.cache import cache_page
-from .tasks import (
-    send_email_otp_task,
-    send_forgot_email_otp_task,
-    send_welcome_email_task
-)
+# from .tasks import (
+#     send_email_otp_task,
+#     send_forgot_email_otp_task,
+#     send_welcome_email_task
+# )
 
 # # ================================
 # # 📧 SEND OTP
@@ -1386,10 +1386,6 @@ def send_email_otp(email, otp):
         return False
 
 
-from django.core.cache import cache
-from .tasks import send_email_otp_task
-
-
 @api_view(['POST'])
 def send_otp(request):
     email = request.data.get("email")
@@ -1461,7 +1457,7 @@ def send_otp(request):
     # =====================================
     # CELERY EMAIL SEND
     # =====================================
-    send_email_otp_task.delay(
+    send_email_otp(
         email,
         otp
     )
@@ -1554,7 +1550,7 @@ def register(request):
         if serializer.is_valid():
             user = serializer.save()
             try:
-                send_welcome_email_task.delay(user.email, user.username)
+                send_welcome_email(user.email, user.username)
             except Exception as e:
                 print("EMAIL ERROR 👉", str(e))
             otp.delete()
@@ -1693,7 +1689,7 @@ def forgot_password_send_otp(request):
         last_sent_at=now
     )
 
-    send_forgot_email_otp_task.delay(email, otp)
+    send_forgot_email_otp(email, otp)
     return Response({"message": "OTP sent 📧"})
 
 
