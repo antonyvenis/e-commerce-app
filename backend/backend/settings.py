@@ -167,7 +167,8 @@ SESSION_COOKIE_AGE = 60 * 60 * 24 * 7  # 7 days
 SESSION_SAVE_EVERY_REQUEST = True
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://e-commerce-app-food.vercel.app"
+    "https://e-commerce-app-food.vercel.app",
+    "https://e-commerce-app-8jg4.onrender.com",
 ]
 
 
@@ -241,3 +242,10 @@ CACHES = {
 
 CELERY_BROKER_URL = os.getenv("REDIS_URL")
 CELERY_RESULT_BACKEND = os.getenv("REDIS_URL")
+
+ALLOWED_HOSTS = [
+    "e-commerce-app-8jg4.onrender.com",
+    "localhost",
+    "127.0.0.1",
+]
+
