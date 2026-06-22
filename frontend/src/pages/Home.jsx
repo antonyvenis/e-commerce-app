@@ -272,7 +272,12 @@ function Home() {
   /* 🔥 FETCH PRODUCTS */
   const fetchProducts = () => {
     axios.get("https://e-commerce-app-8jg4.onrender.com/api/products/")
-      .then(res => setData(res.data))
+      .then(res => {
+        const payload = Array.isArray(res.data)
+          ? res.data
+          : res.data?.products || [];
+        setData(payload);
+      })
       .catch(err => console.log(err));
   };
 
@@ -282,7 +287,7 @@ function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  const products = useMemo(() => data, [data]);
+  const products = useMemo(() => Array.isArray(data) ? data : [], [data]);
 
   const filtered = products.filter((product) =>
     product.name?.toLowerCase().includes(search.toLowerCase())
