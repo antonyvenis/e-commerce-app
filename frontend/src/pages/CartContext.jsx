@@ -5,9 +5,22 @@ const CartContext = createContext();
 export const CartProvider = ({ children }) => {
 
   // 🔥 Load cart from localStorage (IMPORTANT)
+  // const [cart, setCart] = useState(() => {
+  //   return JSON.parse(localStorage.getItem("cart")) || [];
+  // });
   const [cart, setCart] = useState(() => {
-    return JSON.parse(localStorage.getItem("cart")) || [];
-  });
+  try {
+    const savedCart = JSON.parse(
+      localStorage.getItem("cart")
+    );
+
+    return Array.isArray(savedCart)
+      ? savedCart
+      : [];
+  } catch {
+    return [];
+  }
+});
 
   // 🔥 Save cart to localStorage (every update)
   useEffect(() => {
