@@ -245,15 +245,25 @@ function Payment() {
           total_price: total,
 
           // 🔥 CART ITEMS
-          items: cart.map((item) => ({
-            item_name: item.item_name,
-            price: item.price,
-            quantity: item.quantity,
-            image: item.image
-          }))
-        }
-      );
+      //     items: cart.map((item) => ({
+      //       item_name: item.item_name,
+      //       price: item.price,
+      //       quantity: item.quantity,
+      //       image: item.image
+      //     }))
+      //   }
+      // );
 
+      // ✅ இப்படி மாத்து
+items: cart.map((item) => ({
+  product_id: item.id,        // ✅ இதை add பண்ணு
+  item_name: item.item_name || item.name,  // ✅ both handle
+  price: item.price,
+  quantity: item.quantity,
+  image: item.image || ""
+}))
+}
+);
       // 🧹 CLEAR CART
       clearCart();
 

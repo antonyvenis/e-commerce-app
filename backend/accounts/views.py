@@ -2208,9 +2208,14 @@ def place_order(request):
             "order_id": order.id
         })
 
+    # except Exception as e:
+    #     print("ORDER ERROR 👉", str(e))  # ✅ real error print ஆகும்
+    #     return Response({"error": str(e)}, status=400)
     except Exception as e:
-        print("ORDER ERROR 👉", str(e))  # ✅ real error print ஆகும்
-        return Response({"error": str(e)}, status=400)
+    import traceback
+    print("ORDER ERROR 👉", traceback.format_exc())  # full error print
+    return Response({"error": traceback.format_exc()}, status=400)
+
 
 # ================================
 # 📦 GET ORDERS
