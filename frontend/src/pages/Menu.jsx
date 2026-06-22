@@ -4,7 +4,6 @@
 // import { useCart } from "./CartContext";
 // import axios from "axios";
 // import { Link } from "react-router-dom";
-// // import { FaBars } from "react-icons/fa";
 
 // const API = "https://e-commerce-app-8jg4.onrender.com";
 
@@ -20,9 +19,16 @@
 //   const fetchProducts = async () => {
 //     try {
 //       const res = await axios.get(`${API}/api/products/`);
-//       setProducts(res.data);
+
+//       // ✅ SAFE FIX: always ensure array
+//       const data = Array.isArray(res.data)
+//         ? res.data
+//         : res.data?.products || [];
+
+//       setProducts(data);
 //     } catch (err) {
 //       console.log(err);
+//       setProducts([]);
 //     } finally {
 //       setLoading(false);
 //     }
@@ -32,25 +38,38 @@
 //     fetchProducts();
 //   }, []);
 
+//   // 🔥 FILTERED PRODUCTS (SAFE)
 //   const filtered = useMemo(() => {
-//     return products
+//     const safeProducts = Array.isArray(products) ? products : [];
+
+//     return safeProducts
 //       .filter(p => filter === "all" || p.category === filter)
 //       .filter(p =>
 //         p.name?.toLowerCase().includes(search.toLowerCase())
 //       );
 //   }, [products, search, filter]);
 
+//   // 🧠 SUGGESTIONS (SAFE)
 //   const suggestions = useMemo(() => {
-//     if (cart.length === 0) return products.slice(0, 3);
+//     const safeProducts = Array.isArray(products) ? products : [];
+
+//     if (!cart || cart.length === 0) {
+//       return safeProducts.slice(0, 3);
+//     }
+
 //     const categories = cart.map(item => item.category);
-//     return products.filter(p => categories.includes(p.category));
+
+//     return safeProducts.filter(p =>
+//       categories.includes(p.category)
+//     );
 //   }, [products, cart]);
 
 //   return (
 //     <div>
 
-//       {/* 🔥 TOP BAR (Search + Hamburger same line) */}
+//       {/* 🔥 TOP BAR */}
 //       <div className="top-bar">
+
 //         <motion.input
 //           type="text"
 //           placeholder="Search food...🔍"
@@ -61,13 +80,13 @@
 //           animate={{ y: 0, opacity: 1 }}
 //         />
 
-//         {/* <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}> ☰ </button> */}
-
-//         <button 
-//   className="hamburger" 
-//   onClick={() => setMenuOpen(!menuOpen)}
-//   style={{ display: window.innerWidth >= 768 ? 'none' : 'flex' }}
-//   > ☰ </button>
+//         {/* ✅ FIX: remove window.innerWidth usage */}
+//         <button
+//           className="hamburger"
+//           onClick={() => setMenuOpen(!menuOpen)}
+//         >
+//           ☰
+//         </button>
 
 //       </div>
 
@@ -75,7 +94,7 @@
 //       <div className={`filters ${menuOpen ? "open" : ""}`}>
 
 //         <button onClick={() => { setFilter("all"); setMenuOpen(false); }}>
-//          All 🍽️
+//           All 🍽️
 //         </button>
 
 //         <button onClick={() => { setFilter("veg"); setMenuOpen(false); }}>
@@ -95,7 +114,7 @@
 //         </button>
 
 //         <button onClick={() => setMenuOpen(false)}>
-//           <Link to="/food" id="Link-text">Cake 🍰 </Link>
+//           <Link to="/food" id="Link-text">Cake 🍰</Link>
 //         </button>
 
 //         <button onClick={() => setMenuOpen(false)}>
@@ -103,7 +122,7 @@
 //         </button>
 
 //         <button onClick={() => { setFilter("comming-soon"); setMenuOpen(false); }}>
-//           Coming 🔜.... 🕒
+//           Coming 🔜 🕒
 //         </button>
 
 //       </div>
@@ -115,6 +134,7 @@
 //         <p style={{ textAlign: "center" }}>Loading... ⏳</p>
 //       ) : (
 //         <div className="grid">
+
 //           <AnimatePresence>
 //             {filtered.length > 0 ? (
 //               filtered.map(item => (
@@ -135,10 +155,11 @@
 //               </motion.p>
 //             )}
 //           </AnimatePresence>
+
 //         </div>
 //       )}
 
-//       {/* 🧠 Suggestions */}
+//       {/* 🧠 SUGGESTIONS */}
 //       <h2 className="title">🧠 Recommended for You</h2>
 
 //       <div className="grid">
@@ -155,7 +176,7 @@
 
 // export default Menu;
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ProductCard from "./ProductCart";
 import { useCart } from "./CartContext";
@@ -173,11 +194,17 @@ function Menu() {
   const [loading, setLoading] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
 
+  // 🔥 INFINITE SCROLL STATE
+  const [visibleCount, setVisibleCount] = useState(10);
+  const loaderRef = useRef(null);
+
+  /* ================================
+     🟢 FETCH PRODUCTS
+  ================================ */
   const fetchProducts = async () => {
     try {
       const res = await axios.get(`${API}/api/products/`);
 
-      // ✅ SAFE FIX: always ensure array
       const data = Array.isArray(res.data)
         ? res.data
         : res.data?.products || [];
@@ -195,7 +222,16 @@ function Menu() {
     fetchProducts();
   }, []);
 
-  // 🔥 FILTERED PRODUCTS (SAFE)
+  /* ================================
+     🔄 RESET visible count on filter/search change
+  ================================ */
+  useEffect(() => {
+    setVisibleCount(10);
+  }, [search, filter]);
+
+  /* ================================
+     🔥 FILTERED PRODUCTS (SAFE)
+  ================================ */
   const filtered = useMemo(() => {
     const safeProducts = Array.isArray(products) ? products : [];
 
@@ -206,7 +242,40 @@ function Menu() {
       );
   }, [products, search, filter]);
 
-  // 🧠 SUGGESTIONS (SAFE)
+  /* ================================
+     👁️ VISIBLE PRODUCTS (for infinite scroll)
+  ================================ */
+  const visibleProducts = useMemo(() => {
+    return filtered.slice(0, visibleCount);
+  }, [filtered, visibleCount]);
+
+  /* ================================
+     ♾️ INFINITE SCROLL - load more
+  ================================ */
+  const loadMore = useCallback(() => {
+    setVisibleCount(prev => prev + 10);
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadMore();
+        }
+      },
+      { threshold: 1.0 }
+    );
+
+    if (loaderRef.current) {
+      observer.observe(loaderRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [loadMore, visibleProducts]);
+
+  /* ================================
+     🧠 SUGGESTIONS (SAFE)
+  ================================ */
   const suggestions = useMemo(() => {
     const safeProducts = Array.isArray(products) ? products : [];
 
@@ -221,6 +290,9 @@ function Menu() {
     );
   }, [products, cart]);
 
+  /* ================================
+     🎨 UI
+  ================================ */
   return (
     <div>
 
@@ -237,7 +309,6 @@ function Menu() {
           animate={{ y: 0, opacity: 1 }}
         />
 
-        {/* ✅ FIX: remove window.innerWidth usage */}
         <button
           className="hamburger"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -290,30 +361,56 @@ function Menu() {
       {loading ? (
         <p style={{ textAlign: "center" }}>Loading... ⏳</p>
       ) : (
-        <div className="grid">
+        <>
+          <div className="grid">
+            <AnimatePresence>
+              {visibleProducts.length > 0 ? (
+                visibleProducts.map(item => (
+                  <motion.div
+                    key={item.id}
+                    layout
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.5 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <ProductCard product={item} />
+                  </motion.div>
+                ))
+              ) : (
+                <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                  No items found 😢
+                </motion.p>
+              )}
+            </AnimatePresence>
+          </div>
 
-          <AnimatePresence>
-            {filtered.length > 0 ? (
-              filtered.map(item => (
-                <motion.div
-                  key={item.id}
-                  layout
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.5 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <ProductCard product={item} />
-                </motion.div>
-              ))
-            ) : (
-              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                No items found 😢
-              </motion.p>
-            )}
-          </AnimatePresence>
+          {/* ♾️ INFINITE SCROLL LOADER */}
+          {visibleCount < filtered.length && (
+            <div
+              ref={loaderRef}
+              style={{
+                textAlign: "center",
+                padding: "30px",
+                fontSize: "20px"
+              }}
+            >
+              Loading more... ⏳
+            </div>
+          )}
 
-        </div>
+          {/* ✅ ALL LOADED MESSAGE */}
+          {visibleCount >= filtered.length && filtered.length > 0 && (
+            <p style={{
+              textAlign: "center",
+              padding: "20px",
+              color: "gray",
+              fontSize: "14px"
+            }}>
+              ✅ All {filtered.length} items loaded!
+            </p>
+          )}
+        </>
       )}
 
       {/* 🧠 SUGGESTIONS */}
