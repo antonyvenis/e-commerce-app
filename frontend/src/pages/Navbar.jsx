@@ -114,7 +114,7 @@ function Navbar() {
           </Link>
 
           <Link to="/profile" onClick={() => setMenuOpen(false)}>
-            👤 {user?.name || "Profile"}
+            👤{user?.username || "Profile"}
           </Link>
 
           {!user && (
