@@ -2091,6 +2091,69 @@ def update_quantity(request):
 # ================================
 # 📦 PLACE ORDER ✅ SINGLE CORRECT
 # ================================
+# @api_view(['POST'])
+# def place_order(request):
+#     try:
+#         user = CustomUser.objects.get(username=request.data.get("username"))
+#         items = request.data.get("items")
+
+#         if not items:
+#             return Response({"error": "Cart empty ❌"})
+
+#         # total = sum(item["price"] * item["quantity"] for item in items)
+#         total = 0
+
+#         for item in items:
+
+#             product = Product.objects.get(
+#                 id=item["product_id"]
+#             )
+
+#             offer = product.offer or 0
+
+#             final_price = float(product.price)
+
+#             if offer > 0:
+#                 final_price = (
+#                     final_price -
+#                     (final_price * offer / 100)
+#                 )
+
+#             total += (
+#                 final_price *
+#                 item["quantity"]
+#             )
+
+#         order = Order.objects.create(
+#             user=user,
+#             total_price=total,
+#             address=request.data.get("address"),
+#             phone=request.data.get("phone"),
+#             payment_method=request.data.get("payment_method"),
+#             name=request.data.get("name")
+#         )
+
+#         for item in items:
+#             OrderItem.objects.create(
+#                 order=order,
+#                 item_name=item["item_name"],
+#                 price=item["price"],
+#                 quantity=item["quantity"],
+#                 image=item.get("image", "")
+#             )
+
+#         CartItem.objects.filter(user=user).delete()
+
+#         cache.delete(f"cart_{user.username}")
+
+#         return Response({
+#             "message": "Order placed ✅",
+#             "order_id": order.id
+#         })
+
+#     except:
+#         return Response({"error": "User not found"})
+
 @api_view(['POST'])
 def place_order(request):
     try:
@@ -2100,29 +2163,17 @@ def place_order(request):
         if not items:
             return Response({"error": "Cart empty ❌"})
 
-        # total = sum(item["price"] * item["quantity"] for item in items)
         total = 0
 
         for item in items:
-
-            product = Product.objects.get(
-                id=item["product_id"]
-            )
-
+            product = Product.objects.get(id=item["product_id"])
             offer = product.offer or 0
-
             final_price = float(product.price)
 
             if offer > 0:
-                final_price = (
-                    final_price -
-                    (final_price * offer / 100)
-                )
+                final_price = final_price - (final_price * offer / 100)
 
-            total += (
-                final_price *
-                item["quantity"]
-            )
+            total += final_price * item["quantity"]
 
         order = Order.objects.create(
             user=user,
@@ -2134,16 +2185,22 @@ def place_order(request):
         )
 
         for item in items:
+            product = Product.objects.get(id=item["product_id"])
+            offer = product.offer or 0
+            final_price = float(product.price)
+
+            if offer > 0:
+                final_price = final_price - (final_price * offer / 100)
+
             OrderItem.objects.create(
                 order=order,
                 item_name=item["item_name"],
-                price=item["price"],
+                price=round(final_price, 2),  # ✅ correct offer price
                 quantity=item["quantity"],
                 image=item.get("image", "")
             )
 
         CartItem.objects.filter(user=user).delete()
-
         cache.delete(f"cart_{user.username}")
 
         return Response({
@@ -2151,9 +2208,9 @@ def place_order(request):
             "order_id": order.id
         })
 
-    except:
-        return Response({"error": "User not found"})
-
+    except Exception as e:
+        print("ORDER ERROR 👉", str(e))  # ✅ real error print ஆகும்
+        return Response({"error": str(e)}, status=400)
 
 # ================================
 # 📦 GET ORDERS
