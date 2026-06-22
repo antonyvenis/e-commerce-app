@@ -2252,7 +2252,7 @@ def get_products(request):
             category=category
         )
 
-    paginator = Paginator(products, 20)
+    paginator = Paginator(products, 100)
 
     page_obj = paginator.get_page(page)
 
