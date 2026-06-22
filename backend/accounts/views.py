@@ -1027,7 +1027,7 @@ def get_products(request):
             category=category
         )
 
-    paginator = Paginator(products, 20)
+    paginator = Paginator(products, 60)
 
     page_obj = paginator.get_page(page)
 
@@ -1517,3 +1517,11 @@ def generate_invoice(request, order_id):
 
     doc.build(elements)
     return response
+
+# ================================
+# ✅ HEALTH CHECK
+# ================================
+from django.http import JsonResponse
+
+def health_check(request):
+    return JsonResponse({"status": "ok"})    
