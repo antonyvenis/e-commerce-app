@@ -2149,7 +2149,6 @@ def update_quantity(request):
 
 #     except:
 #         return Response({"error": "User not found"})
-
 @api_view(['POST'])
 def place_order(request):
     try:
@@ -2165,10 +2164,8 @@ def place_order(request):
             product = Product.objects.get(id=item["product_id"])
             offer = product.offer or 0
             final_price = float(product.price)
-
             if offer > 0:
                 final_price = final_price - (final_price * offer / 100)
-
             total += final_price * item["quantity"]
 
         order = Order.objects.create(
@@ -2184,14 +2181,13 @@ def place_order(request):
             product = Product.objects.get(id=item["product_id"])
             offer = product.offer or 0
             final_price = float(product.price)
-
             if offer > 0:
                 final_price = final_price - (final_price * offer / 100)
 
             OrderItem.objects.create(
                 order=order,
                 item_name=item["item_name"],
-                price=round(final_price, 2),  # ✅ correct offer price
+                price=round(final_price, 2),
                 quantity=item["quantity"],
                 image=item.get("image", "")
             )
@@ -2204,13 +2200,10 @@ def place_order(request):
             "order_id": order.id
         })
 
-    # except Exception as e:
-    #     print("ORDER ERROR 👉", str(e))  # ✅ real error print ஆகும்
-    #     return Response({"error": str(e)}, status=400)
     except Exception as e:
-    import traceback
-    print("ORDER ERROR 👉", traceback.format_exc())  # full error print
-    return Response({"error": traceback.format_exc()}, status=400)
+        import traceback
+        print("ORDER ERROR 👉", traceback.format_exc())  # ✅ Render logs-ல பாரு
+        return Response({"error": traceback.format_exc()}, status=400)
 
 
 # ================================
@@ -2310,7 +2303,7 @@ def get_products(request):
             category=category
         )
 
-    paginator = Paginator(products, 100)
+    paginator = Paginator(products, 20)
 
     page_obj = paginator.get_page(page)
 
