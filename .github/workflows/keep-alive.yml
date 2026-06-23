@@ -13,3 +13,18 @@ jobs:
       - name: Ping Backend
         run: |
           curl https://e-commerce-app-8jg4.onrender.com/
+
+# name: Keep Backend Alive
+
+# on:
+#   schedule:
+#     - cron: "*/14 0-17 * * *"   # IST 6AM-11PM மட்டும்
+#   workflow_dispatch:
+
+# jobs:
+#   ping:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Ping Backend
+#         run: |
+#           curl https://e-commerce-app-8jg4.onrender.com/health/          
