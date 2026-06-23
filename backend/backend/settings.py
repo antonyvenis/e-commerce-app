@@ -205,25 +205,6 @@ CSRF_COOKIE_SECURE = True
 
 SESSION_COOKIE_SECURE = True
 
-# CACHES = {
-#     "default": {
-#         "BACKEND":
-#         "django_redis.cache.RedisCache",
-
-#         "LOCATION":
-#         "redis://127.0.0.1:6379/1",
-
-#         "OPTIONS": {
-#             "CLIENT_CLASS":
-#             "django_redis.client.DefaultClient",
-#         }
-#     }
-# }
-
-# CELERY_BROKER_URL = os.getenv(
-#     "REDIS_URL"
-# )
-
 CELERY_ACCEPT_CONTENT = ["json"]
 
 CELERY_TASK_SERIALIZER = "json"
