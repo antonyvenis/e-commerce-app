@@ -1282,3 +1282,16 @@ from django.http import JsonResponse
 
 def health_check(request):
     return JsonResponse({"status": "ok"})    
+
+# ================================
+# 🏓 DB PING - Supabase Active வை
+# ================================
+def db_ping(request):
+    try:
+        # ✅ Lightest possible DB query
+        from django.db import connection
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+        return JsonResponse({"db": "ok"})
+    except Exception as e:
+        return JsonResponse({"db": "error", "msg": str(e)}, status=500)    
