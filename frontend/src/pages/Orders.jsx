@@ -7,14 +7,11 @@
 
 // function Orders() {
 //   const [orders, setOrders] = useState([]);
-//   const [loading, setLoading] = useState(true); // 🔥 NEW
+//   const [loading, setLoading] = useState(true);
 //   const navigate = useNavigate();
 
 //   const user = JSON.parse(localStorage.getItem("user"));
 
-//   /* =========================================
-//      📦 FETCH ORDERS FROM DB (FAST)
-//   ========================================= */
 //   useEffect(() => {
 //     const fetchOrders = async () => {
 //       if (!user) {
@@ -33,28 +30,21 @@
 //       } catch (err) {
 //         console.log("ORDER ERROR 👉", err);
 //       } finally {
-//         setLoading(false); // 🔥 STOP LOADING
+//         setLoading(false);
 //       }
 //     };
 
 //     fetchOrders();
 //   }, [user]);
 
-//   /* =========================================
-//      🖼 IMAGE FIX
-//   ========================================= */
 //   const getImage = (img) => {
 //     if (!img) return "https://via.placeholder.com/60";
-
-//     return img.startsWith("http")
-//       ? img
-//       : `${API}${img}`;
+//     return img.startsWith("http") ? img : `${API}${img}`;
 //   };
 
 //   return (
 //     <div className="orders-container">
 
-//       {/* 🔥 LOADING */}
 //       {loading ? (
 //         <h2 style={{ textAlign: "center" }}>
 //           Loading Orders... 📦
@@ -73,7 +63,6 @@
 //               📦 My Orders ({orders.length})
 //             </h2>
 
-//             {/* ❌ NO USER */}
 //             {!user && (
 //               <>
 //                 <p>Please login 😢</p>
@@ -83,7 +72,6 @@
 //               </>
 //             )}
 
-//             {/* 😢 EMPTY */}
 //             {user && orders.length === 0 && (
 //               <>
 //                 <p>No orders yet 😢</p>
@@ -93,7 +81,6 @@
 //               </>
 //             )}
 
-//             {/* ✅ ORDERS LIST */}
 //             {orders.map(order => (
 //               <div key={order.id} className="order-card">
 
@@ -112,24 +99,22 @@
 //                   <span>💳 {order.payment_method}</span>
 //                 </div>
 
-//                 {/* 📦 ITEMS */}
 //                 <div className="order-items">
 //                   {order.items.map((item, index) => (
 //                     <div key={index} className="order-item">
 
-//                       {/* 🔥 IMAGE FIX */}                     
-//                 <img
-//                 src={
-//                item.image
-//                  ? item.image.startsWith("http")
-//                  ? item.image.replace('/upload/', '/upload/w_300,q_auto,f_auto/')
-//                  : `https://e-commerce-app-8jg4.onrender.com${item.image}`
-//                  : "https://dummyimage.com/150"
-//                 }
-//                 alt={item.item_name}
-//                 loading="lazy"
-//                 className="order-img"
-//                  />
+//                       <img
+//                         src={
+//                           item.image
+//                             ? item.image.startsWith("http")
+//                               ? item.image.replace('/upload/', '/upload/w_300,q_auto,f_auto/')
+//                               : `https://e-commerce-app-8jg4.onrender.com${item.image}`
+//                             : "https://dummyimage.com/150"
+//                         }
+//                         alt={item.item_name}
+//                         loading="lazy"
+//                         className="order-img"
+//                       />
 
 //                       <div>
 //                         <div className="item-name">
@@ -149,13 +134,23 @@
 //                   ))}
 //                 </div>
 
-//                 {/* 💰 TOTAL */}
 //                 <h4>Total: ₹{order.total}</h4>
 
 //                 <button className="reorder-btn">
 //                   <Link to="/menu" id="Link-text">
 //                     Reorder 🔁
 //                   </Link>
+//                 </button>
+
+//                 {/* 🔥 INVOICE DOWNLOAD BUTTON — இதுமட்டும் new */}
+//                 <button
+//                   className="reorder-btn"
+//                   style={{ marginTop: "10px", background: "#28a745" }}
+//                   onClick={() =>
+//                     window.open(`${API}/api/invoice/${order.id}/`, '_blank')
+//                   }
+//                 >
+//                   📄 Download Invoice
 //                 </button>
 
 //               </div>
@@ -170,6 +165,8 @@
 // }
 
 // export default Orders;
+
+
 
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -210,9 +207,22 @@ function Orders() {
     fetchOrders();
   }, [user]);
 
-  const getImage = (img) => {
-    if (!img) return "https://via.placeholder.com/60";
-    return img.startsWith("http") ? img : `${API}${img}`;
+  /* ================================
+     💰 BREAKDOWN HELPER (FIXED ✅)
+     Backend saves grand total now,
+     so we reverse-calc for display
+  ================================ */
+  const getBreakdown = (order) => {
+    // Subtotal from items
+    const subtotal = order.items.reduce(
+      (acc, item) => acc + parseFloat(item.price) * item.quantity,
+      0
+    );
+    const tax = subtotal * 0.05;
+    const delivery = subtotal > 199 ? 0 : 40;
+    const grandTotal = subtotal + tax + delivery;
+
+    return { subtotal, tax, delivery, grandTotal };
   };
 
   return (
@@ -254,80 +264,97 @@ function Orders() {
               </>
             )}
 
-            {orders.map(order => (
-              <div key={order.id} className="order-card">
+            {orders.map(order => {
 
-                <div className="order-top">
-                  <p>🆔 Order ID: {order.id}</p>
-                  <p>🗓️ {new Date(order.created_at).toLocaleString()}</p>
-                  <p className="status">🚚 ✔ {order.status}</p>
-                </div>
+              const { subtotal, tax, delivery, grandTotal } = getBreakdown(order);
 
-                <div className="order-location">
-                  <p>📍 {order.address}</p>
-                  <span>📞 {order.phone}</span>
-                </div>
+              return (
+                <div key={order.id} className="order-card">
 
-                <div className="order-meta">
-                  <span>💳 {order.payment_method}</span>
-                </div>
+                  <div className="order-top">
+                    <p>🆔 Order ID: {order.id}</p>
+                    <p>🗓️ {new Date(order.created_at).toLocaleString()}</p>
+                    <p className="status">🚚 ✔ {order.status}</p>
+                  </div>
 
-                <div className="order-items">
-                  {order.items.map((item, index) => (
-                    <div key={index} className="order-item">
+                  <div className="order-location">
+                    <p>📍 {order.address}</p>
+                    <span>📞 {order.phone}</span>
+                  </div>
 
-                      <img
-                        src={
-                          item.image
-                            ? item.image.startsWith("http")
-                              ? item.image.replace('/upload/', '/upload/w_300,q_auto,f_auto/')
-                              : `https://e-commerce-app-8jg4.onrender.com${item.image}`
-                            : "https://dummyimage.com/150"
-                        }
-                        alt={item.item_name}
-                        loading="lazy"
-                        className="order-img"
-                      />
+                  <div className="order-meta">
+                    <span>💳 {order.payment_method}</span>
+                  </div>
 
-                      <div>
-                        <div className="item-name">
-                          {index + 1}. {item.item_name}
-                        </div><br />
+                  <div className="order-items">
+                    {order.items.map((item, index) => (
+                      <div key={index} className="order-item">
 
-                        <div className="item-qty">
-                          Qty: {item.quantity}
-                        </div><br />
+                        <img
+                          src={
+                            item.image
+                              ? item.image.startsWith("http")
+                                ? item.image.replace('/upload/', '/upload/w_300,q_auto,f_auto/')
+                                : `${API}${item.image}`
+                              : "https://dummyimage.com/150"
+                          }
+                          alt={item.item_name}
+                          loading="lazy"
+                          className="order-img"
+                        />
 
-                        <div className="item-price">
-                          ₹ {item.price}
-                        </div><br />
+                        <div>
+                          <div className="item-name">
+                            {index + 1}. {item.item_name}
+                          </div><br />
+
+                          <div className="item-qty">
+                            Qty: {item.quantity}
+                          </div><br />
+
+                          <div className="item-price">
+                            ₹ {parseFloat(item.price).toFixed(2)}
+                          </div><br />
+                        </div>
+
                       </div>
+                    ))}
+                  </div>
 
-                    </div>
-                  ))}
+                  {/* ✅ PRICE BREAKDOWN */}
+                  <div className="order-total-breakdown">
+                    <p>Subtotal: ₹{subtotal.toFixed(2)}</p>
+                    <p>GST (5%): ₹{tax.toFixed(2)}</p>
+                    <p>
+                      Delivery:{" "}
+                      {delivery === 0
+                        ? <span style={{ color: "#28a745", fontWeight: "bold" }}>FREE 🎉</span>
+                        : `₹${delivery}`
+                      }
+                    </p>
+                    <h4>Total: ₹{grandTotal.toFixed(2)}</h4>
+                  </div>
+
+                  <button className="reorder-btn">
+                    <Link to="/menu" id="Link-text">
+                      Reorder 🔁
+                    </Link>
+                  </button>
+
+                  {/* 🔥 INVOICE DOWNLOAD BUTTON */}
+                  <button
+                    className="reorder-btn"
+                    style={{ marginTop: "10px", background: "#28a745" }}
+                    onClick={() =>
+                      window.open(`${API}/api/invoice/${order.id}/`, '_blank')
+                    }
+                  >
+                    📄 Download Invoice
+                  </button>
+
                 </div>
-
-                <h4>Total: ₹{order.total}</h4>
-
-                <button className="reorder-btn">
-                  <Link to="/menu" id="Link-text">
-                    Reorder 🔁
-                  </Link>
-                </button>
-
-                {/* 🔥 INVOICE DOWNLOAD BUTTON — இதுமட்டும் new */}
-                <button
-                  className="reorder-btn"
-                  style={{ marginTop: "10px", background: "#28a745" }}
-                  onClick={() =>
-                    window.open(`${API}/api/invoice/${order.id}/`, '_blank')
-                  }
-                >
-                  📄 Download Invoice
-                </button>
-
-              </div>
-            ))}
+              );
+            })}
 
           </motion.div>
         </AnimatePresence>

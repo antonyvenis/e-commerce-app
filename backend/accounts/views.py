@@ -872,6 +872,62 @@ def update_quantity(request):
 
 #     except:
 #         return Response({"error": "User not found"})
+# @api_view(['POST'])
+# def place_order(request):
+#     try:
+#         user = CustomUser.objects.get(username=request.data.get("username"))
+#         items = request.data.get("items")
+
+#         if not items:
+#             return Response({"error": "Cart empty ❌"})
+
+#         total = 0
+
+#         for item in items:
+#             product = Product.objects.get(id=item["product_id"])
+#             offer = product.offer or 0
+#             final_price = float(product.price)
+#             if offer > 0:
+#                 final_price = final_price - (final_price * offer / 100)
+#             total += final_price * item["quantity"]
+
+#         order = Order.objects.create(
+#             user=user,
+#             total_price=total,
+#             address=request.data.get("address"),
+#             phone=request.data.get("phone"),
+#             payment_method=request.data.get("payment_method"),
+#             name=request.data.get("name")
+#         )
+
+#         for item in items:
+#             product = Product.objects.get(id=item["product_id"])
+#             offer = product.offer or 0
+#             final_price = float(product.price)
+#             if offer > 0:
+#                 final_price = final_price - (final_price * offer / 100)
+
+#             OrderItem.objects.create(
+#                 order=order,
+#                 item_name=item["item_name"],
+#                 price=round(final_price, 2),
+#                 quantity=item["quantity"],
+#                 image=item.get("image", "")
+#             )
+
+#         CartItem.objects.filter(user=user).delete()
+#         cache.delete(f"cart_{user.username}")
+
+#         return Response({
+#             "message": "Order placed ✅",
+#             "order_id": order.id
+#         })
+
+#     except Exception as e:
+#         import traceback
+#         print("ORDER ERROR 👉", traceback.format_exc())  # ✅ Render logs-ல பாரு
+#         return Response({"error": traceback.format_exc()}, status=400)
+
 @api_view(['POST'])
 def place_order(request):
     try:
@@ -881,7 +937,7 @@ def place_order(request):
         if not items:
             return Response({"error": "Cart empty ❌"})
 
-        total = 0
+        subtotal = 0
 
         for item in items:
             product = Product.objects.get(id=item["product_id"])
@@ -889,11 +945,16 @@ def place_order(request):
             final_price = float(product.price)
             if offer > 0:
                 final_price = final_price - (final_price * offer / 100)
-            total += final_price * item["quantity"]
+            subtotal += final_price * item["quantity"]
+
+        # ✅ GST + Delivery - same logic as invoice
+        tax_amount = subtotal * 0.05
+        delivery = 0 if subtotal > 199 else 40
+        grand_total = subtotal + tax_amount + delivery  # ✅ Real total
 
         order = Order.objects.create(
             user=user,
-            total_price=total,
+            total_price=round(grand_total, 2),  # ✅ Save grand total
             address=request.data.get("address"),
             phone=request.data.get("phone"),
             payment_method=request.data.get("payment_method"),
@@ -925,7 +986,7 @@ def place_order(request):
 
     except Exception as e:
         import traceback
-        print("ORDER ERROR 👉", traceback.format_exc())  # ✅ Render logs-ல பாரு
+        print("ORDER ERROR 👉", traceback.format_exc())
         return Response({"error": traceback.format_exc()}, status=400)
 
 
@@ -1027,7 +1088,7 @@ def get_products(request):
             category=category
         )
 
-    paginator = Paginator(products, 60)
+    paginator = Paginator(products, 100)
 
     page_obj = paginator.get_page(page)
 
