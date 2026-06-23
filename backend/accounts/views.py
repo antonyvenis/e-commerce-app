@@ -928,6 +928,67 @@ def update_quantity(request):
 #         print("ORDER ERROR 👉", traceback.format_exc())  # ✅ Render logs-ல பாரு
 #         return Response({"error": traceback.format_exc()}, status=400)
 
+# @api_view(['POST'])
+# def place_order(request):
+#     try:
+#         user = CustomUser.objects.get(username=request.data.get("username"))
+#         items = request.data.get("items")
+
+#         if not items:
+#             return Response({"error": "Cart empty ❌"})
+
+#         subtotal = 0
+
+#         for item in items:
+#             product = Product.objects.get(id=item["product_id"])
+#             offer = product.offer or 0
+#             final_price = float(product.price)
+#             if offer > 0:
+#                 final_price = final_price - (final_price * offer / 100)
+#             subtotal += final_price * item["quantity"]
+
+#         # ✅ GST + Delivery - same logic as invoice
+#         tax_amount = subtotal * 0.05
+#         delivery = 0 if subtotal > 199 else 40
+#         grand_total = subtotal + tax_amount + delivery  # ✅ Real total
+
+#         order = Order.objects.create(
+#             user=user,
+#             total_price=round(grand_total, 2),  # ✅ Save grand total
+#             address=request.data.get("address"),
+#             phone=request.data.get("phone"),
+#             payment_method=request.data.get("payment_method"),
+#             name=request.data.get("name")
+#         )
+
+#         for item in items:
+#             product = Product.objects.get(id=item["product_id"])
+#             offer = product.offer or 0
+#             final_price = float(product.price)
+#             if offer > 0:
+#                 final_price = final_price - (final_price * offer / 100)
+
+#             OrderItem.objects.create(
+#                 order=order,
+#                 item_name=item["item_name"],
+#                 price=round(final_price, 2),
+#                 quantity=item["quantity"],
+#                 image=item.get("image", "")
+#             )
+
+#         CartItem.objects.filter(user=user).delete()
+#         cache.delete(f"cart_{user.username}")
+
+#         return Response({
+#             "message": "Order placed ✅",
+#             "order_id": order.id
+#         })
+
+#     except Exception as e:
+#         import traceback
+#         print("ORDER ERROR 👉", traceback.format_exc())
+#         return Response({"error": traceback.format_exc()}, status=400)
+
 @api_view(['POST'])
 def place_order(request):
     try:
@@ -940,21 +1001,18 @@ def place_order(request):
         subtotal = 0
 
         for item in items:
-            product = Product.objects.get(id=item["product_id"])
-            offer = product.offer or 0
-            final_price = float(product.price)
-            if offer > 0:
-                final_price = final_price - (final_price * offer / 100)
+            # ✅ Frontend send பண்ற price யே use பண்ணு (already offer applied)
+            final_price = float(item["price"])
             subtotal += final_price * item["quantity"]
 
-        # ✅ GST + Delivery - same logic as invoice
+        # ✅ GST + Delivery
         tax_amount = subtotal * 0.05
         delivery = 0 if subtotal > 199 else 40
-        grand_total = subtotal + tax_amount + delivery  # ✅ Real total
+        grand_total = subtotal + tax_amount + delivery
 
         order = Order.objects.create(
             user=user,
-            total_price=round(grand_total, 2),  # ✅ Save grand total
+            total_price=round(grand_total, 2),
             address=request.data.get("address"),
             phone=request.data.get("phone"),
             payment_method=request.data.get("payment_method"),
@@ -962,16 +1020,11 @@ def place_order(request):
         )
 
         for item in items:
-            product = Product.objects.get(id=item["product_id"])
-            offer = product.offer or 0
-            final_price = float(product.price)
-            if offer > 0:
-                final_price = final_price - (final_price * offer / 100)
-
+            # ✅ Frontend price save பண்ணு
             OrderItem.objects.create(
                 order=order,
                 item_name=item["item_name"],
-                price=round(final_price, 2),
+                price=round(float(item["price"]), 2),  # ✅ Cart price
                 quantity=item["quantity"],
                 image=item.get("image", "")
             )
