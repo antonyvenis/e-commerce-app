@@ -31,6 +31,26 @@
 
 
 
+# name: Keep Backend Alive
+
+# on:
+#   schedule:
+#     - cron: "*/14 * * * *"
+#   workflow_dispatch:
+
+# jobs:
+#   ping:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Ping Render
+#         run: |
+#           curl https://e-commerce-app-8jg4.onrender.com/health/
+
+#       - name: Ping Supabase DB
+#         run: |
+#           curl https://e-commerce-app-8jg4.onrender.com/db-ping/
+
 name: Keep Backend Alive
 
 on:
@@ -41,12 +61,9 @@ on:
 jobs:
   ping:
     runs-on: ubuntu-latest
-
     steps:
       - name: Ping Render
-        run: |
-          curl https://e-commerce-app-8jg4.onrender.com/health/
+        run: curl https://e-commerce-app-8jg4.onrender.com/health/
 
       - name: Ping Supabase DB
-        run: |
-          curl https://e-commerce-app-8jg4.onrender.com/db-ping/
+        run: curl https://e-commerce-app-8jg4.onrender.com/db-ping/
