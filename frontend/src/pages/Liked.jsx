@@ -55,7 +55,7 @@ function Liked() {
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [user?.username]);
 
   /* ================================
      🔥 FIRST LOAD

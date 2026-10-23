@@ -569,10 +569,8 @@ function Home() {
         ))}
       </div>
 
-      <div><p>Visit Again ❤️👇🏻</p></div>
-
-      <HeroBanner />
-      <About />
+      {/* <div><p>Visit Again ❤️👇🏻</p></div> */}
+      {/* <About /> */}
       <Footer />
 
     </motion.div>

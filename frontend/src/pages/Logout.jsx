@@ -1,38 +1,32 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { getUser, logout as endSession } from "../api";
 
 function Logout() {
   const navigate = useNavigate();
+  const [busy, setBusy] = useState(false);
 
-  // 🔥 store user BEFORE logout
-  const user = JSON.parse(localStorage.getItem("user"));
+  // read the user BEFORE the session is cleared
+  const user = getUser();
 
-  const logout = () => {
-    // 🔐 clear only session data
-    localStorage.removeItem("user");
-    localStorage.removeItem("likes");
-    localStorage.removeItem("cart");
-    localStorage.removeItem("orders");
-
-    alert("Logout successful 👋");
-
+  const logout = async () => {
+    setBusy(true);
+    await endSession(); // blacklists the refresh token on the server, then clears local data
+    toast.success("Logged out. See you soon!");
     navigate("/login");
   };
 
   return (
-    <div className="header fade-in">
+    <section className="logout-card">
+      <h1>Log out{user ? `, ${user.username}` : ""}?</h1>
+      <p>You will need to log in again to see your cart, wishlist and orders.</p>
 
-      <h1>🫂</h1>
-
-      {/* 👤 USER NAME SAFE */}
-      <h3>Bye, {user?.username || "User"} 👋</h3>
-
-      <h2>THANK YOU FOR VISITING 🤝</h2>
-
-      <h5>Come again, {user?.username || "User"} 💫👍</h5>
-
-      <button onClick={logout}>Logout 🚪</button>
-
-    </div>
+      <div className="logout-actions">
+        <button onClick={logout} disabled={busy}>{busy ? "Logging out…" : "Log out"}</button>
+        <button className="logout-cancel" onClick={() => navigate(-1)} disabled={busy}>Stay logged in</button>
+      </div>
+    </section>
   );
 }
 

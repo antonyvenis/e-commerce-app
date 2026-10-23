@@ -1,0 +1,703 @@
+/* =========================================================
+   AUTH PAGES: Login, Register (split layout) + OTP, Forgot password (centered card)
+   Brand colour = --au-accent. Change it once to re-theme everything here.
+   ========================================================= */
+
+.au-page,
+.otp-container,
+.forgot-container {
+  --au-accent: #ff6b1a;
+  --au-accent-dark: #e85a0c;
+  --au-ink: #0e1a3a;
+  --au-muted: #5d6a86;
+  --au-line: #dfe4ee;
+  --au-field: #f4f6fb;
+  --au-error: #d92d20;
+  --au-ok: #12a150;
+  font-family: "Plus Jakarta Sans", "Poppins", system-ui, sans-serif;
+  color: var(--au-ink);
+}
+
+/* ---------- layout ---------- */
+.au-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  background: #fff;
+}
+
+.au-form-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 28px 20px;
+  min-width: 0;
+}
+
+.au-brand {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  color: var(--au-ink);
+  text-decoration: none;
+}
+
+.au-brand-icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: var(--au-accent);
+  color: #fff;
+}
+
+.au-form-wrap {
+  width: 100%;
+  max-width: 420px;
+  margin: auto 0;
+  padding: 28px 0;
+}
+
+.au-title {
+  margin: 0 0 8px;
+  font-size: clamp(28px, 4vw, 36px);
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+
+.au-sub {
+  margin: 0 0 28px;
+  text-align: center;
+  color: var(--au-muted);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* ---------- fields ---------- */
+.au-page .au-field {
+  margin-bottom: 16px;
+}
+
+.au-page .au-field label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.au-page input:not([type="checkbox"]) {
+  width: 100%;
+  box-sizing: border-box;
+  height: 48px;
+  padding: 0 14px;
+  border: 1.5px solid transparent;
+  border-radius: 12px;
+  background: var(--au-field);
+  color: var(--au-ink);
+  font: inherit;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+
+.au-page input::placeholder {
+  color: #98a2b8;
+}
+
+.au-page input:not([type="checkbox"]):focus {
+  background: #fff;
+  border-color: var(--au-accent);
+  box-shadow: 0 0 0 4px rgba(255, 107, 26, 0.16);
+}
+
+.au-page input[aria-invalid="true"] {
+  border-color: var(--au-error);
+}
+
+.au-input-wrap {
+  position: relative;
+}
+
+.au-input-wrap input {
+  padding-right: 52px !important;
+}
+
+.au-page .au-eye {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: auto;
+  height: 36px;
+  min-width: 36px;
+  margin: 0;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--au-muted);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.au-page .au-eye:hover {
+  color: var(--au-ink);
+  background: rgba(14, 26, 58, 0.06);
+}
+
+.au-inline {
+  display: flex;
+  gap: 10px;
+}
+
+.au-inline input {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ---------- row: remember + forgot ---------- */
+.au-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 4px 0 8px;
+  font-size: 14px;
+}
+
+.au-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--au-muted);
+  cursor: pointer;
+}
+
+.au-check input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--au-accent);
+  cursor: pointer;
+}
+
+.au-page a.au-link,
+.au-switch a {
+  color: var(--au-accent-dark);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.au-page a.au-link:hover,
+.au-switch a:hover {
+  text-decoration: underline;
+}
+
+.au-error {
+  min-height: 20px;
+  margin: 0 0 8px;
+  color: var(--au-error);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.au-note {
+  margin: 0 0 16px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #fff4ec;
+  color: #8a3b08;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.au-hint {
+  margin: 12px 0 0;
+  font-size: 12px;
+  color: var(--au-muted);
+  text-align: center;
+}
+
+/* ---------- buttons ---------- */
+.au-page .au-btn {
+  width: 100%;
+  box-sizing: border-box;
+  height: 48px;
+  margin: 0;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 12px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, background-color 0.2s, box-shadow 0.2s, opacity 0.2s;
+}
+
+.au-page .au-btn-primary {
+  background: var(--au-accent);
+  background-image: none;
+  color: #fff;
+  box-shadow: 0 8px 20px -8px rgba(255, 107, 26, 0.7);
+}
+
+.au-page .au-btn-primary:hover:not(:disabled) {
+  background: var(--au-accent-dark);
+  transform: translateY(-1px);
+}
+
+.au-page .au-btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.99);
+}
+
+.au-page .au-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.au-page .au-btn:focus-visible,
+.au-page a:focus-visible,
+.au-page .au-eye:focus-visible {
+  outline: 3px solid rgba(255, 107, 26, 0.45);
+  outline-offset: 2px;
+}
+
+.au-page .au-btn-ghost {
+  width: auto;
+  flex-shrink: 0;
+  background: #fff;
+  border: 1.5px solid var(--au-line);
+  color: var(--au-ink);
+}
+
+.au-page .au-btn-ghost:hover:not(:disabled) {
+  border-color: var(--au-accent);
+  color: var(--au-accent-dark);
+}
+
+.au-page .au-btn-ghost.is-verified {
+  background: #e8f7ee;
+  border-color: #bde5cc;
+  color: var(--au-ok);
+  opacity: 1;
+}
+
+.au-spin {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: au-spin 0.7s linear infinite;
+}
+
+@keyframes au-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---------- divider + google ---------- */
+.au-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 24px 0 18px;
+  color: var(--au-muted);
+  font-size: 13px;
+}
+
+.au-divider::before,
+.au-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--au-line);
+}
+
+.au-google {
+  display: flex;
+  justify-content: center;
+  min-height: 44px;
+}
+
+.au-switch {
+  margin: 24px 0 0;
+  text-align: center;
+  color: var(--au-muted);
+  font-size: 14px;
+}
+
+.au-legal {
+  margin: 0;
+  color: #98a2b8;
+  font-size: 12px;
+}
+
+/* ---------- password rules ---------- */
+.au-rules {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+  color: #98a2b8;
+}
+
+.au-rules li::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: var(--au-line);
+  transition: background-color 0.2s;
+}
+
+.au-rules li.ok {
+  color: var(--au-ok);
+}
+
+.au-rules li.ok::before {
+  background: var(--au-ok);
+}
+
+/* =========================================================
+   HERO SIDE: the one memorable moment (live order tracker)
+   ========================================================= */
+.au-hero-side {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 36px;
+  padding: 56px;
+  background: linear-gradient(160deg, #0e1a3a 0%, #14254f 100%);
+  color: #fff;
+}
+
+.au-glow {
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  right: -140px;
+  top: -140px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 107, 26, 0.55), transparent 65%);
+  pointer-events: none;
+}
+
+.au-hero-copy {
+  position: relative;
+  max-width: 440px;
+}
+
+.au-hero-copy h2 {
+  margin: 0 0 14px;
+  font-size: clamp(30px, 3.4vw, 44px);
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+
+.au-hero-copy p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.au-tracker {
+  position: relative;
+  width: min(100%, 380px);
+  padding: 22px 24px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.6);
+}
+
+.au-tracker-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.au-tracker-head strong {
+  display: block;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.au-tracker-label {
+  display: block;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 2px;
+}
+
+.au-eta {
+  text-align: right;
+}
+
+.au-eta strong {
+  color: #ffb88a;
+}
+
+.au-steps {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 22px;
+}
+
+.au-steps li {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  animation: au-step 8s infinite;
+  animation-delay: calc(var(--i) * 1.6s);
+}
+
+.au-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  background: #14254f;
+  animation: au-dot 8s infinite;
+  animation-delay: calc(var(--i) * 1.6s);
+}
+
+/* vertical rail behind the dots */
+.au-rail {
+  position: absolute;
+  left: 30px;
+  top: 98px;
+  bottom: 32px;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.au-rail-fill {
+  display: block;
+  width: 100%;
+  height: 0;
+  background: var(--au-accent);
+  animation: au-rail 8s infinite;
+}
+
+@keyframes au-rail {
+  0%   { height: 0; }
+  75%  { height: 100%; }
+  100% { height: 100%; }
+}
+
+@keyframes au-step {
+  0%, 4%   { color: rgba(255, 255, 255, 0.5); }
+  8%, 100% { color: #fff; }
+}
+
+@keyframes au-dot {
+  0%, 4%   { background: #14254f; border-color: rgba(255, 255, 255, 0.35); }
+  8%, 100% { background: var(--au-accent); border-color: var(--au-accent); }
+}
+
+.au-chip {
+  position: absolute;
+  right: 56px;
+  bottom: 48px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--au-ink);
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 16px 30px -12px rgba(0, 0, 0, 0.5);
+  animation: au-float 5s ease-in-out infinite;
+}
+
+@keyframes au-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 960px) {
+  .au-page {
+    grid-template-columns: 1fr;
+  }
+  .au-hero-side {
+    display: none;
+  }
+  .au-form-side {
+    padding: 20px 20px 16px;
+  }
+}
+
+@media (max-width: 420px) {
+  .au-inline {
+    flex-direction: column;
+  }
+  .au-page .au-btn-ghost {
+    width: 100%;
+  }
+}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .au-steps li,
+  .au-dot,
+  .au-rail-fill,
+  .au-chip,
+  .au-spin {
+    animation: none !important;
+  }
+  .au-rail-fill {
+    height: 100%;
+  }
+  .au-steps li {
+    color: #fff;
+  }
+  .au-dot {
+    background: var(--au-accent);
+    border-color: var(--au-accent);
+  }
+}
+
+/* =========================================================
+   OTP + FORGOT PASSWORD: restyled centered card (JSX unchanged)
+   ========================================================= */
+.otp-container,
+.forgot-container {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+  background: linear-gradient(160deg, #0e1a3a 0%, #14254f 100%);
+  box-sizing: border-box;
+}
+
+.otp-box,
+.forgot-box {
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  padding: 32px 28px;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.6);
+  text-align: center;
+  animation: au-pop 0.4s ease-out both;
+}
+
+@keyframes au-pop {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.otp-box h1,
+.forgot-box h1 {
+  margin: 0 0 12px;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.otp-box h2,
+.forgot-box h2 {
+  margin: 0 0 18px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--au-ink) !important;
+}
+
+.otp-box input,
+.forgot-box input {
+  width: 100%;
+  box-sizing: border-box;
+  height: 48px;
+  margin: 0 0 12px;
+  padding: 0 14px;
+  border: 1.5px solid transparent;
+  border-radius: 12px;
+  background: var(--au-field);
+  color: var(--au-ink);
+  font: inherit;
+  outline: none;
+}
+
+.otp-box input:focus,
+.forgot-box input:focus {
+  background: #fff;
+  border-color: var(--au-accent);
+  box-shadow: 0 0 0 4px rgba(255, 107, 26, 0.16);
+}
+
+.otp-inputs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.otp-inputs input {
+  width: 46px;
+  height: 54px;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.otp-box button,
+.forgot-box button {
+  width: 100%;
+  height: 48px;
+  margin: 8px 0 0;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--au-accent);
+  background-image: none;
+  color: #fff;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.otp-box button:hover:not(:disabled),
+.forgot-box button:hover:not(:disabled) {
+  background: var(--au-accent-dark);
+}
+
+.otp-box button:disabled,
+.forgot-box button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

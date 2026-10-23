@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { downloadInvoice } from "../api";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
@@ -35,7 +36,7 @@ function Orders() {
     };
 
     fetchOrders();
-  }, [user]);
+  }, [user?.username]);
 
   /* ================================
      💰 BREAKDOWN HELPER (FIXED ✅)
@@ -176,7 +177,9 @@ function Orders() {
                     className="reorder-btn"
                     style={{ marginTop: "10px", background: "#28a745" }}
                     onClick={() =>
-                      window.open(`${API}/api/invoice/${order.id}/`, '_blank')
+                      downloadInvoice(order.id).catch(() =>
+                        alert("Could not download the invoice. Please try again.")
+                      )
                     }
                   >
                     📄 Download Invoice

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
 import Cart from "./pages/Cart";
@@ -22,53 +22,67 @@ import Food2 from "./pages/Food2";
 import OTP from "./pages/OTP";
 import ForgotPassword from "./pages/ForgotPassword";
 import AdminUpload from "./pages/AdminUpload";
+import ProtectedRoute from "./auth/ProtectedRoute";
 
 /* 🔥 NEW IMPORT */
 import ProductDetails from "./pages/ProductDetails";
 import Register from "./pages/Register";
 import HeroBanner from "./pages/HeroBanner";
 
-function App() {
+// Home and Contact already render their own <Footer />
+const NO_FOOTER = ["/", "/contact", "/login", "/register", "/otp", "/forgot-password", "/herobanner"];
+
+function Layout() {
+  const { pathname } = useLocation();
+
   return (
-    <BrowserRouter>
+    <>
       <Navbar />
 
       {/* 🔔 GLOBAL TOAST */}
       <Toaster position="top-center" reverseOrder={false} />
 
+      <main key={pathname} className="page">
       <Routes>
-
+        {/* 🌍 Public */}
         <Route path="/" element={<Home />} />
-        <Route path="/cart" element={<Cart />} />
         <Route path="/menu" element={<Menu />} />
-        <Route path="/liked" element={<Liked />} />
-        <Route path="/payment" element={<Payment />} />
-        <Route path="/success" element={<Success />} />
-
-        {/* 🔥 ADD THIS ROUTE */}
         <Route path="/product/:id" element={<Menu />} />
-
-        {/* 🔐 Protected Route Example */}
-        <Route
-          path="/orders"
-          element={true ? <Orders /> : <Navigate to="/login" />}
-        />
-
-        <Route path="/logout" element={<Logout />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/profilechange" element={<ProfileChange />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
         <Route path="/footer" element={<Footer />} />
         <Route path="/food" element={<Food />} />
         <Route path="/food2" element={<Food2 />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/herobanner" element={<HeroBanner />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/otp" element={<OTP />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/upload" element={<AdminUpload />} />
-        <Route path="/herobanner" element={<HeroBanner />} />
+        <Route path="/logout" element={<Logout />} />
+
+        {/* 🔐 Needs a login (the API enforces this too) */}
+        <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+        <Route path="/liked" element={<ProtectedRoute><Liked /></ProtectedRoute>} />
+        <Route path="/payment" element={<ProtectedRoute><Payment /></ProtectedRoute>} />
+        <Route path="/success" element={<ProtectedRoute><Success /></ProtectedRoute>} />
+        <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        <Route path="/profilechange" element={<ProtectedRoute><ProfileChange /></ProtectedRoute>} />
+
+        {/* 🛠️ Admin role only */}
+        <Route path="/upload" element={<ProtectedRoute admin><AdminUpload /></ProtectedRoute>} />
       </Routes>
+      </main>
+
+      {!NO_FOOTER.includes(pathname) && <Footer />}
+    </>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Layout />
     </BrowserRouter>
   );
 }

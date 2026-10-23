@@ -36,7 +36,7 @@ function Payment() {
       navigate("/login");
     }
 
-  }, [user, navigate]);
+  }, [user?.username, navigate]);
 
   const handleChange = (e) => {
 

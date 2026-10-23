@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import Contact from "./Contact";
-import HeroBanner from "./HeroBanner";
 
 function About() {
   return (
@@ -39,7 +38,7 @@ function About() {
         ))}
       </div>
 
-      <div> {<Contact />} </div>
+      {/* <div> {<Contact />} </div> */}
 
     </div>
   );

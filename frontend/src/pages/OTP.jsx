@@ -92,7 +92,7 @@ function OTP() {
     try {
       await axios.post(
         "https://e-commerce-app-8jg4.onrender.com/api/send-otp/",
-        { email }
+        { email, username: data?.username, phone: data?.phone || undefined }
       );
 
       toast.success("OTP Resent 📧");

@@ -1,233 +1,191 @@
-import axios from "axios";
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import api, { saveSession } from "../api";
+import AuthShell from "../components/AuthShell";
+import GoogleButton from "../components/GoogleButton";
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Same rules the server enforces in register()
+const RULES = [
+  { id: "len", label: "At least 6 characters", test: (p) => p.length >= 6 },
+  { id: "up", label: "One uppercase letter", test: (p) => /[A-Z]/.test(p) },
+  { id: "low", label: "One lowercase letter", test: (p) => /[a-z]/.test(p) },
+  { id: "num", label: "One number", test: (p) => /[0-9]/.test(p) },
+  { id: "sym", label: "One of ! @ # $ % ^ & *", test: (p) => /[!@#$%^&*]/.test(p) },
+];
+
+const firstError = (data) => {
+  if (!data) return "";
+  if (data.error) return data.error;
+  const key = Object.keys(data)[0];
+  const value = key && data[key];
+  return Array.isArray(value) ? value[0] : "";
+};
 
 function Register() {
   const navigate = useNavigate();
 
-  const [data, setData] = useState({
-    username: "",
-    email: "",
-    phone: "",
-    password: ""
-  });
-
-  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-  const [otpSent, setOtpSent] = useState(false);
+  // The password is never written to storage. Only name/email/phone survive the OTP page.
+  const [form, setForm] = useState({ username: "", email: "", phone: "", password: "" });
   const [verified, setVerified] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [sending, setSending] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [timer, setTimer] = useState(60);
 
-  const inputs = useRef([]);
-
-  /* =========================
-     ⏱️ TIMER
-  ========================= */
-  useEffect(() => {
-    if (otpSent && timer > 0) {
-      const t = setTimeout(() => setTimer(timer - 1), 1000);
-      return () => clearTimeout(t);
-    }
-  }, [timer, otpSent]);
-
-  /* =========================
-     🔁 RETURN FROM OTP PAGE
-  ========================= */
   useEffect(() => {
     if (localStorage.getItem("otpVerified") === "true") {
-      setVerified(true);
-
-      const saved = JSON.parse(localStorage.getItem("registerData"));
-      if (saved) setData(saved);
+      try {
+        const saved = JSON.parse(localStorage.getItem("registerData"));
+        if (saved) setForm((f) => ({ ...f, ...saved, password: "" }));
+        setVerified(true);
+      } catch {
+        localStorage.removeItem("otpVerified");
+      }
     }
   }, []);
 
-  /* =========================
-     📧 SEND OTP → NAVIGATE
-  ========================= */
-  const sendOtp = async () => {
+  const ruleState = useMemo(() => RULES.map((r) => ({ ...r, ok: r.test(form.password) })), [form.password]);
+  const passwordOk = ruleState.every((r) => r.ok);
 
-    if (!data.username || !data.email || !data.phone || !data.password) {
-      toast.error("Fill all details first ⚠️");
-      return;
+  const set = (key) => (e) => setForm({ ...form, [key]: e.target.value });
+
+  const sendOtp = async () => {
+    setError("");
+    if (!form.username.trim()) return setError("Enter your name first.");
+    if (!EMAIL_RE.test(form.email.trim())) return setError("Enter a valid email address.");
+
+    try {
+      setSending(true);
+      await api.post("/send-otp/", {
+        email: form.email.trim(),
+        username: form.username.trim(),
+        phone: form.phone.trim() || undefined,
+      });
+      localStorage.removeItem("otpVerified");
+      localStorage.setItem(
+        "registerData",
+        JSON.stringify({ username: form.username.trim(), email: form.email.trim(), phone: form.phone.trim() })
+      );
+      toast.success("Code sent. Check your inbox and spam folder.");
+      navigate("/otp");
+    } catch (err) {
+      setError(firstError(err.response?.data) || "Could not send the code. Try again.");
+    } finally {
+      setSending(false);
     }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (!verified) return setError("Verify your email with the code first.");
+    if (!passwordOk) return setError("Your password does not meet all the rules yet.");
+
+    const payload = {
+      username: form.username.trim(),
+      email: form.email.trim(),
+      phone: form.phone.trim() || undefined,
+      password: form.password,
+    };
 
     try {
       setLoading(true);
+      await api.post("/register/", payload);
+      localStorage.removeItem("registerData");
+      localStorage.removeItem("otpVerified");
 
-      await axios.post("https://e-commerce-app-8jg4.onrender.com/api/send-otp/", {
-        email: data.email,
-        username: data.username,
-        phone: data.phone,
-      });
-      setOtpSent(true); // ✅ important
-
-      toast.success("OTP sent 📧");
-
-      localStorage.setItem("registerData", JSON.stringify(data));
-
-      navigate("/otp", {
-        state: {
-          email: data.email,
-          data: data
-        }
-      });
-
+      // Log the new customer in straight away
+      try {
+        const { data } = await api.post("/login/", { email: payload.email, password: payload.password });
+        saveSession(data, true);
+        toast.success("Account created. Welcome to Legend!");
+        navigate("/", { replace: true });
+      } catch {
+        toast.success("Account created. Log in to continue.");
+        navigate("/login");
+      }
     } catch (err) {
-
-      console.log("FULL ERROR 👉", err);
-      console.log("BACKEND 👉", err.response?.data);
-
-      const error = err.response?.data;
-
-      // 🔥 STRING ERROR (views.py → {"error": "msg"})
-      if (error?.error) {
-        toast.error(error.error);
-      }
-
-      // 🔥 FIELD ERRORS (serializer)
-      else if (error?.username) {
-        toast.error(error.username[0]);
-      }
-      else if (error?.email) {
-        toast.error(error.email[0]);
-      }
-      else if (error?.phone) {
-        toast.error(error.phone[0]);
-      }
-
-      // 🔥 FALLBACK
-      else {
-        toast.error("OTP failed ❌");
-      }
-
+      setError(firstError(err.response?.data) || "Could not create the account. Try again.");
     } finally {
       setLoading(false);
     }
   };
 
-  /* =========================
-     📝 REGISTER
-  ========================= */
-  const handleSubmit = async () => {
-
-    if (!verified) {
-      toast.error("Verify OTP first ❌");
-      return;
-    }
-
-    if (!data.username || !data.email || !data.phone || !data.password) {
-      toast.error("Fill all fields ⚠️");
-      return;
-    }
-
+  const handleGoogle = async (credential) => {
+    setError("");
     try {
-      setLoading(true);
-
-      const res = await axios.post(
-        "https://e-commerce-app-8jg4.onrender.com/api/register/",
-        data
-      );
-
-      if (res.status === 200) {
-        toast.success("Registered Successfully 🎉");
-
-        localStorage.removeItem("registerData");
-        localStorage.removeItem("otpVerified");
-
-        navigate("/login");
-      }
-
+      const { data } = await api.post("/google-login/", { credential });
+      saveSession(data, true);
+      toast.success(`Welcome, ${data.username}`);
+      navigate("/", { replace: true });
     } catch (err) {
-
-      console.log("FULL ERROR 👉", err.response?.data);
-
-      const error = err.response?.data;
-
-      if (error?.error) {
-        toast.error(error.error);
-      }
-      else if (error?.username) {
-        toast.error(error.username[0]);
-      }
-      else if (error?.email) {
-        toast.error(error.email[0]);
-      }
-      else if (error?.phone) {
-        toast.error(error.phone[0]);
-      }
-      else if (error?.password) {
-        toast.error(error.password[0]);
-      }
-      else {
-        toast.error("Register failed ❌");
-      }
-
-    } finally {
-      setLoading(false);
+      setError(err.response?.data?.error || "Google sign-in failed. Try again.");
     }
   };
 
   return (
-  <div className="register-container">
-    <div className="register-box">
+    <AuthShell
+      title="Create your account"
+      subtitle="Verify your email once, then order from your favourite kitchens."
+      footer={
+        <>
+          Already have an account? <Link to="/login">Log in</Link>
+        </>
+      }
+    >
+      <form onSubmit={handleSubmit} noValidate>
+        <div className="au-field">
+          <label htmlFor="reg-name">Name</label>
+          <input id="reg-name" autoComplete="username" placeholder="How we should call you" value={form.username} onChange={set("username")} disabled={verified} />
+        </div>
 
-      <h1>⚡<span className="App-Name">𝓛𝓮𝓰𝓮𝓷𝓭<sup>💫</sup></span>⚡</h1>
+        <div className="au-field">
+          <label htmlFor="reg-email">Email</label>
+          <div className="au-inline">
+            <input id="reg-email" type="email" autoComplete="email" inputMode="email" placeholder="you@example.com" value={form.email} onChange={set("email")} disabled={verified} />
+            <button type="button" className={`au-btn au-btn-ghost ${verified ? "is-verified" : ""}`} onClick={sendOtp} disabled={sending || verified}>
+              {verified ? "Verified" : sending ? "Sending…" : "Send code"}
+            </button>
+          </div>
+        </div>
 
-      <h2 style={{color: "green"}}>Register🚀</h2>
+        <div className="au-field">
+          <label htmlFor="reg-phone">Phone (optional)</label>
+          <input id="reg-phone" type="tel" autoComplete="tel" inputMode="tel" placeholder="For delivery updates" value={form.phone} onChange={set("phone")} />
+        </div>
 
-      <input
-        placeholder="Username"
-        value={data.username}
-        onChange={(e) => setData({ ...data, username: e.target.value })}
-      />
+        <div className="au-field">
+          <label htmlFor="reg-password">Password</label>
+          <div className="au-input-wrap">
+            <input id="reg-password" type={showPassword ? "text" : "password"} autoComplete="new-password" placeholder="Create a password" value={form.password} onChange={set("password")} />
+            <button type="button" className="au-eye" onClick={() => setShowPassword((s) => !s)} aria-label={showPassword ? "Hide password" : "Show password"} aria-pressed={showPassword}>
+              {showPassword ? "Hide" : "Show"}
+            </button>
+          </div>
+          <ul className="au-rules" aria-label="Password rules">
+            {ruleState.map((r) => (
+              <li key={r.id} className={r.ok ? "ok" : ""}>{r.label}</li>
+            ))}
+          </ul>
+        </div>
 
-      <input
-        placeholder="Email"
-        value={data.email}
-        onChange={(e) => setData({ ...data, email: e.target.value })}
-      />
+        <p className="au-error" role="alert" aria-live="polite">{error}</p>
 
-      <button onClick={sendOtp} disabled={loading || verified}>
-        {verified ? "Verified ✅" : (loading ? "Sending..." : "Send OTP 📧")}
-      </button>
+        <button className="au-btn au-btn-primary" type="submit" disabled={loading}>
+          {loading ? <span className="au-spin" aria-label="Creating account" /> : "Create account"}
+        </button>
+      </form>
 
-      <input
-        placeholder="Phone"
-        value={data.phone}
-        onChange={(e) => setData({ ...data, phone: e.target.value })}
-      />
-
-      <input
-        type="password"
-        placeholder="Password"
-        value={data.password}
-        onChange={(e) => setData({ ...data, password: e.target.value })}
-      />
-
-      <button onClick={handleSubmit} disabled={loading}>
-        {loading ? "Processing..." : "Register 🚀"}
-      </button>
-
-      {otpSent && (
-  <div style={{
-    background: "#e7f3ff",
-    color: "#0c5460",
-    padding: "10px",
-    borderRadius: "6px",
-    marginTop: "10px",
-    fontSize: "13px"
-  }}>
-    📧 OTP sent! Check Inbox / Spam folder and refresh your email.
-    📧 Didn’t receive OTP? Wait 30 seconds and try again.
-    {timer > 0 ? ` Resend OTP in ${timer}s` : " Didn't receive? Try again."}
-  </div>
-)}
-
-    </div>
-  </div>
-);
+      {import.meta.env.VITE_GOOGLE_CLIENT_ID && (
+        <div className="au-divider"><span>or sign up with</span></div>
+      )}
+      <GoogleButton onCredential={handleGoogle} text="signup_with" />
+    </AuthShell>
+  );
 }
 
 export default Register;
