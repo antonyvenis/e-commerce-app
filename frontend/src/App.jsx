@@ -28,6 +28,7 @@ import ProtectedRoute from "./auth/ProtectedRoute";
 import ProductDetails from "./pages/ProductDetails";
 import Register from "./pages/Register";
 import HeroBanner from "./pages/HeroBanner";
+import Privacy from "./pages/Privacy";
 
 // Home and Contact already render their own <Footer />
 const NO_FOOTER = ["/", "/contact", "/login", "/register", "/otp", "/forgot-password", "/herobanner"];
@@ -47,7 +48,7 @@ function Layout() {
         {/* 🌍 Public */}
         <Route path="/" element={<Home />} />
         <Route path="/menu" element={<Menu />} />
-        <Route path="/product/:id" element={<Menu />} />
+        <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
         <Route path="/footer" element={<Footer />} />
@@ -59,6 +60,7 @@ function Layout() {
         <Route path="/otp" element={<OTP />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/logout" element={<Logout />} />
+        <Route path="/privacy" element={<Privacy />} />
 
         {/* 🔐 Needs a login (the API enforces this too) */}
         <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />

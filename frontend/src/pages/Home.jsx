@@ -1,579 +1,274 @@
-// import { useEffect, useState, useMemo, useRef } from "react";
-// import { Link, useNavigate } from "react-router-dom";
-// import About from "./About";
-// import { motion } from "framer-motion";
-// import axios from "axios";
-// import Footer from "./Footer";
-// import HeroBanner from "./HeroBanner";
-
-// function Home() {
-//   const navigate = useNavigate();
-
-//   const [data, setData] = useState([]);
-//   const [search, setSearch] = useState("");
-//   const [location, setLocation] = useState("Detecting...");
-//   const [offerIndex, setOfferIndex] = useState(0);
-
-//   const [speed, setSpeed] = useState("slow");
-//   const trackRef = useRef();
-
-//   /* =========================
-//      🔥 HERO SLIDER (15)
-//   ========================= */
-//   const heroSlides = [
-//   { image: "https://img.magnific.com/premium-photo/flying-chicken-biryani-spicy-indian-hyderabadi-biryani-generative-ai_21085-36430.jpg?w=2000", title: "🔥 Biryani Special", sub: "Hot & spicy", loading:"lazy"},
-//   { image: "https://images.unsplash.com/photo-1594007654729-407eedc4be65", title: "🍕 Pizza Blast", sub: "Cheesy love",loading:"lazy" },
-//   { image: "https://images.unsplash.com/photo-1550547660-d9450f859349", title: "🍔 Burger King", sub: "Juicy bites",loading:"lazy" },
-//   { image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87", title: "🥤 Cool Drinks", sub: "Chill refresh",loading:"lazy" },
-//   { image: "https://img.magnific.com/free-photo/boneless-chicken-with-fries-top-view_23-2149972943.jpg?semt=ais_hybrid", title: "🍗 Chicken Fry", sub: "Crispy & tasty" ,loading:"lazy"},
-//   { image: "https://static.vecteezy.com/system/resources/previews/027/679/809/large_2x/side-anglegraphy-of-delicious-noodles-in-white-background-photo.jpg", title: "🍜 Noodles", sub: "Street style" ,loading:"lazy"},
-//   { image: "https://st2.depositphotos.com/1354142/7950/i/950/depositphotos_79501054-stock-photo-south-indian-meals-served-on.jpg", title: "🍛 Meals", sub: "Full meals",loading:"lazy" },
-//   { image: "https://i.pinimg.com/originals/0f/13/7d/0f137d2a243f7b63e5716ab4c10c3ee3.jpg", title: "🥗 Veg Special", sub: "Healthy",loading:"lazy" },
-//   { image: "https://images.unsplash.com/photo-1551024601-bec78aea704b", title: "🍰 Desserts", sub: "Sweet treat",loading:"lazy" },
-//   { image: "https://wallpaperaccess.com/full/1401021.jpg", title: "🥘 Chinese", sub: "Rich taste",loading:"lazy" },
-//   { image: "https://wallpapercave.com/wp/wp6818614.jpg", title: "🍖 BBQ", sub: "Smoky flavor",loading:"lazy" },
-//   { image: "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0", title: "🍞 Breakfast", sub: "Start fresh",loading:"lazy" },
-//   { image: "https://images.unsplash.com/photo-1525385133512-2f3bdd039054", title: "🍹 Juice", sub: "Natural energy",loading:"lazy" },
-//   { image: "https://images.unsplash.com/photo-1600891964599-f61ba0e24092", title: "🔥 Combo Offers", sub: "Save big",loading:"lazy" }
-// ];
-
-
-//   const [heroIndex, setHeroIndex] = useState(0);
-
-//   /* 📱 SWIPE */
-//   const touchStartX = useRef(0);
-//   const touchEndX = useRef(0);
-
-//   const handleTouchStart = (e) => {
-//     touchStartX.current = e.touches[0].clientX;
-//   };
-
-//   const handleTouchMove = (e) => {
-//     touchEndX.current = e.touches[0].clientX;
-//   };
-
-//   const handleTouchEnd = () => {
-//     const distance = touchStartX.current - touchEndX.current;
-
-//     if (distance > 50) {
-//       setHeroIndex((prev) => (prev + 1) % heroSlides.length);
-//     }
-
-//     if (distance < -50) {
-//       setHeroIndex((prev) =>
-//         prev === 0 ? heroSlides.length - 1 : prev - 1
-//       );
-//     }
-//   };
-
-//   /* 🔁 AUTO SLIDE */
-//   useEffect(() => {
-//     const interval = setInterval(() => {
-//       setHeroIndex((prev) => (prev + 1) % heroSlides.length);
-//     }, 2500);
-//     return () => clearInterval(interval);
-//   }, []);
-
-//   /* =========================
-//      🔥 OFFERS
-//   ========================= */
-//   const offers = [
-//     "🔥 50% OFF on all orders",
-//     "🚚 Free Delivery above ₹199",
-//     "🍔 Buy 1 Get 1 Free",
-//     "💳 20% Cashback with UPI"
-//   ];
-
-//   const user = JSON.parse(localStorage.getItem("user"));
-
-//   /* 📍 LOCATION */
-//   useEffect(() => {
-//     navigator.geolocation.getCurrentPosition(
-//       () => setLocation("Chennai 📍"),
-//       () => setLocation("Location blocked ❌")
-//     );
-//   }, []);
-
-//   /* 🔁 OFFERS ROTATE */
-//   useEffect(() => {
-//     const interval = setInterval(() => {
-//       setOfferIndex((prev) => (prev + 1) % offers.length);
-//     }, 2500);
-//     return () => clearInterval(interval);
-//   }, []);
-
-//   /* 🔥 FETCH PRODUCTS */
-//   const fetchProducts = () => {
-//     axios.get("https://e-commerce-app-8jg4.onrender.com/api/products/")
-//       .then(res => {
-//         const payload = Array.isArray(res.data)
-//           ? res.data
-//           : res.data?.products || [];
-//         setData(payload);
-//       })
-//       .catch(err => console.log(err));
-//   };
-
-//   useEffect(() => {
-//     fetchProducts();
-//     const interval = setInterval(fetchProducts, 5000);
-//     return () => clearInterval(interval);
-//   }, []);
-
-//   const products = useMemo(() => Array.isArray(data) ? data : [], [data]);
-
-//   const filtered = products.filter((product) =>
-//     product.name?.toLowerCase().includes(search.toLowerCase())
-//   );
-
-//   return (
-//     <motion.div
-//       className="home-container"
-//       initial={{ opacity: 0, x: 50 }}
-//       animate={{ opacity: 1, x: 0 }}
-//       transition={{ duration: 0.5 }}
-//     >
-
-//       {/* 👋 Welcome */}
-//       {user && (
-//         <h3 className="welcome">
-//           Welcome, {user?.username} 👋
-//         </h3>
-//       )}
-
-//       {/* 🔥 EXISTING HERO */}
-//       <div className="hero">
-//         <div className="hero-content">
-
-//           <p className="location">📍 {location}</p>
-
-//           <h2 key={offerIndex} className="offer-text">
-//             {offers[offerIndex]}
-//           </h2>
-
-//           <h1 className="hero-title">
-//             Delicious Food Delivered 😋
-//           </h1>
-
-//           <p>Order your favorite meals anytime</p>
-
-//           {/* <div className="search-box">
-//             <input
-//               type="text"
-//               placeholder="Search for food...🔍"
-//               value={search}
-//               onChange={(e) => setSearch(e.target.value)}
-//             />
-
-//             <Link to="/menu">
-//               <button>Search</button>
-//             </Link>
-//           </div> */}
-
-//           {/* 🔍 SEARCH BOX */}
-//   <div className="search-box">
-
-//   <input
-//     type="text"
-//     placeholder="Search for food... 🔍"
-//     value={search}
-//     onChange={(e) => setSearch(e.target.value)}
-//     onKeyDown={(e) => {
-//       if (e.key === "Enter") {
-//         navigate("/menu");
-//       }
-//     }}
-//   />
-
-//   <button
-//     className="search-btn"
-//     onClick={() => navigate("/menu")}
-//   >
-//     Search
-//   </button>
-
-//  </div>
-
-
-//           <button
-//             className="order-btn"
-//             onClick={() => navigate("/menu")}
-//           >
-//             Order Now 🍔
-//           </button>
-
-//         </div>
-//       </div>
-
-//       {/* ⚡ SPEED */}
-//       {/* <div style={{ textAlign: "center", margin: "15px" }}>
-//         <button onClick={() => setSpeed(speed === "slow" ? "fast" : "slow")}>
-//           {speed === "slow" ? "✨ Slow" : "⚡ Fast"}
-//         </button>
-//       </div> */}
-
-//       {/* 🍔 AUTO SCROLL */}
-//       <div className="scroll-container">
-//         <div
-//           className={`scroll-track ${speed}`}
-//           ref={trackRef}
-//           onTouchStart={() =>
-//             (trackRef.current.style.animationPlayState = "paused")
-//           }
-//           onTouchEnd={() =>
-//             (trackRef.current.style.animationPlayState = "running")
-//           }
-//         >
-
-//           {[...filtered, ...filtered].map((item, index) => (
-//             <div
-//               className="food-card"
-//               key={index}
-//               onClick={() =>
-//                 navigate(`/product/${item.id}`, { state: item })
-//               }
-//             >
-//               {/* <img
-//                 src={
-//                   item.image
-//                     ? `https://e-commerce-app-8jg4.onrender.com+${item.image}`
-//                     : "https://dummyimage.com/150"
-//                 }
-//                 alt={item.name}
-//                 loading="lazy"
-//               /> */}
-//               <img
-//              src={
-//               item.image
-//               ? item.image.startsWith("http")
-//               ? item.image.replace('/upload/', '/upload/w_300,q_auto,f_auto/')
-//               : `https://e-commerce-app-8jg4.onrender.com${item.image}`
-//               : "https://dummyimage.com/150"
-//            }
-//            alt={item.name}
-//            loading="lazy"
-//             />
-//               <p>{item.name}</p>
-//             </div>
-//           ))}
-
-//         </div>
-//       </div>
-
-//       {/* 🍽️ Categories */}
-//       <div className="categories">
-//         <div className="cat-card" onClick={() => navigate("/menu")}>🍔 Food</div>
-//         <div className="cat-card" onClick={() => navigate("/menu")}>🥤 Drinks</div>
-//         <div className="cat-card" onClick={() => navigate("/menu")}>🥬🍗 Veg & NonVeg</div>
-//         <div className="cat-card" onClick={() => navigate("/menu")}>🍛 Biryani</div>
-//       </div>
-
-//       <div><p>Order Now 👇🏻✔️</p></div>
-          
-//           {/* 🔥 HERO SLIDER */}
-//        <div
-//         className="hero-slider"
-//         onTouchStart={handleTouchStart}
-//         onTouchMove={handleTouchMove}
-//         onTouchEnd={handleTouchEnd}
-//       >
-//         {heroSlides.map((slide, i) => (
-//           <div
-//             key={i}
-//             className={`slide ${i === heroIndex ? "active" : ""}`}
-//             style={{ backgroundImage: `url(${slide.image})` }}
-//           >
-//             <div className="hero-overlay">
-//               <h1>{slide.title}</h1>
-//               <p>{slide.sub}</p>
-//               <button onClick={() => navigate("/menu")}>
-//                 Order Now 🍔
-//               </button>
-//             </div>
-//           </div>
-//         ))}
-//       </div> 
-
-//       <div><p>Visit Again ❤️👇🏻</p></div>
-
-//       <HeroBanner />
-//       <About />
-//       <Footer />
-
-//     </motion.div>
-//   );
-// }
-
-// export default Home;
-
-import { useEffect, useState, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import About from "./About";
-import { motion } from "framer-motion";
+import { motion, MotionConfig } from "framer-motion";
 import axios from "axios";
+import About from "./About";
 import Footer from "./Footer";
 import HeroBanner from "./HeroBanner";
+import { API_BASE, getUser } from "../api";
+import { imgUrl, money, onImgError } from "./shopUtils";
+import "./shop.css";
+
+const HERO_SLIDES = [
+  { image: "https://img.magnific.com/premium-photo/flying-chicken-biryani-spicy-indian-hyderabadi-biryani-generative-ai_21085-36430.jpg?w=2000", title: "Biryani Special", sub: "Hot, spicy and slow-cooked" },
+  { image: "https://images.unsplash.com/photo-1594007654729-407eedc4be65", title: "Pizza Blast", sub: "Cheesy love in every slice" },
+  { image: "https://images.unsplash.com/photo-1550547660-d9450f859349", title: "Burger King", sub: "Juicy, stacked and loaded" },
+  { image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87", title: "Cool Drinks", sub: "Chill and refresh" },
+  { image: "https://img.magnific.com/free-photo/boneless-chicken-with-fries-top-view_23-2149972943.jpg?semt=ais_hybrid", title: "Chicken Fry", sub: "Crispy and tasty" },
+  { image: "https://st2.depositphotos.com/1354142/7950/i/950/depositphotos_79501054-stock-photo-south-indian-meals-served-on.jpg", title: "Full Meals", sub: "Home-style South Indian" },
+  { image: "https://images.unsplash.com/photo-1551024601-bec78aea704b", title: "Desserts", sub: "A sweet treat to finish" },
+  { image: "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0", title: "Breakfast", sub: "Start the day fresh" },
+];
+
+const OFFERS = [
+  "50% OFF on all orders",
+  "Free delivery above ₹199",
+  "Buy 1 Get 1 Free",
+  "20% cashback with UPI",
+];
+
+const CATEGORIES = [
+  { icon: "🍔", name: "Food", note: "Burgers, pizza, rolls", tone: "orange" },
+  { icon: "🍛", name: "Biryani", note: "Dum and hyderabadi", tone: "red" },
+  { icon: "🥤", name: "Drinks", note: "Juices and shakes", tone: "blue" },
+  { icon: "🥗", name: "Veg", note: "Fresh and healthy", tone: "green" },
+  { icon: "🍗", name: "Non-veg", note: "Grilled and fried", tone: "violet" },
+  { icon: "🍰", name: "Desserts", note: "Sweet endings", tone: "pink" },
+];
+
+const STEPS = [
+  { n: "01", title: "Pick your dish", text: "Browse the menu, filter by category and save favourites to your wishlist." },
+  { n: "02", title: "Pay securely", text: "GST and delivery are shown up front. Delivery is free above ₹199." },
+  { n: "03", title: "Track it live", text: "Follow your order from kitchen to doorstep and download the invoice." },
+];
+
+const reveal = {
+  initial: { opacity: 0, y: 36 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-80px" },
+  transition: { duration: 0.6, ease: "easeOut" },
+};
 
 function Home() {
   const navigate = useNavigate();
+  const user = getUser();
 
-  const [data, setData] = useState([]);
+  const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
-  const [location, setLocation] = useState("Detecting...");
+  const [focused, setFocused] = useState(false);
+  const [location, setLocation] = useState("Detecting location");
   const [offerIndex, setOfferIndex] = useState(0);
+  const [slide, setSlide] = useState(0);
+  const touch = useRef({ start: 0, end: 0 });
 
-  const [speed, setSpeed] = useState("slow");
-  const trackRef = useRef();
-
-  /* =========================
-     🔥 HERO SLIDER (15)
-  ========================= */
-  const heroSlides = [
-    { image: "https://img.magnific.com/premium-photo/flying-chicken-biryani-spicy-indian-hyderabadi-biryani-generative-ai_21085-36430.jpg?w=2000", title: "🔥 Biryani Special", sub: "Hot & spicy", loading: "lazy" },
-    { image: "https://images.unsplash.com/photo-1594007654729-407eedc4be65", title: "🍕 Pizza Blast", sub: "Cheesy love", loading: "lazy" },
-    { image: "https://images.unsplash.com/photo-1550547660-d9450f859349", title: "🍔 Burger King", sub: "Juicy bites", loading: "lazy" },
-    { image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87", title: "🥤 Cool Drinks", sub: "Chill refresh", loading: "lazy" },
-    { image: "https://img.magnific.com/free-photo/boneless-chicken-with-fries-top-view_23-2149972943.jpg?semt=ais_hybrid", title: "🍗 Chicken Fry", sub: "Crispy & tasty", loading: "lazy" },
-    { image: "https://static.vecteezy.com/system/resources/previews/027/679/809/large_2x/side-anglegraphy-of-delicious-noodles-in-white-background-photo.jpg", title: "🍜 Noodles", sub: "Street style", loading: "lazy" },
-    { image: "https://st2.depositphotos.com/1354142/7950/i/950/depositphotos_79501054-stock-photo-south-indian-meals-served-on.jpg", title: "🍛 Meals", sub: "Full meals", loading: "lazy" },
-    { image: "https://i.pinimg.com/originals/0f/13/7d/0f137d2a243f7b63e5716ab4c10c3ee3.jpg", title: "🥗 Veg Special", sub: "Healthy", loading: "lazy" },
-    { image: "https://images.unsplash.com/photo-1551024601-bec78aea704b", title: "🍰 Desserts", sub: "Sweet treat", loading: "lazy" },
-    { image: "https://wallpaperaccess.com/full/1401021.jpg", title: "🥘 Chinese", sub: "Rich taste", loading: "lazy" },
-    { image: "https://wallpapercave.com/wp/wp6818614.jpg", title: "🍖 BBQ", sub: "Smoky flavor", loading: "lazy" },
-    { image: "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0", title: "🍞 Breakfast", sub: "Start fresh", loading: "lazy" },
-    { image: "https://images.unsplash.com/photo-1525385133512-2f3bdd039054", title: "🍹 Juice", sub: "Natural energy", loading: "lazy" },
-    { image: "https://images.unsplash.com/photo-1600891964599-f61ba0e24092", title: "🔥 Combo Offers", sub: "Save big", loading: "lazy" }
-  ];
-
-  const [heroIndex, setHeroIndex] = useState(0);
-
-  /* 📱 SWIPE */
-  const touchStartX = useRef(0);
-  const touchEndX = useRef(0);
-
-  const handleTouchStart = (e) => {
-    touchStartX.current = e.touches[0].clientX;
-  };
-
-  const handleTouchMove = (e) => {
-    touchEndX.current = e.touches[0].clientX;
-  };
-
-  const handleTouchEnd = () => {
-    const distance = touchStartX.current - touchEndX.current;
-
-    if (distance > 50) {
-      setHeroIndex((prev) => (prev + 1) % heroSlides.length);
-    }
-
-    if (distance < -50) {
-      setHeroIndex((prev) =>
-        prev === 0 ? heroSlides.length - 1 : prev - 1
-      );
-    }
-  };
-
-  /* 🔁 AUTO SLIDE */
   useEffect(() => {
-    const interval = setInterval(() => {
-      setHeroIndex((prev) => (prev + 1) % heroSlides.length);
-    }, 2500);
-    return () => clearInterval(interval);
-  }, []);
-
-  /* =========================
-     🔥 OFFERS
-  ========================= */
-  const offers = [
-    "🔥 50% OFF on all orders",
-    "🚚 Free Delivery above ₹199",
-    "🍔 Buy 1 Get 1 Free",
-    "💳 20% Cashback with UPI"
-  ];
-
-  const user = JSON.parse(localStorage.getItem("user"));
-
-  /* 📍 LOCATION */
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      () => setLocation("Chennai 📍"),
-      () => setLocation("Location blocked ❌")
+    navigator.geolocation?.getCurrentPosition(
+      () => setLocation("Chennai"),
+      () => setLocation("Location off")
     );
   }, []);
 
-  /* 🔁 OFFERS ROTATE */
   useEffect(() => {
-    const interval = setInterval(() => {
-      setOfferIndex((prev) => (prev + 1) % offers.length);
-    }, 2500);
-    return () => clearInterval(interval);
+    const id = setInterval(() => setOfferIndex((i) => (i + 1) % OFFERS.length), 2800);
+    return () => clearInterval(id);
   }, []);
 
-  /* 🔥 FETCH PRODUCTS - ✅ ONCE ONLY (egress fix) */
-  const fetchProducts = () => {
-    axios.get("https://e-commerce-app-8jg4.onrender.com/api/products/")
-      .then(res => {
-        const payload = Array.isArray(res.data)
-          ? res.data
-          : res.data?.products || [];
-        setData(payload);
-      })
-      .catch(err => console.log(err));
+  useEffect(() => {
+    const id = setInterval(() => setSlide((i) => (i + 1) % HERO_SLIDES.length), 3500);
+    return () => clearInterval(id);
+  }, []);
+
+  // one request, not a polling loop
+  useEffect(() => {
+    axios.get(`${API_BASE}/api/products/`)
+      .then((res) => setProducts(Array.isArray(res.data) ? res.data : res.data?.products || []))
+      .catch(() => setProducts([]));
+  }, []);
+
+  const matches = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return q ? products.filter((p) => p.name?.toLowerCase().includes(q)) : products;
+  }, [products, search]);
+
+  const suggestions = search.trim() ? matches.slice(0, 5) : [];
+  const popular = useMemo(() => (matches.length ? [...matches, ...matches] : []), [matches]);
+
+  const swipe = () => {
+    const d = touch.current.start - touch.current.end;
+    if (Math.abs(d) < 50) return;
+    setSlide((i) => (d > 0 ? (i + 1) % HERO_SLIDES.length : (i === 0 ? HERO_SLIDES.length - 1 : i - 1)));
   };
 
-  useEffect(() => {
-    fetchProducts(); // ✅ Once மட்டும் — setInterval இல்ல
-  }, []);
-
-  const products = useMemo(() => Array.isArray(data) ? data : [], [data]);
-
-  const filtered = products.filter((product) =>
-    product.name?.toLowerCase().includes(search.toLowerCase())
-  );
+  const goProduct = (item) => navigate(`/product/${item.id}`, { state: item });
+  const current = HERO_SLIDES[slide];
 
   return (
-    <motion.div
-      className="home-container"
-      initial={{ opacity: 0, x: 50 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.5 }}
-    >
+    <MotionConfig reducedMotion="user">
+      <div className="hm">
+        {/* ---------------------------------------------------- HERO */}
+        <section className="hm-hero">
+          <span className="hm-blob hm-blob-a" aria-hidden="true" />
+          <span className="hm-blob hm-blob-b" aria-hidden="true" />
 
-      {/* 👋 Welcome */}
-      {user && (
-        <h3 className="welcome">
-          Welcome, {user?.username} 👋
-        </h3>
-      )}
+          <motion.div className="hm-hero-copy" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            {user && <p className="hm-welcome">Welcome back, {user.username}</p>}
 
-      {/* 🔥 EXISTING HERO */}
-      <div className="hero">
-        <div className="hero-content">
+            <div className="hm-pills">
+              <span className="sh-pill hm-loc">{location}</span>
+              <span key={offerIndex} className="sh-pill sh-pill-hot hm-offer">{OFFERS[offerIndex]}</span>
+            </div>
 
-          <p className="location">📍 {location}</p>
+            <h1>Delicious food, <span>delivered fast</span></h1>
+            <p className="hm-sub">Order from your favourite kitchens anytime. Hot on arrival, tracked to your door.</p>
 
-          <h2 key={offerIndex} className="offer-text">
-            {offers[offerIndex]}
-          </h2>
-
-          <h1 className="hero-title">
-            Delicious Food Delivered 😋
-          </h1>
-
-          <p>Order your favorite meals anytime</p>
-
-          {/* 🔍 SEARCH BOX */}
-          <div className="search-box">
-
-            <input
-              type="text"
-              placeholder="Search for food... 🔍"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  navigate("/menu");
-                }
-              }}
-            />
-
-            <button
-              className="search-btn"
-              onClick={() => navigate("/menu")}
-            >
-              Search
-            </button>
-
-          </div>
-
-          <button
-            className="order-btn"
-            onClick={() => navigate("/menu")}
-          >
-            Order Now 🍔
-          </button>
-
-        </div>
-      </div>
-
-      {/* 🍔 AUTO SCROLL */}
-      <div className="scroll-container">
-        <div
-          className={`scroll-track ${speed}`}
-          ref={trackRef}
-          onTouchStart={() =>
-            (trackRef.current.style.animationPlayState = "paused")
-          }
-          onTouchEnd={() =>
-            (trackRef.current.style.animationPlayState = "running")
-          }
-        >
-
-          {[...filtered, ...filtered].map((item, index) => (
-            <div
-              className="food-card"
-              key={index}
-              onClick={() =>
-                navigate(`/product/${item.id}`, { state: item })
-              }
-            >
-              <img
-                src={
-                  item.image
-                    ? item.image.startsWith("http")
-                      ? item.image.replace('/upload/', '/upload/w_300,q_auto,f_auto/')
-                      : `https://e-commerce-app-8jg4.onrender.com${item.image}`
-                    : "https://dummyimage.com/150"
-                }
-                alt={item.name}
-                loading="lazy"
+            <div className={`hm-search ${focused ? "is-focus" : ""}`}>
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="M20 20l-3.5-3.5" /></svg>
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                onFocus={() => setFocused(true)}
+                onBlur={() => setTimeout(() => setFocused(false), 150)}
+                onKeyDown={(e) => e.key === "Enter" && navigate("/menu")}
+                placeholder="Search biryani, pizza, dosa…"
+                aria-label="Search dishes"
               />
-              <p>{item.name}</p>
+              <button className="sh-btn sh-btn-primary" onClick={() => navigate("/menu")}>Search</button>
+
+              {focused && suggestions.length > 0 && (
+                <ul className="hm-suggest">
+                  {suggestions.map((p) => (
+                    <li key={p.id}>
+                      <button onMouseDown={() => goProduct(p)}>
+                        <img src={imgUrl(p.image, 120)} alt="" onError={onImgError} />
+                        <span>{p.name}</span>
+                        <b>{money(p.price)}</b>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
-          ))}
 
-        </div>
-      </div>
+            <div className="hm-cta">
+              <Link className="sh-btn sh-btn-primary" to="/menu">Order now</Link>
+              <Link className="sh-btn sh-btn-ghost" to="/orders">Track my order</Link>
+            </div>
 
-      {/* 🍽️ Categories */}
-      <div className="categories">
-        <div className="cat-card" onClick={() => navigate("/menu")}>🍔 Food</div>
-        <div className="cat-card" onClick={() => navigate("/menu")}>🥤 Drinks</div>
-        <div className="cat-card" onClick={() => navigate("/menu")}>🥬🍗 Veg & NonVeg</div>
-        <div className="cat-card" onClick={() => navigate("/menu")}>🍛 Biryani</div>
-      </div>
+            <ul className="hm-stats">
+              <li><b>30 min</b><span>avg delivery</span></li>
+              <li><b>4.9★</b><span>happy eaters</span></li>
+              <li><b>₹199+</b><span>free delivery</span></li>
+            </ul>
+          </motion.div>
 
-      <div><p>Order Now 👇🏻✔️</p></div>
-
-      {/* 🔥 HERO SLIDER */}
-      <div
-        className="hero-slider"
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
-        {heroSlides.map((slide, i) => (
-          <div
-            key={i}
-            className={`slide ${i === heroIndex ? "active" : ""}`}
-            style={{ backgroundImage: `url(${slide.image})` }}
+          <motion.div
+            className="hm-hero-visual"
+            initial={{ opacity: 0, scale: 0.92 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            onTouchStart={(e) => (touch.current.start = e.touches[0].clientX)}
+            onTouchMove={(e) => (touch.current.end = e.touches[0].clientX)}
+            onTouchEnd={swipe}
           >
-            <div className="hero-overlay">
-              <h1>{slide.title}</h1>
-              <p>{slide.sub}</p>
-              <button onClick={() => navigate("/menu")}>
-                Order Now 🍔
-              </button>
+            <div className="hm-frame">
+              {HERO_SLIDES.map((s, i) => (
+                <div key={s.title} className={`hm-slide ${i === slide ? "is-on" : ""}`} style={{ backgroundImage: `url(${s.image})` }} role="img" aria-label={s.title} />
+              ))}
+              <div className="hm-caption">
+                <h2 key={current.title}>{current.title}</h2>
+                <p key={current.sub}>{current.sub}</p>
+                <button className="sh-btn sh-btn-primary" onClick={() => navigate("/menu")}>Order now</button>
+              </div>
+              <div className="hm-dots" role="tablist" aria-label="Featured dishes">
+                {HERO_SLIDES.map((s, i) => (
+                  <button key={s.title} className={i === slide ? "is-on" : ""} onClick={() => setSlide(i)} aria-label={`Show ${s.title}`} />
+                ))}
+              </div>
             </div>
+            <span className="hm-float hm-float-a">⭐ 4.8 rated</span>
+            <span className="hm-float hm-float-b">🚚 Free above ₹199</span>
+          </motion.div>
+        </section>
+
+        {/* ----------------------------------------- POPULAR MARQUEE */}
+        {popular.length > 0 && (
+          <motion.section className="hm-section" {...reveal}>
+            <div className="hm-head">
+              <div><p className="hm-eyebrow">Popular right now</p><h2>People keep ordering these</h2></div>
+              <Link className="sh-link" to="/menu">See full menu</Link>
+            </div>
+            <div className="hm-marquee">
+              <div className="hm-track">
+                {popular.map((item, i) => (
+                  <button key={`${item.id}-${i}`} className="hm-dish" onClick={() => goProduct(item)} aria-hidden={i >= matches.length}>
+                    <img src={imgUrl(item.image, 360)} alt={i < matches.length ? item.name : ""} loading="lazy" onError={onImgError} />
+                    <span className="hm-dish-name">{item.name}</span>
+                    <span className="hm-dish-price">{money(item.price)}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </motion.section>
+        )}
+
+        {/* ------------------------------------------- CATEGORIES */}
+        <motion.section className="hm-section" {...reveal}>
+          <div className="hm-head"><div><p className="hm-eyebrow">Browse</p><h2>What are you craving?</h2></div></div>
+          <div className="hm-cats">
+            {CATEGORIES.map((c, i) => (
+              <motion.button
+                key={c.name}
+                className={`hm-cat tone-${c.tone}`}
+                onClick={() => navigate("/menu")}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.06, duration: 0.45 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                <span className="hm-cat-icon" aria-hidden="true">{c.icon}</span>
+                <strong>{c.name}</strong>
+                <small>{c.note}</small>
+              </motion.button>
+            ))}
           </div>
-        ))}
+        </motion.section>
+
+        {/* ---------------------------------------------- OFFERS */}
+        <motion.section className="hm-section" {...reveal}>
+          <div className="hm-offers">
+            <article className="hm-offer-card hm-offer-a"><p>Today only</p><h3>50% off your first order</h3><Link to="/menu">Claim it</Link></article>
+            <article className="hm-offer-card hm-offer-b"><p>Always on</p><h3>Free delivery above ₹199</h3><Link to="/menu">Start ordering</Link></article>
+            <article className="hm-offer-card hm-offer-c"><p>Pay with UPI</p><h3>20% cashback on every UPI order</h3><Link to="/menu">See menu</Link></article>
+          </div>
+        </motion.section>
+
+        {/* -------------------------------------------- HOW IT WORKS */}
+        <motion.section className="hm-section" {...reveal}>
+          <div className="hm-head"><div><p className="hm-eyebrow">How it works</p><h2>From craving to doorstep in 3 steps</h2></div></div>
+          <ol className="hm-steps">
+            {STEPS.map((s) => (
+              <li key={s.n}><span>{s.n}</span><h3>{s.title}</h3><p>{s.text}</p></li>
+            ))}
+          </ol>
+        </motion.section>
+
+        {/* ------------------------------------------------ BANNER */}
+        <motion.section className="hm-section" {...reveal}>
+          <div className="hm-banner">
+            <div>
+              <h2>Hungry? Dinner is a few taps away.</h2>
+              <p>Hot food, honest prices and a tracker that tells you exactly when to open the door.</p>
+            </div>
+            <Link className="sh-btn sh-btn-light" to="/menu">Order now</Link>
+          </div>
+        </motion.section>
+
+        <HeroBanner />
+        <About />
+        <Footer />
       </div>
-
-      {/* <div><p>Visit Again ❤️👇🏻</p></div> */}
-      {/* <About /> */}
-      <Footer />
-
-    </motion.div>
+    </MotionConfig>
   );
 }
 

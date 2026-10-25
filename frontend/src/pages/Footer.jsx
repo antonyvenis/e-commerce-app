@@ -19,7 +19,7 @@ function Footer() {
         <nav className="lg-footer-links" aria-label="Footer">
           <Link to="/menu">Menu</Link>
           <Link to="/orders">Orders</Link>
-          <Link to="/herobanner">About</Link>
+          <Link to="/about">About</Link>
           <Link to="/contact">Contact</Link>
         </nav>
 

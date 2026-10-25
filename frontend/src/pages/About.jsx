@@ -38,7 +38,7 @@ function About() {
         ))}
       </div>
 
-      {/* <div> {<Contact />} </div> */}
+      <div> {<Contact />} </div>
 
     </div>
   );

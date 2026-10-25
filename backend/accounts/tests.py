@@ -1,5 +1,3 @@
-# Create your tests here.
-
 """
 Run:  python manage.py test accounts -v 2
 Covers: email login, JWT + refresh rotation, role-based access (RBAC),
@@ -438,3 +436,230 @@ class PublicEndpointTests(BaseAPITest):
 
     def test_health_is_public(self):
         self.assertEqual(self.client.get("/api/health/").status_code, 200)
+
+
+# ------------------------------------------------------------------ admin dashboard
+class AdminDashboardTests(BaseAPITest):
+    def setUp(self):
+        super().setUp()
+        self.customer = make_user()
+        self.admin = make_user("boss", "boss@example.com", role="admin")
+        self.biryani = make_product("Biryani", price=300)
+        self.dosa = make_product("Dosa", price=80, is_active=False)
+        self.order1 = Order.objects.create(user=self.customer, total_price=300, status="Pending")
+        self.order2 = Order.objects.create(user=self.customer, total_price=100, status="Delivered")
+        OrderItem.objects.create(order=self.order1, item_name="Biryani", price=300, quantity=2, image="")
+
+    # ---- access control
+    def test_every_admin_endpoint_blocks_customers_and_anonymous(self):
+        urls = [
+            ("get", "/api/admin/stats/"),
+            ("get", "/api/admin/orders/"),
+            ("get", "/api/admin/products/"),
+            ("post", f"/api/admin/orders/{self.order1.id}/status/"),
+            ("post", f"/api/admin/products/{self.biryani.id}/toggle/"),
+        ]
+        for method, url in urls:
+            anon = getattr(APIClient(), method)(url, format="json")
+            cust = getattr(self.auth_as(self.customer), method)(url, format="json")
+            self.assertEqual(anon.status_code, 401, url)
+            self.assertEqual(cust.status_code, 403, url)
+
+    # ---- stats
+    def test_stats_numbers(self):
+        res = self.auth_as(self.admin).get("/api/admin/stats/")
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.data["users"], 2)
+        self.assertEqual(res.data["products"], 1)          # inactive dish not counted
+        self.assertEqual(res.data["orders"], 2)
+        self.assertEqual(res.data["revenue"], 400)
+        self.assertEqual(res.data["by_status"]["Pending"], 1)
+        self.assertEqual(res.data["by_status"]["Delivered"], 1)
+        self.assertEqual(res.data["by_status"]["Preparing"], 0)
+
+    # ---- orders
+    def test_orders_list_and_filter(self):
+        client = self.auth_as(self.admin)
+        res = client.get("/api/admin/orders/")
+        self.assertEqual(len(res.data["orders"]), 2)
+        self.assertEqual(res.data["orders"][0]["customer"], "antony")
+        only = client.get("/api/admin/orders/", {"status": "Delivered"})
+        self.assertEqual([o["id"] for o in only.data["orders"]], [self.order2.id])
+
+    def test_orders_ignores_unknown_status_filter_and_bad_page(self):
+        res = self.auth_as(self.admin).get("/api/admin/orders/", {"status": "Hacked", "page": "abc"})
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(len(res.data["orders"]), 2)
+
+    def test_items_count_sums_quantities(self):
+        rows = self.auth_as(self.admin).get("/api/admin/orders/", {"status": "Pending"}).data["orders"]
+        self.assertEqual(rows[0]["items_count"], 2)
+
+    def test_update_order_status(self):
+        res = self.auth_as(self.admin).post(
+            f"/api/admin/orders/{self.order1.id}/status/", {"status": "Preparing"}, format="json")
+        self.assertEqual(res.status_code, 200)
+        self.order1.refresh_from_db()
+        self.assertEqual(self.order1.status, "Preparing")
+
+    def test_update_order_status_rejects_invalid_value(self):
+        res = self.auth_as(self.admin).post(
+            f"/api/admin/orders/{self.order1.id}/status/", {"status": "Teleported"}, format="json")
+        self.assertEqual(res.status_code, 400)
+        self.order1.refresh_from_db()
+        self.assertEqual(self.order1.status, "Pending")
+
+    def test_update_unknown_order_404(self):
+        res = self.auth_as(self.admin).post("/api/admin/orders/9999/status/", {"status": "Pending"}, format="json")
+        self.assertEqual(res.status_code, 404)
+
+    # ---- products
+    def test_admin_products_include_inactive_and_search(self):
+        client = self.auth_as(self.admin)
+        names = [p["name"] for p in client.get("/api/admin/products/").data["products"]]
+        self.assertCountEqual(names, ["Biryani", "Dosa"])
+        found = client.get("/api/admin/products/", {"q": "dos"}).data
+        self.assertEqual([p["name"] for p in found["products"]], ["Dosa"])
+
+    def test_toggle_product_hides_and_shows_it_publicly(self):
+        client = self.auth_as(self.admin)
+        res = client.post(f"/api/admin/products/{self.biryani.id}/toggle/", format="json")
+        self.assertFalse(res.data["is_active"])
+        public = APIClient().get("/api/products/").data["products"]
+        self.assertNotIn("Biryani", [p["name"] for p in public])
+        client.post(f"/api/admin/products/{self.biryani.id}/toggle/", format="json")
+        public = APIClient().get("/api/products/").data["products"]
+        self.assertIn("Biryani", [p["name"] for p in public])
+
+
+class InvoiceRobustnessTests(BaseAPITest):
+    def test_invoice_survives_markup_characters_in_user_input(self):
+        user = make_user()
+        order = Order.objects.create(
+            user=user, total_price=100, name="Tom & <b>Jerry</b>",
+            address="12 <Main> St & 3rd Ave", payment_method="UPI", status="Delivered",
+        )
+        OrderItem.objects.create(order=order, item_name="Chicken <65> & Fries", price=100, quantity=1, image="")
+        res = self.auth_as(user).get(f"/api/invoice/{order.id}/")
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(res.content.startswith(b"%PDF"))
+
+    def test_invoice_with_many_items_paginates(self):
+        user = make_user()
+        order = Order.objects.create(user=user, total_price=100, address="x")
+        for i in range(60):
+            OrderItem.objects.create(order=order, item_name=f"Dish number {i} with a fairly long descriptive name", price=10, quantity=1, image="")
+        res = self.auth_as(user).get(f"/api/invoice/{order.id}/")
+        self.assertEqual(res.status_code, 200)
+        self.assertGreaterEqual(res.content.count(b"/Type /Page\n"), 2)
+
+
+class DjangoAdminSiteTests(BaseAPITest):
+    """The themed Django admin (/legend-admin/) still renders."""
+
+    def test_login_page_renders(self):
+        self.assertEqual(self.client.get("/legend-admin/login/").status_code, 200)
+
+    def test_superuser_can_open_main_lists(self):
+        root = CustomUser.objects.create_superuser("root", "root@example.com", PASSWORD)
+        self.client.force_login(root)
+        for path in ("/legend-admin/", "/legend-admin/accounts/order/",
+                     "/legend-admin/accounts/product/", "/legend-admin/accounts/customuser/"):
+            self.assertEqual(self.client.get(path).status_code, 200, path)
+
+
+# ------------------------------------------------------------------ buy now, product detail, profile photo
+class BuyNowAndDetailTests(BaseAPITest):
+    def setUp(self):
+        super().setUp()
+        self.user = make_user()
+        self.client = self.auth_as(self.user)
+        self.biryani = make_product("Biryani", price=300)
+        self.dosa = make_product("Dosa", price=100)
+
+    def test_buy_now_orders_only_the_posted_dish_and_keeps_the_rest_of_the_cart(self):
+        self.client.post("/api/add-cart/", {"product_id": self.biryani.id}, format="json")
+        res = self.client.post("/api/order/", {
+            "items": [{"product_id": self.dosa.id, "item_name": "Dosa", "price": 1, "quantity": 2}],
+            "address": "Chennai",
+        }, format="json")
+        self.assertEqual(res.status_code, 200)
+        order = Order.objects.get(id=res.data["order_id"])
+        self.assertEqual([(i.item_name, i.quantity) for i in order.items.all()], [("Dosa", 2)])
+        self.assertEqual(order.total_price, 210.0)  # 200 + 5% GST, free delivery above 199
+        self.assertTrue(CartItem.objects.filter(user=self.user, product_id=self.biryani.id).exists())
+
+    def test_ordering_cart_items_removes_only_those_from_the_cart(self):
+        self.client.post("/api/add-cart/", {"product_id": self.biryani.id}, format="json")
+        self.client.post("/api/add-cart/", {"product_id": self.dosa.id}, format="json")
+        self.client.post("/api/order/", {"items": [{"product_id": self.biryani.id, "quantity": 1}]}, format="json")
+        left = CartItem.objects.filter(user=self.user)
+        self.assertEqual([c.product_id for c in left], [self.dosa.id])
+
+    def test_product_id_beats_item_name(self):
+        res = self.client.post("/api/order/", {"items": [{"product_id": self.dosa.id, "item_name": "Biryani", "quantity": 1}]}, format="json")
+        self.assertEqual(Order.objects.get(id=res.data["order_id"]).items.get().item_name, "Dosa")
+
+    def test_inactive_dish_cannot_be_ordered(self):
+        self.dosa.is_active = False
+        self.dosa.save()
+        res = self.client.post("/api/order/", {"items": [{"product_id": self.dosa.id, "quantity": 1}]}, format="json")
+        self.assertEqual(res.status_code, 400)
+
+    def test_cart_payload_includes_product_id(self):
+        self.client.post("/api/add-cart/", {"product_id": self.biryani.id}, format="json")
+        self.assertEqual(self.client.get("/api/cart/").data[0]["product_id"], self.biryani.id)
+
+    def test_product_detail_is_public(self):
+        res = APIClient().get(f"/api/products/{self.biryani.id}/")
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.data["name"], "Biryani")
+
+    def test_product_detail_404_for_missing_or_inactive(self):
+        self.dosa.is_active = False
+        self.dosa.save()
+        self.assertEqual(APIClient().get(f"/api/products/{self.dosa.id}/").status_code, 404)
+        self.assertEqual(APIClient().get("/api/products/99999/").status_code, 404)
+
+
+class ProfilePhotoTests(BaseAPITest):
+    def test_oversized_photo_rejected(self):
+        user = make_user()
+        res = self.auth_as(user).post("/api/update-profile/", {"image": "data:image/jpeg;base64," + "A" * 250_000}, format="json")
+        self.assertEqual(res.status_code, 400)
+
+    def test_small_photo_saved(self):
+        user = make_user()
+        res = self.auth_as(user).post("/api/update-profile/", {"image": "data:image/jpeg;base64,AAAA"}, format="json")
+        self.assertEqual(res.status_code, 200)
+        user.refresh_from_db()
+        self.assertTrue(user.image.startswith("data:image/jpeg"))
+
+    def test_login_payload_never_carries_a_big_photo(self):
+        user = make_user()
+        user.image = "data:image/jpeg;base64," + "A" * 5000
+        user.save()
+        self.assertIsNone(self.login().data["image"])
+
+
+class AddToCartQuantityTests(BaseAPITest):
+    def setUp(self):
+        super().setUp()
+        self.user = make_user()
+        self.client = self.auth_as(self.user)
+        self.dish = make_product("Biryani", price=300)
+
+    def test_quantity_is_added(self):
+        self.client.post("/api/add-cart/", {"product_id": self.dish.id, "quantity": 3}, format="json")
+        self.client.post("/api/add-cart/", {"product_id": self.dish.id, "quantity": 2}, format="json")
+        self.assertEqual(CartItem.objects.get(user=self.user).quantity, 5)
+
+    def test_quantity_defaults_to_one_and_is_capped(self):
+        self.client.post("/api/add-cart/", {"product_id": self.dish.id}, format="json")
+        self.assertEqual(CartItem.objects.get(user=self.user).quantity, 1)
+        self.client.post("/api/add-cart/", {"product_id": self.dish.id, "quantity": 9999}, format="json")
+        self.assertEqual(CartItem.objects.get(user=self.user).quantity, 50)
+
+    def test_garbage_quantity_falls_back_to_one(self):
+        self.client.post("/api/add-cart/", {"product_id": self.dish.id, "quantity": "lots"}, format="json")
+        self.assertEqual(CartItem.objects.get(user=self.user).quantity, 1)

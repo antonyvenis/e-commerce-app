@@ -569,3 +569,23 @@ body .status {
     scroll-behavior: auto !important;
   }
 }
+
+
+/* ---------- About section: no empty screen-high gap ---------- */
+.about.premium-bg {
+  min-height: auto;            /* was 100vh, which left a big empty green block */
+  padding: 56px 20px 24px;
+}
+
+.about .contact {
+  min-height: auto;            /* Contact is embedded here, so it must not be 100vh too */
+  padding: 40px 16px 56px;
+}
+
+.about .contact-form {
+  height: auto;
+}
+
+.about-grid {
+  margin-top: 28px;
+}

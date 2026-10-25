@@ -78,7 +78,7 @@ export const saveSession = (data, remember = true) => {
       email: data.email,
       role: data.role,
       is_staff: data.is_staff,
-      image: data.image || null,
+      image: data.image && data.image.length < 500 ? data.image : null, // never keep a base64 photo here
     })
   );
   window.dispatchEvent(new Event("auth:changed"));

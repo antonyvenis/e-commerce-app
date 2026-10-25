@@ -1,12 +1,8 @@
 import "./HeroBanner.css";
 import { Link } from "react-router-dom";
-import About from "./About";
 
 function HeroBanner() {
   return (
-    <>
-       <About />
-
     <div className="hero-banner-page-top">
     <div className="hero-banner-page">
       <div className="bg-glow glow1"></div>
@@ -179,7 +175,6 @@ function HeroBanner() {
       </div>
     </div>
     </div>
-    </>
   );
 }
 

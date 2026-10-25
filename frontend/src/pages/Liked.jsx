@@ -1,420 +1,123 @@
-import { useEffect, useState, useCallback, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import axios from "axios";
-import toast from "react-hot-toast";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import toast from "react-hot-toast";
+import api from "../api";
+import { imgUrl, money, onImgError } from "./shopUtils";
+import "./shop.css";
 
-const API = "https://e-commerce-app-8jg4.onrender.com";
+const Heart = () => (
+  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+    <path d="M12 21s-7.5-4.6-9.6-9.2C.8 8.2 3 4.5 6.6 4.5c2 0 3.6 1 4.7 2.7h1.4c1.1-1.7 2.7-2.7 4.7-2.7 3.6 0 5.8 3.7 4.2 7.3C19.5 16.4 12 21 12 21z" />
+  </svg>
+);
 
 function Liked() {
-  const [likedProducts, setLikedProducts] = useState([]);
+  const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [adding, setAdding] = useState(null);
 
-  const user = useMemo(
-    () => JSON.parse(localStorage.getItem("user")),
-    []
-  );
-
-  /* ================================
-     ❤️ FETCH LIKES
-  ================================ */
-  const fetchLikes = useCallback(async () => {
-    if (!user) {
-      setLoading(false);
-      return;
-    }
-
+  const load = useCallback(async () => {
     try {
-      const res = await axios.get(
-        `${API}/api/likes/`,
-        {
-          params: {
-            username: user.username
-          }
-        }
-      );
-
-      const data = Array.isArray(res.data)
-        ? res.data
-        : [];
-
-      setLikedProducts(data);
-
-    } catch (err) {
-      console.log(
-        "LIKE FETCH ERROR 👉",
-        err.response?.data
-      );
-
-      toast.error(
-        "Failed to load wishlist ❌"
-      );
-
-      setLikedProducts([]);
-
+      const { data } = await api.get("/likes/");
+      setItems(Array.isArray(data) ? data : []);
+    } catch {
+      toast.error("Could not load your wishlist");
+      setItems([]);
     } finally {
       setLoading(false);
     }
-  }, [user?.username]);
+  }, []);
 
-  /* ================================
-     🔥 FIRST LOAD
-  ================================ */
-  useEffect(() => {
-    fetchLikes();
-  }, [fetchLikes]);
+  useEffect(() => { load(); }, [load]);
 
-  /* ================================
-     🔥 REAL-TIME UPDATE
-  ================================ */
-  useEffect(() => {
-    const handleUpdate = () => {
-      fetchLikes();
-    };
-
-    window.addEventListener(
-      "wishlistUpdated",
-      handleUpdate
-    );
-
-    return () => {
-      window.removeEventListener(
-        "wishlistUpdated",
-        handleUpdate
-      );
-    };
-  }, [fetchLikes]);
-
-  /* ================================
-     ❌ REMOVE
-  ================================ */
-  const removeItem = async (item) => {
-    const oldData = [...likedProducts];
-
-    setLikedProducts(prev =>
-      prev.filter(
-        p => p.id !== item.id
-      )
-    );
-
+  const remove = async (item) => {
+    const before = items;
+    setItems((list) => list.filter((p) => p.id !== item.id));
     try {
-      await axios.post(
-        `${API}/api/remove-like/`,
-        {
-          username: user.username,
-          id: item.id
-        }
-      );
-
-      toast.success(
-        `${item.item_name} removed ❌`
-      );
-
-      window.dispatchEvent(
-        new Event("wishlistUpdated")
-      );
-
-    } catch (err) {
-      console.log(err);
-
-      setLikedProducts(oldData);
-
-      toast.error(
-        "Remove failed ❌"
-      );
+      await api.post("/remove-like/", { id: item.id });
+      toast.success(`${item.item_name} removed from wishlist`);
+      window.dispatchEvent(new Event("wishlistUpdated"));
+    } catch {
+      setItems(before);
+      toast.error("Could not remove it");
     }
   };
 
-  /* ================================
-     🛒 ADD TO CART
-  ================================ */
-  const handleAdd = async (item) => {
-    if (!user) {
-      return toast.error(
-        "Login first ❌"
-      );
-    }
-
+  const addToCart = async (item) => {
+    setAdding(item.id);
     try {
-      await axios.post(
-        `${API}/api/add-cart/`,
-        {
-          username: user.username,
-          product_id: item.id
-        }
-      );
-
-      toast.success(
-        `${item.item_name} added to cart 🛒`
-      );
-
-      window.dispatchEvent(
-        new Event("cartUpdated")
-      );
-
-    } catch (err) {
-      console.log(
-        "CART ERROR 👉",
-        err.response?.data
-      );
-
-      toast.error(
-        "Cart error ❌"
-      );
+      await api.post("/add-cart/", { product_id: item.id });
+      toast.success(`${item.item_name} added to cart`);
+      const { data } = await api.get("/cart/");
+      localStorage.setItem("cartCount", String(Array.isArray(data) ? data.length : 0));
+      window.dispatchEvent(new Event("cartUpdated"));
+    } catch {
+      toast.error("Could not add it to the cart");
+    } finally {
+      setAdding(null);
     }
   };
-
-  /* ================================
-     LOADING
-  ================================ */
-  if (loading) {
-    return (
-      <div className="liked-container">
-        <h2>
-          Loading wishlist... ❤️
-        </h2>
-      </div>
-    );
-  }
 
   return (
-    <div className="liked-container">
-      <h2 className="liked-title">
-        ❤️ Wishlist (
-        {likedProducts.length})
-      </h2>
+    <div className="sh-page">
+      <header className="sh-pagehead">
+        <h1>Your wishlist</h1>
+        {!loading && items.length > 0 && <p>{items.length} saved {items.length === 1 ? "dish" : "dishes"}</p>}
+      </header>
 
-      {likedProducts.length === 0 ? (
-        <div className="empty-state">
-          <h3>
-            No liked items 😢
-          </h3>
-
-          <Link to="/menu">
-            <button>
-              Go Shopping ➡️
-            </button>
-          </Link>
-        </div>
+      {loading ? (
+        <div className="sh-grid">{[0, 1, 2, 3].map((i) => <div key={i} className="sh-skel-card" style={{ "--d": `${i * 90}ms` }} />)}</div>
+      ) : items.length === 0 ? (
+        <motion.div className="sh-empty" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}>
+          <div className="sh-empty-art sh-pulse" aria-hidden="true">♥</div>
+          <h2>Nothing saved yet</h2>
+          <p>Tap the heart on any dish and it will wait for you here.</p>
+          <Link className="sh-btn sh-btn-primary" to="/menu">Find something tasty</Link>
+        </motion.div>
       ) : (
-        <div className="liked-grid">
-          <AnimatePresence>
-            {likedProducts.map(
-              (item, index) => {
-                const offerPercent =
-                  Number(
-                    item.offer ??
-                    item.discount ??
-                    0
-                  );
+        <motion.div className="sh-grid" layout>
+          <AnimatePresence mode="popLayout">
+            {items.map((item, i) => {
+              const offer = Number(item.offer ?? item.discount ?? 0);
+              const base = Number(item.price) || 0;
+              const final = offer > 0 ? base - (base * offer) / 100 : base;
+              return (
+                <motion.article
+                  key={item.id}
+                  layout
+                  className="sh-card"
+                  initial={{ opacity: 0, y: 28, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1, transition: { delay: Math.min(i, 8) * 0.05 } }}
+                  exit={{ opacity: 0, scale: 0.85, transition: { duration: 0.2 } }}
+                >
+                  <div className="sh-card-media">
+                    <img src={imgUrl(item.image)} alt={item.item_name} loading="lazy" onError={onImgError} />
+                    {offer > 0 && <span className="sh-ribbon">{offer}% off</span>}
+                    <button className="sh-heart is-on" onClick={() => remove(item)} aria-label={`Remove ${item.item_name} from wishlist`}>
+                      <Heart />
+                    </button>
+                  </div>
 
-                const isOffer =
-                  offerPercent > 0;
-
-                const originalPrice =
-                  Number(
-                    item.price
-                  ) || 0;
-
-                const offerPrice =
-                  isOffer
-                    ? (
-                        originalPrice -
-                        (
-                          originalPrice *
-                          offerPercent
-                        ) /
-                          100
-                      ).toFixed(2)
-                    : originalPrice.toFixed(
-                        2
-                      );
-
-                return (
-                  <motion.div
-                    key={item.id}
-                    className="liked-card"
-                    layout
-                    initial={{
-                      opacity: 0,
-                      scale: 0.8
-                    }}
-                    animate={{
-                      opacity: 1,
-                      scale: 1
-                    }}
-                    exit={{
-                      opacity: 0,
-                      x: 100
-                    }}
-                    transition={{
-                      duration: 0.2
-                    }}
-                    style={{
-                      position:
-                        "relative"
-                    }}
-                  >
-                    {/* OFFER */}
-                    {isOffer && (
-                      <div
-                        style={{
-                          position:
-                            "absolute",
-                          top: "10px",
-                          left: "10px",
-                          background:
-                            "red",
-                          color:
-                            "white",
-                          padding:
-                            "6px 12px",
-                          borderRadius:
-                            "20px",
-                          fontSize:
-                            "14px",
-                          fontWeight:
-                            "bold",
-                          zIndex: 10,
-                          boxShadow:
-                            "0 2px 8px rgba(0,0,0,0.2)"
-                        }}
-                      >
-                        🔥{" "}
-                        {
-                          offerPercent
-                        }
-                        % OFF
-                      </div>
-                    )}
-
-                    {/* IMAGE */}
-                    <img
-                      src={
-                        item.image
-                          ? item.image.startsWith(
-                              "http"
-                            )
-                            ? item.image
-                            : `${API}${item.image}`
-                          : "https://dummyimage.com/300"
-                      }
-                      alt={
-                        item.item_name
-                      }
-                      loading="lazy"
-                    />
-
-                    {/* NAME */}
-                    <h4>
-                      {index + 1}.{" "}
-                      {
-                        item.item_name
-                      }
-                    </h4>
-
-                    {/* PRICE */}
-                    <div className="price-section">
-                      {isOffer ? (
-                        <>
-                          <p
-                            style={{
-                              textDecoration:
-                                "line-through",
-                              color:
-                                "gray",
-                              marginBottom:
-                                "5px",
-                              minHeight:
-                                "24px"
-                            }}
-                          >
-                            ₹
-                            {
-                              originalPrice
-                            }
-                          </p>
-
-                          <p
-                            style={{
-                              color:
-                                "green",
-                              fontWeight:
-                                "bold",
-                              fontSize:
-                                "22px",
-                              minHeight:
-                                "32px"
-                            }}
-                          >
-                            ₹
-                            {
-                              offerPrice
-                            }
-                          </p>
-                        </>
-                      ) : (
-                        <>
-                          <p
-                            style={{
-                              visibility:
-                                "hidden",
-                              marginBottom:
-                                "5px",
-                              minHeight:
-                                "24px"
-                            }}
-                          >
-                            ₹0
-                          </p>
-
-                          <p
-                            style={{
-                              fontWeight:
-                                "bold",
-                              fontSize:
-                                "22px",
-                              minHeight:
-                                "32px"
-                            }}
-                          >
-                            ₹
-                            {
-                              originalPrice
-                            }
-                          </p>
-                        </>
-                      )}
+                  <div className="sh-card-body">
+                    <div className="sh-card-meta">
+                      {item.category && <span className="sh-pill">{item.category}</span>}
+                      {Number(item.rating) > 0 && <span className="sh-rating">★ {Number(item.rating).toFixed(1)}</span>}
                     </div>
-
-                    {/* BUTTONS */}
-                    <div className="btn-group">
-                      <button
-                        onClick={() =>
-                          handleAdd(
-                            item
-                          )
-                        }
-                      >
-                        Add to Cart 🛒
-                      </button>
-
-                      <button
-                        onClick={() =>
-                          removeItem(
-                            item
-                          )
-                        }
-                      >
-                        Remove ❌
-                      </button>
-                    </div>
-                  </motion.div>
-                );
-              }
-            )}
+                    <h3>{item.item_name}</h3>
+                    <p className="sh-price-line">
+                      <b>{money(final, 2)}</b>
+                      {offer > 0 && <s>{money(base, 2)}</s>}
+                    </p>
+                    <button className="sh-btn sh-btn-primary sh-block" onClick={() => addToCart(item)} disabled={adding === item.id || item.is_active === false}>
+                      {item.is_active === false ? "Unavailable" : adding === item.id ? "Adding…" : "Add to cart"}
+                    </button>
+                  </div>
+                </motion.article>
+              );
+            })}
           </AnimatePresence>
-        </div>
+        </motion.div>
       )}
     </div>
   );
