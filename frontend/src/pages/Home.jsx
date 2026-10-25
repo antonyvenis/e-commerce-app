@@ -4,7 +4,6 @@ import { motion, MotionConfig } from "framer-motion";
 import axios from "axios";
 import About from "./About";
 import Footer from "./Footer";
-import HeroBanner from "./HeroBanner";
 import { API_BASE, getUser } from "../api";
 import { imgUrl, money, onImgError } from "./shopUtils";
 import "./shop.css";
@@ -128,11 +127,11 @@ function Home() {
                 onChange={(e) => setSearch(e.target.value)}
                 onFocus={() => setFocused(true)}
                 onBlur={() => setTimeout(() => setFocused(false), 150)}
-                onKeyDown={(e) => e.key === "Enter" && navigate("/menu")}
+                onKeyDown={(e) => e.key === "Enter" && navigate(search.trim() ? `/menu?q=${encodeURIComponent(search.trim())}` : "/menu")}
                 placeholder="Search biryani, pizza, dosa…"
                 aria-label="Search dishes"
               />
-              <button className="sh-btn sh-btn-primary" onClick={() => navigate("/menu")}>Search</button>
+              <button className="sh-btn sh-btn-primary" onClick={() => navigate(search.trim() ? `/menu?q=${encodeURIComponent(search.trim())}` : "/menu")}>Search</button>
 
               {focused && suggestions.length > 0 && (
                 <ul className="hm-suggest">
@@ -264,7 +263,6 @@ function Home() {
           </div>
         </motion.section>
 
-        <HeroBanner />
         <About />
         <Footer />
       </div>

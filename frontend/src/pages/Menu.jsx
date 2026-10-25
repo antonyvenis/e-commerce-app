@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import api, { getUser } from "../api";
+import api, { API_BASE, getUser } from "../api";
 import ProductCard, { finalPrice } from "./ProductCart";
 import { labelOf } from "./shopUtils";
 import "./shop.css";
@@ -35,9 +35,11 @@ const pageWindow = (current, total) => {
 function Menu() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [failed, setFailed] = useState(false);
   const [likedIds, setLikedIds] = useState([]);
 
-  const [search, setSearch] = useState("");
+  const [params] = useSearchParams();
+  const [search, setSearch] = useState(params.get("q") || "");
   const [category, setCategory] = useState("all");
   const [sort, setSort] = useState("featured");
   const [offersOnly, setOffersOnly] = useState(false);
@@ -60,7 +62,7 @@ function Menu() {
         } while (next <= total && next <= 10);
         if (alive) setProducts(all);
       } catch {
-        if (alive) setProducts([]);
+        if (alive) { setProducts([]); setFailed(true); }
       } finally {
         if (alive) setLoading(false);
       }
@@ -142,12 +144,27 @@ function Menu() {
         {categories.map(({ key, count }) => (
           <button key={key} className={`mn-chip ${category === key ? "is-on" : ""}`} onClick={() => setCategory(key)}>{labelOf(key)} <b>{count}</b></button>
         ))}
-        <Link className="mn-chip mn-chip-link" to="/food">Cakes →</Link>
-        <Link className="mn-chip mn-chip-link" to="/food2">Chinese →</Link>
+        <Link className="mn-chip mn-chip-link" to="/food">World kitchen →</Link>
+        <Link className="mn-chip mn-chip-link" to="/food2">Recipe ideas →</Link>
       </div>
 
       {loading ? (
         <div className="mn-grid">{Array.from({ length: 8 }).map((_, i) => <div key={i} className="sh-skel-card" style={{ "--d": `${i * 70}ms` }} />)}</div>
+      ) : products.length === 0 ? (
+        <motion.div className="sh-empty" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}>
+          <div className="sh-empty-art" aria-hidden="true">{failed ? "📡" : "🍽️"}</div>
+          <h2>{failed ? "Could not reach the server" : "The menu is empty"}</h2>
+          <p>
+            {failed
+              ? "Check your internet connection and that the backend is running."
+              : "This database has no dishes yet. Dishes saved on another server or database will not appear here."}
+          </p>
+          {import.meta.env.DEV && <p className="mn-api">Loading from {API_BASE}/api/products/</p>}
+          <div className="co-empty-actions">
+            <button className="sh-btn sh-btn-primary" onClick={() => window.location.reload()}>Try again</button>
+            {getUser()?.role === "admin" && <Link className="sh-btn sh-btn-ghost" to="/upload">Upload the sample menu</Link>}
+          </div>
+        </motion.div>
       ) : visible.length === 0 ? (
         <motion.div className="sh-empty" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}>
           <div className="sh-empty-art" aria-hidden="true">🔍</div>

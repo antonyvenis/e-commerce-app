@@ -946,6 +946,7 @@ def get_orders(request):
 # 📦 GET PRODUCTS
 # ================================
 @api_view(['GET'])
+@authentication_classes([])
 @permission_classes([AllowAny])
 def get_product(request, product_id):
     product = get_object_or_404(Product, id=product_id, is_active=True)
@@ -963,6 +964,8 @@ def get_product(request, product_id):
 
 @cache_page(60 * 5)
 @api_view(['GET'])
+@authentication_classes([])
+@permission_classes([AllowAny])
 def get_products(request):
 
     category = request.GET.get("category")

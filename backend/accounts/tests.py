@@ -663,3 +663,13 @@ class AddToCartQuantityTests(BaseAPITest):
     def test_garbage_quantity_falls_back_to_one(self):
         self.client.post("/api/add-cart/", {"product_id": self.dish.id, "quantity": "lots"}, format="json")
         self.assertEqual(CartItem.objects.get(user=self.user).quantity, 1)
+
+
+class PublicEndpointsIgnoreStaleTokenTests(BaseAPITest):
+    """An expired or garbage token must never break pages that do not need a login."""
+
+    def test_product_list_and_detail_work_with_a_garbage_token(self):
+        dish = make_product("Biryani")
+        client = self.bearer("expired.or.garbage")
+        self.assertEqual(client.get("/api/products/").status_code, 200)
+        self.assertEqual(client.get(f"/api/products/{dish.id}/").status_code, 200)

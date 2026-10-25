@@ -30,8 +30,8 @@ import Register from "./pages/Register";
 import HeroBanner from "./pages/HeroBanner";
 import Privacy from "./pages/Privacy";
 
-// Home and Contact already render their own <Footer />
-const NO_FOOTER = ["/", "/contact", "/login", "/register", "/otp", "/forgot-password", "/herobanner"];
+// Home renders its own <Footer />
+const NO_FOOTER = ["/", "/login", "/register", "/otp", "/forgot-password", "/herobanner"];
 
 function Layout() {
   const { pathname } = useLocation();
